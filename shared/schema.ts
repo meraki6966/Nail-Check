@@ -1,18 +1,24 @@
-import { sql } from "drizzle-orm";
-import { pgTable, text, varchar } from "drizzle-orm/pg-core";
+import { pgTable, text, serial, integer, boolean, timestamp } from "drizzle-orm/pg-core";
 import { createInsertSchema } from "drizzle-zod";
 import { z } from "zod";
+export * from "./models/auth";
 
-export const users = pgTable("users", {
-  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
-  username: text("username").notNull().unique(),
-  password: text("password").notNull(),
+export const tutorials = pgTable("tutorials", {
+  id: serial("id").primaryKey(),
+  title: text("title").notNull(),
+  imageSource: text("image_source").notNull(),
+  styleCategory: text("style_category").notNull(), // e.g., French, Chrome
+  difficultyLevel: text("difficulty_level").notNull(), // Beginner, Intermediate, Pro
+  toolsRequired: text("tools_required").array().notNull(),
+  tutorialContent: text("tutorial_content").notNull(),
+  creatorCredit: text("creator_credit"),
+  createdAt: timestamp("created_at").defaultNow(),
 });
 
-export const insertUserSchema = createInsertSchema(users).pick({
-  username: true,
-  password: true,
+export const insertTutorialSchema = createInsertSchema(tutorials).omit({ 
+  id: true, 
+  createdAt: true 
 });
 
-export type InsertUser = z.infer<typeof insertUserSchema>;
-export type User = typeof users.$inferSelect;
+export type Tutorial = typeof tutorials.$inferSelect;
+export type InsertTutorial = z.infer<typeof insertTutorialSchema>;
