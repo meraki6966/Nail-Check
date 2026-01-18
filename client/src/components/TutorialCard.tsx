@@ -71,6 +71,11 @@ export function TutorialCard({ tutorial }: TutorialCardProps) {
               {tutorial.difficultyLevel}
             </Badge>
           </div>
+          {tutorial.tutorialContent && tutorial.tutorialContent.trim().length > 0 && (
+            <Badge variant="outline" className="mb-2 bg-primary/5 text-primary border-primary/20 text-[10px] py-0 px-2 h-5 font-bold uppercase tracking-widest">
+              Tutorial
+            </Badge>
+          )}
           <Link href={`/tutorial/${tutorial.id}`}>
             <h3 className="font-display text-lg font-bold leading-tight hover:text-primary transition-colors cursor-pointer">
               {tutorial.title}
