@@ -60,13 +60,13 @@ export default function Home() {
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
               <Input
                 placeholder="Search styles, techniques..."
-                className="pl-10 h-11 rounded-xl border-border/60 focus:border-primary focus:ring-primary/20 bg-card"
+                className="pl-10 h-11 rounded-full border-border/60 focus:border-primary focus:ring-primary/20 bg-card"
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
               />
             </div>
             <Select value={style} onValueChange={setStyle}>
-              <SelectTrigger className="w-full md:w-[180px] h-11 rounded-xl bg-card border-border/60">
+              <SelectTrigger className="w-full md:w-[180px] h-11 rounded-full bg-card border-border/60">
                 <SelectValue placeholder="Style" />
               </SelectTrigger>
               <SelectContent>
@@ -77,7 +77,7 @@ export default function Home() {
               </SelectContent>
             </Select>
             <Select value={difficulty} onValueChange={setDifficulty}>
-              <SelectTrigger className="w-full md:w-[180px] h-11 rounded-xl bg-card border-border/60">
+              <SelectTrigger className="w-full md:w-[180px] h-11 rounded-full bg-card border-border/60">
                 <SelectValue placeholder="Difficulty" />
               </SelectTrigger>
               <SelectContent>

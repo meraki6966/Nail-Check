@@ -30,8 +30,8 @@ export default function Saved() {
     <Layout>
       <div className="space-y-8">
         <div className="flex items-center gap-4">
-          <div className="p-3 bg-red-100 rounded-full">
-            <Heart className="h-6 w-6 text-red-500 fill-current" />
+          <div className="p-3 bg-primary/10 rounded-full">
+            <Heart className="h-6 w-6 text-primary fill-current" />
           </div>
           <div>
             <h1 className="text-3xl font-display font-bold">Your Saved Looks</h1>

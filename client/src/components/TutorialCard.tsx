@@ -47,7 +47,7 @@ export function TutorialCard({ tutorial }: TutorialCardProps) {
             size="icon"
             className={cn(
               "absolute top-3 right-3 h-9 w-9 rounded-full bg-white/80 backdrop-blur-sm shadow-sm transition-all hover:bg-white hover:scale-110",
-              liked && "text-red-500 bg-white"
+              liked && "text-primary bg-white"
             )}
             onClick={(e) => {
               e.preventDefault();

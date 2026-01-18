@@ -5,40 +5,40 @@
 @tailwind utilities;
 
 :root {
-  --font-display: 'Playfair Display', serif;
-  --font-body: 'Lato', sans-serif;
+  --font-display: 'Inter', sans-serif;
+  --font-body: 'Inter', sans-serif;
 
-  /* Soft, feminine palette: Rose, Cream, Sage, Charcoal */
-  --background: 0 0% 100%;       /* White */
-  --foreground: 270 2% 19%;      /* Soft Charcoal */
+  /* Professional palette: Cream and Muted Rose Gold */
+  --background: 34 30% 96%;       /* Cream */
+  --foreground: 20 10% 20%;      /* Soft Charcoal */
   
-  --primary: 340 60% 88%;        /* Soft Rose Pink */
-  --primary-foreground: 340 40% 20%; /* Darker Rose Text */
+  --primary: 350 35% 75%;        /* Muted Rose Gold */
+  --primary-foreground: 350 10% 98%;
   
-  --secondary: 40 40% 96%;       /* Cream/Off-white */
-  --secondary-foreground: 30 10% 20%;
+  --secondary: 34 25% 92%;       /* Slightly deeper cream */
+  --secondary-foreground: 20 10% 30%;
   
-  --muted: 240 5% 96%;
-  --muted-foreground: 240 4% 46%;
+  --muted: 34 20% 90%;
+  --muted-foreground: 34 10% 45%;
   
-  --accent: 150 20% 90%;         /* Soft Sage Green */
-  --accent-foreground: 150 30% 20%;
+  --accent: 350 30% 94%;         /* Lighter Rose Gold */
+  --accent-foreground: 350 40% 45%;
   
-  --destructive: 0 84% 60%;
+  --destructive: 0 70% 50%;
   --destructive-foreground: 0 0% 98%;
 
-  --border: 240 6% 90%;
-  --input: 240 6% 90%;
-  --ring: 340 60% 88%;
+  --border: 20 10% 85%;
+  --input: 20 10% 85%;
+  --ring: 350 35% 75%;
   
-  --radius: 1rem;
+  --radius: 1rem; /* Highly rounded as requested */
 }
 
 .dark {
   --background: 270 2% 12%;
   --foreground: 0 0% 98%;
   
-  --primary: 340 40% 60%;
+  --primary: 350 35% 65%;
   --primary-foreground: 0 0% 98%;
   
   --secondary: 270 4% 20%;
@@ -47,7 +47,7 @@
   --muted: 270 4% 20%;
   --muted-foreground: 240 5% 65%;
   
-  --accent: 150 15% 30%;
+  --accent: 350 30% 30%;
   --accent-foreground: 0 0% 98%;
   
   --destructive: 0 62% 30%;
@@ -55,7 +55,7 @@
   
   --border: 270 4% 20%;
   --input: 270 4% 20%;
-  --ring: 340 40% 60%;
+  --ring: 350 35% 65%;
 }
 
 @layer base {

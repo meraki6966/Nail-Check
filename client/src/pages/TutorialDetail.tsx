@@ -102,7 +102,7 @@ export default function TutorialDetail() {
                   size="icon"
                   className={cn(
                     "rounded-full bg-white/90 backdrop-blur shadow-lg hover:bg-white hover:scale-105 transition-all",
-                    isLiked ? "text-red-500" : "text-foreground"
+                    isLiked ? "text-primary" : "text-foreground"
                   )}
                   onClick={() => toggleFavorite(tutorial.id)}
                 >
