@@ -55,11 +55,11 @@ export default function Upload() {
     },
   });
 
-  // Redirect if not logged in
-  if (!isLoading && !user) {
-    setLocation("/api/login");
-    return null;
-  }
+  // No longer redirecting visitors
+  // if (!isLoading && !user) {
+  //   setLocation("/api/login");
+  //   return null;
+  // }
 
   const onSubmit = (values: FormValues) => {
     // Convert comma-separated string back to array for API

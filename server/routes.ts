@@ -34,7 +34,7 @@ export async function registerRoutes(
     res.json(tutorial);
   });
 
-  app.post(api.tutorials.create.path, isAuthenticated, async (req, res) => {
+  app.post(api.tutorials.create.path, async (req, res) => {
     try {
       const input = api.tutorials.create.input.parse(req.body);
       const tutorial = await storage.createTutorial(input);
