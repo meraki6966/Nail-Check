@@ -71,7 +71,7 @@ async function seedDatabase() {
       },
       {
         title: "Chrome Glazed Donut",
-        imageSource: "https://images.unsplash.com/photo-1632515674066-6b66d034d6c7?auto=format&fit=crop&q=80&w=1000",
+        imageSource: "/attached_assets/stock_images/chrome_glazed_donut__3ce475bb.jpg",
         styleCategory: "Chrome",
         difficultyLevel: "Intermediate",
         toolsRequired: ["Gel Base", "Sheer White Gel", "Chrome Powder", "Applicator", "No-Wipe Top Coat"],
