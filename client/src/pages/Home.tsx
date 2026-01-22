@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useTutorials } from "@/hooks/use-tutorials";
+import { Link } from "wouter";
 import { Layout } from "@/components/Layout";
 import { TutorialCard } from "@/components/TutorialCard";
 import { Input } from "@/components/ui/input";
@@ -57,6 +58,7 @@ export default function Home() {
     difficulty: difficulty === "all" ? undefined : difficulty,
   };
 
+  // const { data: tutorials, isLoading, error } = useTutorials(filters);
   const tutorials = NAIL_ART_DATA.filter(t => {
     const matchesSearch = !filters.search || 
       t.title.toLowerCase().includes(filters.search.toLowerCase()) ||
