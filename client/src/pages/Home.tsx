@@ -30,6 +30,20 @@ export default function Home() {
   const [search, setSearch] = useState("");
   const [activeCategory, setActiveCategory] = useState<string>("all");
   const [difficulty, setDifficulty] = useState<string>("all");
+  const [aiPrompt, setAiPrompt] = useState("");
+  const [isGenerating, setIsGenerating] = useState(false);
+  const [generatedImage, setGeneratedImage] = useState<string | null>(null);
+
+  const GENERATION_RULES = "Luxe aesthetic, high-gloss finish, NYC borough influence, and professional lighting.";
+
+  const handleGenerate = async () => {
+    setIsGenerating(true);
+    // Placeholder for AI generation
+    setTimeout(() => {
+      setIsGenerating(false);
+      setGeneratedImage("https://images.unsplash.com/photo-1604654894610-df63bc536371?auto=format&fit=crop&q=80&w=1000");
+    }, 2000);
+  };
 
   // Construct filters
   const filters = {
@@ -73,6 +87,62 @@ export default function Home() {
           <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
             Browse our curated collection of nail art tutorials and find the perfect style for your next manicure.
           </p>
+        </div>
+
+        {/* AI Generator Section */}
+        <div className="max-w-4xl mx-auto mb-12">
+          <div className="bg-card/50 backdrop-blur-sm border border-border/50 rounded-3xl p-6 md:p-8 shadow-xl">
+            <h2 className="text-2xl font-display font-bold mb-4 flex items-center gap-2">
+              <Sparkles className="h-5 w-5 text-primary" />
+              AI Nail Set Designer
+            </h2>
+            <div className="flex flex-col md:flex-row gap-4">
+              <div className="relative flex-grow">
+                <Input
+                  placeholder="Describe your dream NYC nail set..."
+                  className="h-12 rounded-2xl border-border/60 focus:border-primary focus:ring-primary/20 bg-background"
+                  value={aiPrompt}
+                  onChange={(e) => setAiPrompt(e.target.value)}
+                />
+              </div>
+              <Button 
+                onClick={handleGenerate} 
+                disabled={isGenerating || !aiPrompt}
+                className="h-12 px-8 rounded-2xl bg-primary text-primary-foreground hover:bg-primary/90 shadow-lg shadow-primary/20"
+              >
+                {isGenerating ? (
+                  <>
+                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                    Designing...
+                  </>
+                ) : (
+                  "Generate with AI"
+                )}
+              </Button>
+            </div>
+            
+            {/* AI Result Area */}
+            {(isGenerating || generatedImage) && (
+              <motion.div 
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                className="mt-8 rounded-3xl overflow-hidden border border-border/50 aspect-video bg-muted/30 flex items-center justify-center relative"
+              >
+                {isGenerating ? (
+                  <div className="flex flex-col items-center gap-4">
+                    <div className="w-12 h-12 rounded-full border-4 border-primary/20 border-t-primary animate-spin" />
+                    <p className="text-muted-foreground animate-pulse">Designing your masterpiece...</p>
+                  </div>
+                ) : generatedImage ? (
+                  <img 
+                    src={generatedImage} 
+                    alt="Generated Nail Set" 
+                    className="w-full h-full object-cover"
+                  />
+                ) : null}
+              </motion.div>
+            )}
+          </div>
         </div>
 
         {/* Filters & Search */}
