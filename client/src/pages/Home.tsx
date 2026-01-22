@@ -12,7 +12,19 @@ import {
 } from "@/components/ui/select";
 import { Search, Loader2, Sparkles } from "lucide-react";
 import { motion } from "framer-motion";
-
+const NAIL_ART_DATA = [
+  { id: "1", title: "Staten Island Luxe Art", category: "Masterpiece Tutorials", imageUrl: "http://nail-check.com/wp-content/uploads/2026/01/naii-check-andrea-staten-island.jpg", location: "Staten Island, NY", difficulty: "Advanced" },
+  { id: "2", title: "Brooklyn Mastery Series", category: "Masterpiece Tutorials", imageUrl: "http://nail-check.com/wp-content/uploads/2026/01/naii-check-andrea-brooklyn.jpg", location: "Brooklyn, NY", difficulty: "Advanced" },
+  { id: "3", title: "Manhattan High-End Design", category: "Masterpiece Tutorials", imageUrl: "http://nail-check.com/wp-content/uploads/2026/01/naii-check-andrea-staten-island-manhattan.jpg", location: "Manhattan, NY", difficulty: "Advanced" },
+  { id: "4", title: "Nail Check Essentials", category: "Supply Hub", imageUrl: "http://nail-check.com/wp-content/uploads/2026/01/naii-check-andrea-amazon.jpeg", location: "NYC Supply Center", difficulty: "N/A" },
+  { id: "5", title: "Trending Quick Set", category: "Quick Sets", imageUrl: "http://nail-check.com/wp-content/uploads/2026/01/naii-check-andrea-staten-island-appstore.jpeg", location: "Staten Island, NY", difficulty: "Beginner" },
+  { id: "6", title: "Hillside Style Guide", category: "Quick Sets", imageUrl: "http://nail-check.com/wp-content/uploads/2026/01/nailcheck-nail-tutorial-hillside.jpg", location: "New York City", difficulty: "Intermediate" },
+  { id: "7", title: "Tri-State Tutorial", category: "Masterpiece Tutorials", imageUrl: "http://nail-check.com/wp-content/uploads/2026/01/nailcheck-nail-tutorial-tri-state.jpg", location: "New York City", difficulty: "Advanced" },
+  { id: "8", title: "My Style Signature", category: "Masterpiece Tutorials", imageUrl: "http://nail-check.com/wp-content/uploads/2026/01/nailcheck-nail-tutorial-my-style.jpg", location: "New York City", difficulty: "Advanced" },
+  { id: "9", title: "Texas League City Set", category: "Quick Sets", imageUrl: "http://nail-check.com/wp-content/uploads/2026/01/nailcheck-nail-tutorial-texas-league-city.jpg", location: "League City, TX", difficulty: "Beginner" },
+  { id: "10", title: "Current Trends", category: "Quick Sets", imageUrl: "http://nail-check.com/wp-content/uploads/2026/01/nailcheck-nail-tutorial-trends.jpg", location: "New York City", difficulty: "Intermediate" },
+  { id: "11", title: "Masterpiece Guide", category: "Masterpiece Tutorials", imageUrl: "http://nail-check.com/wp-content/uploads/2026/01/nailcheck-nail-tutorial.jpg", location: "New York City", difficulty: "Advanced" }
+];
 export default function Home() {
   const [search, setSearch] = useState("");
   const [style, setStyle] = useState<string>("all");
@@ -26,7 +38,7 @@ export default function Home() {
   };
 
   const { data: tutorials, isLoading, error } = useTutorials(filters);
-
+  // const tutorials = NAIL_ART_DATA;
   // Derive unique styles from data if available, or static list
   const styleOptions = [
     "French", "Chrome", "Abstract", "Floral", "Geometric", "Minimalist", "3D Art", "Ombre"
@@ -111,7 +123,19 @@ export default function Home() {
             <p className="text-muted-foreground">Try adjusting your filters or search term.</p>
           </div>
         )}
-      </div>
+      <footer className="mt-auto py-8 border-t border-gray-100">
+        <div className="flex flex-col items-center gap-2">
+          <div className="flex gap-6 text-sm text-gray-500">
+            <a href="https://nail-check.com/terms-of-service/" target="_blank" rel="noopener noreferrer" className="hover:text-pink-400 transition-colors">
+              Terms of Service
+            </a>
+            <a href="https://nail-check.com/privacy-policy/" target="_blank" rel="noopener noreferrer" className="hover:text-pink-400 transition-colors">
+              Privacy Policy
+            </a>
+          </div>
+          <p className="text-xs text-gray-400">© 2026 Nail Check New York City</p>
+        </div>
+      </footer></div>
     </Layout>
   );
 }
