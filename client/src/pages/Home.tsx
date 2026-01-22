@@ -28,13 +28,13 @@ const NAIL_ART_DATA = [
 
 export default function Home() {
   const [search, setSearch] = useState("");
-  const [style, setStyle] = useState<string>("all");
+  const [activeCategory, setActiveCategory] = useState<string>("all");
   const [difficulty, setDifficulty] = useState<string>("all");
 
   // Construct filters
   const filters = {
     search: search || undefined,
-    style: style === "all" ? undefined : style,
+    style: activeCategory === "all" ? undefined : activeCategory,
     difficulty: difficulty === "all" ? undefined : difficulty,
   };
 
@@ -87,8 +87,8 @@ export default function Home() {
                 onChange={(e) => setSearch(e.target.value)}
               />
             </div>
-            <Select value={style} onValueChange={setStyle}>
-              <SelectTrigger className="w-full md:w-[180px] h-11 rounded-full bg-card border-border/60">
+            <Select value={activeCategory} onValueChange={setActiveCategory}>
+              <SelectTrigger className="w-full md:w-[220px] h-11 rounded-full bg-card border-border/60">
                 <SelectValue placeholder="Style" />
               </SelectTrigger>
               <SelectContent>
