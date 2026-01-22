@@ -34,15 +34,19 @@ export default function Home() {
   const [aiPrompt, setAiPrompt] = useState("");
   const [isGenerating, setIsGenerating] = useState(false);
   const [generatedImage, setGeneratedImage] = useState<string | null>(null);
+  const [generationCount, setGenerationCount] = useState(0);
 
   const GENERATION_RULES = "Luxe aesthetic, high-gloss finish, NYC borough influence, and professional lighting.";
 
   const handleGenerate = async () => {
+    if (generationCount >= 1) return;
+
     setIsGenerating(true);
     // Placeholder for AI generation
     setTimeout(() => {
       setIsGenerating(false);
       setGeneratedImage("https://images.unsplash.com/photo-1604654894610-df63bc536371?auto=format&fit=crop&q=80&w=1000");
+      setGenerationCount(prev => prev + 1);
     }, 2000);
   };
 
@@ -108,7 +112,7 @@ export default function Home() {
               </div>
               <Button 
                 onClick={handleGenerate} 
-                disabled={isGenerating || !aiPrompt}
+                disabled={isGenerating || !aiPrompt || generationCount >= 1}
                 className="h-12 px-8 rounded-2xl bg-primary text-primary-foreground hover:bg-primary/90 shadow-lg shadow-primary/20"
               >
                 {isGenerating ? (
@@ -121,6 +125,24 @@ export default function Home() {
                 )}
               </Button>
             </div>
+            
+            {/* Paywall Message */}
+            {generationCount >= 1 && (
+              <motion.div 
+                initial={{ opacity: 0, scale: 0.95 }}
+                animate={{ opacity: 1, scale: 1 }}
+                className="mt-6 p-6 rounded-2xl bg-primary/10 border border-primary/20 text-center"
+              >
+                <p className="text-foreground font-medium mb-4">
+                  You've unlocked your first NYC design! To continue creating, join the Elite Membership for $8.99/mo.
+                </p>
+                <Link href="/membership">
+                  <Button className="bg-primary text-primary-foreground hover:bg-primary/90 rounded-xl">
+                    Upgrade to Elite Membership
+                  </Button>
+                </Link>
+              </motion.div>
+            )}
             
             {/* AI Result Area */}
             {(isGenerating || generatedImage) && (
