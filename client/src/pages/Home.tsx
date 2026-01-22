@@ -13,18 +13,19 @@ import {
 import { Search, Loader2, Sparkles } from "lucide-react";
 import { motion } from "framer-motion";
 const NAIL_ART_DATA = [
-  { id: "1", title: "Staten Island Luxe Art", category: "Masterpiece Tutorials", imageUrl: "http://nail-check.com/wp-content/uploads/2026/01/naii-check-andrea-staten-island.jpg", location: "Staten Island, NY", difficulty: "Advanced" },
-  { id: "2", title: "Brooklyn Mastery Series", category: "Masterpiece Tutorials", imageUrl: "http://nail-check.com/wp-content/uploads/2026/01/naii-check-andrea-brooklyn.jpg", location: "Brooklyn, NY", difficulty: "Advanced" },
-  { id: "3", title: "Manhattan High-End Design", category: "Masterpiece Tutorials", imageUrl: "http://nail-check.com/wp-content/uploads/2026/01/naii-check-andrea-staten-island-manhattan.jpg", location: "Manhattan, NY", difficulty: "Advanced" },
-  { id: "4", title: "Nail Check Essentials", category: "Supply Hub", imageUrl: "http://nail-check.com/wp-content/uploads/2026/01/naii-check-andrea-amazon.jpeg", location: "NYC Supply Center", difficulty: "N/A" },
-  { id: "5", title: "Trending Quick Set", category: "Quick Sets", imageUrl: "http://nail-check.com/wp-content/uploads/2026/01/naii-check-andrea-staten-island-appstore.jpeg", location: "Staten Island, NY", difficulty: "Beginner" },
-  { id: "6", title: "Hillside Style Guide", category: "Quick Sets", imageUrl: "http://nail-check.com/wp-content/uploads/2026/01/nailcheck-nail-tutorial-hillside.jpg", location: "New York City", difficulty: "Intermediate" },
-  { id: "7", title: "Tri-State Tutorial", category: "Masterpiece Tutorials", imageUrl: "http://nail-check.com/wp-content/uploads/2026/01/nailcheck-nail-tutorial-tri-state.jpg", location: "New York City", difficulty: "Advanced" },
-  { id: "8", title: "My Style Signature", category: "Masterpiece Tutorials", imageUrl: "http://nail-check.com/wp-content/uploads/2026/01/nailcheck-nail-tutorial-my-style.jpg", location: "New York City", difficulty: "Advanced" },
-  { id: "9", title: "Texas League City Set", category: "Quick Sets", imageUrl: "http://nail-check.com/wp-content/uploads/2026/01/nailcheck-nail-tutorial-texas-league-city.jpg", location: "League City, TX", difficulty: "Beginner" },
-  { id: "10", title: "Current Trends", category: "Quick Sets", imageUrl: "http://nail-check.com/wp-content/uploads/2026/01/nailcheck-nail-tutorial-trends.jpg", location: "New York City", difficulty: "Intermediate" },
-  { id: "11", title: "Masterpiece Guide", category: "Masterpiece Tutorials", imageUrl: "http://nail-check.com/wp-content/uploads/2026/01/nailcheck-nail-tutorial.jpg", location: "New York City", difficulty: "Advanced" }
+  { id: 1, title: "Staten Island Main", styleCategory: "Masterpiece Tutorials", imageSource: "http://nail-check.com/wp-content/uploads/2026/01/naii-check-andrea-staten-island.jpg", difficultyLevel: "Advanced", creatorCredit: "@andrea" },
+  { id: 2, title: "Brooklyn Series", styleCategory: "Masterpiece Tutorials", imageSource: "http://nail-check.com/wp-content/uploads/2026/01/naii-check-andrea-brooklyn.jpg", difficultyLevel: "Advanced", creatorCredit: "@andrea" },
+  { id: 3, title: "Manhattan High-End", styleCategory: "Masterpiece Tutorials", imageSource: "http://nail-check.com/wp-content/uploads/2026/01/naii-check-andrea-staten-island-manhattan.jpg", difficultyLevel: "Advanced", creatorCredit: "@andrea" },
+  { id: 4, title: "Tri-State Masterclass", styleCategory: "Masterpiece Tutorials", imageSource: "http://nail-check.com/wp-content/uploads/2026/01/nailcheck-nail-tutorial-tri-state.jpg", difficultyLevel: "Advanced", creatorCredit: "@andrea" },
+  { id: 5, title: "Signature Style", styleCategory: "Masterpiece Tutorials", imageSource: "http://nail-check.com/wp-content/uploads/2026/01/nailcheck-nail-tutorial-my-style.jpg", difficultyLevel: "Advanced", creatorCredit: "@andrea" },
+  { id: 6, title: "The Masterpiece Guide", styleCategory: "Masterpiece Tutorials", imageSource: "http://nail-check.com/wp-content/uploads/2026/01/nailcheck-nail-tutorial.jpg", difficultyLevel: "Advanced", creatorCredit: "@andrea" },
+  { id: 7, title: "Amazon Essentials", styleCategory: "Supply Hub", imageSource: "http://nail-check.com/wp-content/uploads/2026/01/naii-check-andrea-staten-island-amazon.jpeg", difficultyLevel: "N/A", creatorCredit: "@andrea" },
+  { id: 8, title: "App Store Special", styleCategory: "Quick Sets", imageSource: "http://nail-check.com/wp-content/uploads/2026/01/naii-check-andrea-staten-island-appstore.jpeg", difficultyLevel: "Beginner", creatorCredit: "@andrea" },
+  { id: 9, title: "League City/Texas (Regional)", styleCategory: "Quick Sets", imageSource: "http://nail-check.com/wp-content/uploads/2026/01/nailcheck-nail-tutorial-texas-league-city.jpg", difficultyLevel: "Beginner", creatorCredit: "@andrea" },
+  { id: 10, title: "Modern Trends", styleCategory: "Quick Sets", imageSource: "http://nail-check.com/wp-content/uploads/2026/01/nailcheck-nail-tutorial-trends.jpg", difficultyLevel: "Intermediate", creatorCredit: "@andrea" },
+  { id: 11, title: "Hillside Quick Set", styleCategory: "Quick Sets", imageSource: "http://nail-check.com/wp-content/uploads/2026/01/nailcheck-nail-tutorial-hillside.jpg", difficultyLevel: "Intermediate", creatorCredit: "@andrea" }
 ];
+
 export default function Home() {
   const [search, setSearch] = useState("");
   const [style, setStyle] = useState<string>("all");
@@ -37,11 +38,20 @@ export default function Home() {
     difficulty: difficulty === "all" ? undefined : difficulty,
   };
 
-  const { data: tutorials, isLoading, error } = useTutorials(filters);
-  // const tutorials = NAIL_ART_DATA;
-  // Derive unique styles from data if available, or static list
+  const tutorials = NAIL_ART_DATA.filter(t => {
+    const matchesSearch = !filters.search || 
+      t.title.toLowerCase().includes(filters.search.toLowerCase()) ||
+      t.styleCategory.toLowerCase().includes(filters.search.toLowerCase());
+    const matchesStyle = !filters.style || t.styleCategory === filters.style;
+    const matchesDifficulty = !filters.difficulty || t.difficultyLevel === filters.difficulty;
+    return matchesSearch && matchesStyle && matchesDifficulty;
+  });
+  const isLoading = false;
+  const error = null;
+
+  // Update style options
   const styleOptions = [
-    "French", "Chrome", "Abstract", "Floral", "Geometric", "Minimalist", "3D Art", "Ombre"
+    "Masterpiece Tutorials", "Supply Hub", "Quick Sets"
   ];
 
   return (
