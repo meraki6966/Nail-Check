@@ -9,27 +9,27 @@
   --font-body: 'Inter', sans-serif;
 
   /* Professional palette: Cream and Muted Rose Gold */
-  --background: 34 30% 96%;       /* Cream */
-  --foreground: 20 10% 20%;      /* Soft Charcoal */
+  --background: 36 67% 98%;       /* Cream #FFFBF5 */
+  --foreground: 0 0% 20%;         /* Dark Gray #333333 */
   
-  --primary: 350 35% 75%;        /* Muted Rose Gold */
-  --primary-foreground: 350 10% 98%;
+  --primary: 6 25% 72%;           /* Rose Gold #C9A9A6 */
+  --primary-foreground: 0 0% 100%;
   
-  --secondary: 34 25% 92%;       /* Slightly deeper cream */
-  --secondary-foreground: 20 10% 30%;
+  --secondary: 36 50% 96%;       /* Slightly deeper cream */
+  --secondary-foreground: 0 0% 20%;
   
-  --muted: 34 20% 90%;
-  --muted-foreground: 34 10% 45%;
+  --muted: 36 30% 94%;
+  --muted-foreground: 0 0% 45%;
   
-  --accent: 350 30% 94%;         /* Lighter Rose Gold */
-  --accent-foreground: 350 40% 45%;
+  --accent: 6 30% 94%;           /* Lighter Rose Gold */
+  --accent-foreground: 6 40% 45%;
   
   --destructive: 0 70% 50%;
   --destructive-foreground: 0 0% 98%;
 
-  --border: 20 10% 85%;
-  --input: 20 10% 85%;
-  --ring: 350 35% 75%;
+  --border: 36 20% 90%;
+  --input: 36 20% 90%;
+  --ring: 6 25% 72%;
   
   --radius: 1rem; /* Highly rounded as requested */
 }

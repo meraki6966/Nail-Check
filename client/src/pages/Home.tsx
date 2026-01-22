@@ -133,17 +133,17 @@ export default function Home() {
             <p className="text-muted-foreground">Try adjusting your filters or search term.</p>
           </div>
         )}
-      <footer className="mt-auto py-8 border-t border-gray-100">
+      <footer className="mt-auto py-8 border-t border-border/40">
         <div className="flex flex-col items-center gap-2">
-          <div className="flex gap-6 text-sm text-gray-500">
-            <a href="https://nail-check.com/terms-of-service/" target="_blank" rel="noopener noreferrer" className="hover:text-pink-400 transition-colors">
+          <div className="flex gap-6 text-sm text-muted-foreground/60">
+            <a href="https://nail-check.com/terms-of-service/" target="_blank" rel="noopener noreferrer" className="hover:text-primary transition-colors">
               Terms of Service
             </a>
-            <a href="https://nail-check.com/privacy-policy/" target="_blank" rel="noopener noreferrer" className="hover:text-pink-400 transition-colors">
+            <a href="https://nail-check.com/privacy-policy/" target="_blank" rel="noopener noreferrer" className="hover:text-primary transition-colors">
               Privacy Policy
             </a>
           </div>
-          <p className="text-xs text-gray-400">© 2026 Nail Check New York City</p>
+          <p className="text-xs text-muted-foreground/40">© 2026 Nail Check New York City</p>
         </div>
       </footer></div>
     </Layout>
