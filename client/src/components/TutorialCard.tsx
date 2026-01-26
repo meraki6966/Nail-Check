@@ -81,11 +81,6 @@ export function TutorialCard({ tutorial }: TutorialCardProps) {
               {tutorial.title}
             </h3>
           </Link>
-          {tutorial.creatorCredit && (
-            <p className="mt-2 text-sm text-muted-foreground italic">
-              by {tutorial.creatorCredit}
-            </p>
-          )}
         </CardContent>
       </Card>
     </motion.div>
