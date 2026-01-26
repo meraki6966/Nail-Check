@@ -23,9 +23,9 @@ const NAIL_ART_DATA = [
   { id: 6, title: "The Masterpiece Guide", styleCategory: "Masterpiece Tutorials", imageSource: "http://nail-check.com/wp-content/uploads/2026/01/nailcheck-nail-tutorial.jpg", difficultyLevel: "Advanced", creatorCredit: "@andrea", toolsRequired: [], tutorialContent: "", createdAt: null },
   { id: 7, title: "Amazon Essentials", styleCategory: "Supply Hub", imageSource: "http://nail-check.com/wp-content/uploads/2026/01/naii-check-andrea-staten-island-amazon.jpeg", difficultyLevel: "N/A", creatorCredit: "@andrea", toolsRequired: [], tutorialContent: "", createdAt: null },
   { id: 8, title: "App Store Special", styleCategory: "Quick Sets", imageSource: "http://nail-check.com/wp-content/uploads/2026/01/naii-check-andrea-staten-island-appstore.jpeg", difficultyLevel: "Beginner", creatorCredit: "@andrea", toolsRequired: [], tutorialContent: "", createdAt: null },
-  { id: 9, title: "League City/Texas (Regional)", styleCategory: "Quick Sets", imageSource: "http://nail-check.com/wp-content/uploads/2026/01/nailcheck-nail-tutorial-texas-league-city.jpg", difficultyLevel: "Beginner", creatorCredit: "@andrea", toolsRequired: [], tutorialContent: "", createdAt: null },
-  { id: 10, title: "Modern Trends", styleCategory: "Quick Sets", imageSource: "http://nail-check.com/wp-content/uploads/2026/01/nailcheck-nail-tutorial-trends.jpg", difficultyLevel: "Intermediate", creatorCredit: "@andrea", toolsRequired: [], tutorialContent: "", createdAt: null },
-  { id: 11, title: "Hillside Quick Set", styleCategory: "Quick Sets", imageSource: "http://nail-check.com/wp-content/uploads/2026/01/nailcheck-nail-tutorial-hillside.jpg", difficultyLevel: "Intermediate", creatorCredit: "@andrea", toolsRequired: [], tutorialContent: "", createdAt: null }
+  { id: 9, title: "League City/Texas (Regional)", styleCategory: "Masterpiece Tutorials", imageSource: "http://nail-check.com/wp-content/uploads/2026/01/nailcheck-nail-tutorial-texas-league-city.jpg", difficultyLevel: "Beginner", creatorCredit: "@andrea", toolsRequired: [], tutorialContent: "", createdAt: null },
+  { id: 10, title: "Modern Trends", styleCategory: "Masterpiece Tutorials", imageSource: "http://nail-check.com/wp-content/uploads/2026/01/nailcheck-nail-tutorial-trends.jpg", difficultyLevel: "Intermediate", creatorCredit: "@andrea", toolsRequired: [], tutorialContent: "", createdAt: null },
+  { id: 11, title: "Hillside 3D Sculpt", styleCategory: "Masterpiece Tutorials", imageSource: "http://nail-check.com/wp-content/uploads/2026/01/nailcheck-nail-tutorial-hillside.jpg", difficultyLevel: "Intermediate", creatorCredit: "@andrea", toolsRequired: [], tutorialContent: "", createdAt: null }
 ];
 
 export default function Home() {
@@ -72,7 +72,7 @@ export default function Home() {
 
   // Update style options
   const styleOptions = [
-    "Masterpiece Tutorials", "Supply Hub", "Quick Sets"
+    "Masterpiece Tutorials", "Signature Style"
   ];
 
   return (
