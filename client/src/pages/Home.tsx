@@ -43,12 +43,25 @@ export default function Home() {
     if (generationCount >= 1) return;
 
     setIsGenerating(true);
-    // Placeholder for AI generation
-    setTimeout(() => {
-      setIsGenerating(false);
-      setGeneratedImage("https://images.unsplash.com/photo-1604654894610-df63bc536371?auto=format&fit=crop&q=80&w=1000");
+    try {
+      const response = await fetch("/api/generate-image", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ 
+          prompt: `${aiPrompt}. Professional NYC nail photography, high-end luxury finish, 8k resolution, macro detail.` 
+        }),
+      });
+      
+      if (!response.ok) throw new Error("Failed to generate");
+      
+      const data = await response.json();
+      setGeneratedImage(`data:${data.mimeType};base64,${data.b64_json}`);
       setGenerationCount(prev => prev + 1);
-    }, 2000);
+    } catch (error) {
+      console.error("AI Generation Error:", error);
+    } finally {
+      setIsGenerating(false);
+    }
   };
 
   // Construct filters
