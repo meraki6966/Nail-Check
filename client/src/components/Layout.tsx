@@ -50,11 +50,11 @@ export function Layout({ children }: { children: React.ReactNode }) {
                  </Button>
               </div>
             ) : (
-              <Link href="/api/login">
+              <a href="/api/login">
                 <Button variant="default" size="sm" className="bg-primary hover:bg-primary/90 text-primary-foreground">
                   Member Login
                 </Button>
-              </Link>
+              </a>
             )}
           </div>
         </div>
