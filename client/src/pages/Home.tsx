@@ -151,7 +151,7 @@ export default function Home() {
                 <p className="text-foreground font-medium mb-4">
                   You've unlocked your first NYC design! To continue creating, join the Elite Membership for $8.99/mo.
                 </p>
-                <Link href="/membership">
+                <Link href="https://nail-check.com/join-the-elite">
                   <Button className="bg-primary text-primary-foreground hover:bg-primary/90 rounded-xl">
                     Upgrade to Elite Membership
                   </Button>

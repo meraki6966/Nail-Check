@@ -52,7 +52,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
             ) : (
               <Link href="/api/login">
                 <Button variant="default" size="sm" className="bg-primary hover:bg-primary/90 text-primary-foreground">
-                  Creator Login
+                  Member Login
                 </Button>
               </Link>
             )}
