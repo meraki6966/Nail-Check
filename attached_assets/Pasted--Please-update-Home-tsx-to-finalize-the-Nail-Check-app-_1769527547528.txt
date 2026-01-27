@@ -1,0 +1,35 @@
+"Please update Home.tsx to finalize the Nail Check app for production. Execute these steps exactly:
+
+UI Refresh: Change 'Creator Log In' to 'Member Log In'. Add a 'Forgot Password?' link to the login modal.
+
+Navigation: Wrap the 'Upgrade to Elite Membership' button in a link to: https://nail-check.com/join-the-elite.
+
+AI Logic: Connect the handleGenerate function to the Nano Banana API. Use the hidden system prompt: 'Professional NYC luxury nail photography, 8k resolution, macro 3D detail.' Ensure generated images display in the main window.
+
+Gallery Grid: Display images in a clean 2-column grid. When an image is clicked, open it in a full-screen modal overlay showing the title and description.
+
+Data Reset: Replace the NAIL_ART_DATA array with these 19 verified WordPress assets:
+
+JavaScript
+[
+  { id: "1", title: "French Chrome Minimalist", category: "signature", url: "http://nail-check.com/wp-content/uploads/2026/01/nailcheck-french-chrome-minimalist.jpg", description: "Clean, classic NYC elegance." },
+  { id: "2", title: "Manhattan Gold", category: "signature", url: "http://nail-check.com/wp-content/uploads/2026/01/nailcheck-manhattan-gold-minimalist.jpg", description: "Minimalist luxury gold detailing." },
+  { id: "3", title: "Staten Island 3D", category: "masterpiece", url: "http://nail-check.com/wp-content/uploads/2026/01/nailcheck-staten-island-3d-sculpt.jpg", description: "Intricate architectural 3D sculpting." },
+  { id: "4", title: "Bronx Chrome", category: "signature", url: "http://nail-check.com/wp-content/uploads/2026/01/nailcheck-bronx-chrome-minimalist.jpg", description: "High-shine urban chrome finish." },
+  { id: "5", title: "Brooklyn Dimension", category: "masterpiece", url: "http://nail-check.com/wp-content/uploads/2026/01/nailcheck-brooklyn-textured-dimension.jpg", description: "Textured layers with NYC depth." },
+  { id: "6", title: "Manhattan Chrome", category: "signature", url: "http://nail-check.com/wp-content/uploads/2026/01/nailcheck-manhattan-chrome-minimalist.jpg", description: "Liquid silver Manhattan style." },
+  { id: "7", title: "Queens 3D Sculpt", category: "masterpiece", url: "http://nail-check.com/wp-content/uploads/2026/01/nailcheck-queens-ny-3d-sculpt.jpg", description: "Bold, 3D structural art." },
+  { id: "8", title: "NYC Signature Gloss", category: "signature", url: "http://nail-check.com/wp-content/uploads/2026/01/nailcheck-nyc-signature-gloss.jpg", description: "The essential high-gloss finish." },
+  { id: "9", title: "Staten Island Signature", category: "signature", url: "http://nail-check.com/wp-content/uploads/2026/01/naii-check-andrea-staten-island.jpg", description: "Andrea's classic Staten Island look." },
+  { id: "10", title: "App Store Spotlight", category: "signature", url: "http://nail-check.com/wp-content/uploads/2026/01/naii-check-andrea-staten-island-appstore.jpeg", description: "Featured App Store design." },
+  { id: "11", title: "Amazon Collection", category: "signature", url: "http://nail-check.com/wp-content/uploads/2026/01/naii-check-andrea-staten-island-amazon.jpeg", description: "Featured Amazon Kindle collection art." },
+  { id: "12", title: "Brooklyn Heritage", category: "signature", url: "http://nail-check.com/wp-content/uploads/2026/01/naii-check-andrea-brooklyn.jpg", description: "Traditional Brooklyn luxury." },
+  { id: "13", title: "Elite Tutorial", category: "masterpiece", url: "http://nail-check.com/wp-content/uploads/2026/01/nailcheck-nail-tutorial.jpg", description: "Advanced technique showcase." },
+  { id: "14", title: "Tri-State Flow", category: "signature", url: "http://nail-check.com/wp-content/uploads/2026/01/naii-check-andrea-staten-island-manhattan.jpg", description: "Connecting NYC styles." },
+  { id: "15", title: "Andrea's Masterpiece", category: "masterpiece", url: "http://nail-check.com/wp-content/uploads/2026/01/nailcheck-nail-tutorial-andrea-rodriguez.jpg", description: "Signature 3D art by Andrea." },
+  { id: "16", title: "Tri-State Texture", category: "masterpiece", url: "http://nail-check.com/wp-content/uploads/2026/01/nailcheck-nail-tutorial-tri-state.jpg", description: "Complex regional 3D textures." },
+  { id: "17", title: "Personal Signature", category: "signature", url: "http://nail-check.com/wp-content/uploads/2026/01/nailcheck-nail-tutorial-my-style.jpg", description: "Personal style minimalist set." },
+  { id: "18", title: "League City Texas", category: "masterpiece", url: "http://nail-check.com/wp-content/uploads/2026/01/nailcheck-nail-tutorial-texas-league-city.jpg", description: "Texas-inspired 3D masterpiece." },
+  { id: "19", title: "Modern Master Trends", category: "masterpiece", url: "http://nail-check.com/wp-content/uploads/2026/01/nailcheck-nail-tutorial-trends.jpg", description: "The future of 3D nail art." }
+]
+```"

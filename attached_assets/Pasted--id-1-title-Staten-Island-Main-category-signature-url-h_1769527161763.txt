@@ -1,0 +1,22 @@
+[
+  { id: "1", title: "Staten Island Main", category: "signature", url: "https://images.unsplash.com/photo-1604654894610-df490982570d?w=800", description: "Clean, classic NYC lines." },
+  { id: "2", title: "Brooklyn Series", category: "masterpiece", url: "https://images.unsplash.com/photo-1632345031435-8727f6897d53?w=800", description: "3D sculpted urban textures." },
+  { id: "3", title: "Modern Trends", category: "masterpiece", url: "https://images.unsplash.com/photo-1519014816548-bf5fe059798b?w=800", description: "High-concept 3D art." },
+  { id: "4", title: "Hillside 3D Sculpt", category: "masterpiece", url: "https://images.unsplash.com/photo-1599940828174-817392259c4b?w=800", description: "Intricate 3D floral layers." },
+  { id: "5", title: "League City", category: "masterpiece", url: "https://images.unsplash.com/photo-1600057033583-93348123282f?w=800", description: "Texas-sized luxury 3D set." },
+  { id: "6", title: "Manhattan Chrome", category: "signature", url: "https://images.unsplash.com/photo-1522337660859-02fbefad157a?w=800", description: "Liquid metal finish." },
+  { id: "7", title: "SoHo Minimalist", category: "signature", url: "https://images.unsplash.com/photo-1607779097040-26e80aa78e66?w=800", description: "High-end chic simplicity." },
+  { id: "8", title: "Queens Quicks", category: "signature", url: "https://images.unsplash.com/photo-1560707303-4e980ce876ad?w=800", description: "Fast-paced NYC style." },
+  { id: "9", title: "Bronx Bold", category: "masterpiece", url: "https://images.unsplash.com/photo-1516760568612-a8da0558d955?w=800", description: "Graffiti-inspired 3D textures." },
+  { id: "10", title: "Harlem Gold", category: "masterpiece", url: "https://images.unsplash.com/photo-1571290274554-e94521ce8321?w=800", description: "24k gold leaf masterpiece." },
+  { id: "11", title: "Wall Street Matte", category: "signature", url: "https://images.unsplash.com/photo-1610992015732-2449b76344bc?w=800", description: "Powerful matte black finish." },
+  { id: "12", title: "Empire State Chrome", category: "signature", url: "https://images.unsplash.com/photo-1632345031435-8727f6897d53?w=800", description: "Liquid silver NYC finish." },
+  { id: "13", title: "Brooklyn 3D Sculpt", category: "masterpiece", url: "https://images.unsplash.com/photo-1604654894610-df490982570d?w=800", description: "Architectural 3D scaling." },
+  { id: "14", title: "Park Avenue Pearl", category: "signature", url: "https://images.unsplash.com/photo-1607779097040-26e80aa78e66?w=800", description: "Timeless Upper East Side look." },
+  { id: "15", title: "SoHo Structural Gold", category: "masterpiece", url: "https://images.unsplash.com/photo-1519014816548-bf5fe059798b?w=800", description: "Hand-sculpted gold filigree." },
+  { id: "16", title: "Statue of Liberty Patina", category: "masterpiece", url: "https://images.unsplash.com/photo-1632345031024-8727f6897d53?w=800", description: "Oxidized copper 3D textures." },
+  { id: "17", title: "Manhattan Midnight", category: "signature", url: "https://images.unsplash.com/photo-1522337660859-02fbefad157a?w=800", description: "Ultra-deep navy shimmer." },
+  { id: "18", title: "Tribeca Textures", category: "masterpiece", url: "https://images.unsplash.com/photo-1599940828174-817392259c4b?w=800", description: "Multi-layered mixed media." },
+  { id: "19", title: "Wall Street Luxe", category: "signature", url: "https://images.unsplash.com/photo-1600057033583-93348123282f?w=800", description: "Gold-leaf accent business chic." }
+]
+```"

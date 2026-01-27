@@ -23,25 +23,25 @@ import { Search, Loader2, Sparkles, X } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 
 const NAIL_ART_DATA = [
-  { id: "1", title: "Staten Island Main", category: "signature", url: "https://images.unsplash.com/photo-1604654894610-df490982570d?w=800", description: "Clean, classic NYC lines." },
-  { id: "2", title: "Brooklyn Series", category: "masterpiece", url: "https://images.unsplash.com/photo-1632345031435-8727f6897d53?w=800", description: "3D sculpted urban textures." },
-  { id: "3", title: "Modern Trends", category: "masterpiece", url: "https://images.unsplash.com/photo-1519014816548-bf5fe059798b?w=800", description: "High-concept 3D art." },
-  { id: "4", title: "Hillside 3D Sculpt", category: "masterpiece", url: "https://images.unsplash.com/photo-1599940828174-817392259c4b?w=800", description: "Intricate 3D floral layers." },
-  { id: "5", title: "League City", category: "masterpiece", url: "https://images.unsplash.com/photo-1600057033583-93348123282f?w=800", description: "Texas-sized luxury 3D set." },
-  { id: "6", title: "Manhattan Chrome", category: "signature", url: "https://images.unsplash.com/photo-1522337660859-02fbefad157a?w=800", description: "Liquid metal finish." },
-  { id: "7", title: "SoHo Minimalist", category: "signature", url: "https://images.unsplash.com/photo-1607779097040-26e80aa78e66?w=800", description: "High-end chic simplicity." },
-  { id: "8", title: "Queens Quicks", category: "signature", url: "https://images.unsplash.com/photo-1560707303-4e980ce876ad?w=800", description: "Fast-paced NYC style." },
-  { id: "9", title: "Bronx Bold", category: "masterpiece", url: "https://images.unsplash.com/photo-1516760568612-a8da0558d955?w=800", description: "Graffiti-inspired 3D textures." },
-  { id: "10", title: "Harlem Gold", category: "masterpiece", url: "https://images.unsplash.com/photo-1571290274554-e94521ce8321?w=800", description: "24k gold leaf masterpiece." },
-  { id: "11", title: "Wall Street Matte", category: "signature", url: "https://images.unsplash.com/photo-1610992015732-2449b76344bc?w=800", description: "Powerful matte black finish." },
-  { id: "12", title: "Empire State Chrome", category: "signature", url: "https://images.unsplash.com/photo-1632345031435-8727f6897d53?w=800", description: "Liquid silver NYC finish." },
-  { id: "13", title: "Brooklyn 3D Sculpt", category: "masterpiece", url: "https://images.unsplash.com/photo-1604654894610-df490982570d?w=800", description: "Architectural 3D scaling." },
-  { id: "14", title: "Park Avenue Pearl", category: "signature", url: "https://images.unsplash.com/photo-1607779097040-26e80aa78e66?w=800", description: "Timeless Upper East Side look." },
-  { id: "15", title: "SoHo Structural Gold", category: "masterpiece", url: "https://images.unsplash.com/photo-1519014816548-bf5fe059798b?w=800", description: "Hand-sculpted gold filigree." },
-  { id: "16", title: "Statue of Liberty Patina", category: "masterpiece", url: "https://images.unsplash.com/photo-1632345031024-8727f6897d53?w=800", description: "Oxidized copper 3D textures." },
-  { id: "17", title: "Manhattan Midnight", category: "signature", url: "https://images.unsplash.com/photo-1522337660859-02fbefad157a?w=800", description: "Ultra-deep navy shimmer." },
-  { id: "18", title: "Tribeca Textures", category: "masterpiece", url: "https://images.unsplash.com/photo-1599940828174-817392259c4b?w=800", description: "Multi-layered mixed media." },
-  { id: "19", title: "Wall Street Luxe", category: "signature", url: "https://images.unsplash.com/photo-1600057033583-93348123282f?w=800", description: "Gold-leaf accent business chic." }
+  { id: "1", title: "French Chrome Minimalist", category: "signature", url: "http://nail-check.com/wp-content/uploads/2026/01/nailcheck-french-chrome-minimalist.jpg", description: "Clean, classic NYC elegance." },
+  { id: "2", title: "Manhattan Gold", category: "signature", url: "http://nail-check.com/wp-content/uploads/2026/01/nailcheck-manhattan-gold-minimalist.jpg", description: "Minimalist luxury gold detailing." },
+  { id: "3", title: "Staten Island 3D", category: "masterpiece", url: "http://nail-check.com/wp-content/uploads/2026/01/nailcheck-staten-island-3d-sculpt.jpg", description: "Intricate architectural 3D sculpting." },
+  { id: "4", title: "Bronx Chrome", category: "signature", url: "http://nail-check.com/wp-content/uploads/2026/01/nailcheck-bronx-chrome-minimalist.jpg", description: "High-shine urban chrome finish." },
+  { id: "5", title: "Brooklyn Dimension", category: "masterpiece", url: "http://nail-check.com/wp-content/uploads/2026/01/nailcheck-brooklyn-textured-dimension.jpg", description: "Textured layers with NYC depth." },
+  { id: "6", title: "Manhattan Chrome", category: "signature", url: "http://nail-check.com/wp-content/uploads/2026/01/nailcheck-manhattan-chrome-minimalist.jpg", description: "Liquid silver Manhattan style." },
+  { id: "7", title: "Queens 3D Sculpt", category: "masterpiece", url: "http://nail-check.com/wp-content/uploads/2026/01/nailcheck-queens-ny-3d-sculpt.jpg", description: "Bold, 3D structural art." },
+  { id: "8", title: "NYC Signature Gloss", category: "signature", url: "http://nail-check.com/wp-content/uploads/2026/01/nailcheck-nyc-signature-gloss.jpg", description: "The essential high-gloss finish." },
+  { id: "9", title: "Staten Island Signature", category: "signature", url: "http://nail-check.com/wp-content/uploads/2026/01/naii-check-andrea-staten-island.jpg", description: "Andrea's classic Staten Island look." },
+  { id: "10", title: "App Store Spotlight", category: "signature", url: "http://nail-check.com/wp-content/uploads/2026/01/naii-check-andrea-staten-island-appstore.jpeg", description: "Featured App Store design." },
+  { id: "11", title: "Amazon Collection", category: "signature", url: "http://nail-check.com/wp-content/uploads/2026/01/naii-check-andrea-staten-island-amazon.jpeg", description: "Featured Amazon Kindle collection art." },
+  { id: "12", title: "Brooklyn Heritage", category: "signature", url: "http://nail-check.com/wp-content/uploads/2026/01/naii-check-andrea-brooklyn.jpg", description: "Traditional Brooklyn luxury." },
+  { id: "13", title: "Elite Tutorial", category: "masterpiece", url: "http://nail-check.com/wp-content/uploads/2026/01/nailcheck-nail-tutorial.jpg", description: "Advanced technique showcase." },
+  { id: "14", title: "Tri-State Flow", category: "signature", url: "http://nail-check.com/wp-content/uploads/2026/01/naii-check-andrea-staten-island-manhattan.jpg", description: "Connecting NYC styles." },
+  { id: "15", title: "Andrea's Masterpiece", category: "masterpiece", url: "http://nail-check.com/wp-content/uploads/2026/01/nailcheck-nail-tutorial-andrea-rodriguez.jpg", description: "Signature 3D art by Andrea." },
+  { id: "16", title: "Tri-State Texture", category: "masterpiece", url: "http://nail-check.com/wp-content/uploads/2026/01/nailcheck-nail-tutorial-tri-state.jpg", description: "Complex regional 3D textures." },
+  { id: "17", title: "Personal Signature", category: "signature", url: "http://nail-check.com/wp-content/uploads/2026/01/nailcheck-nail-tutorial-my-style.jpg", description: "Personal style minimalist set." },
+  { id: "18", title: "League City Texas", category: "masterpiece", url: "http://nail-check.com/wp-content/uploads/2026/01/nailcheck-nail-tutorial-texas-league-city.jpg", description: "Texas-inspired 3D masterpiece." },
+  { id: "19", title: "Modern Master Trends", category: "masterpiece", url: "http://nail-check.com/wp-content/uploads/2026/01/nailcheck-nail-tutorial-trends.jpg", description: "The future of 3D nail art." }
 ];
 
 export default function Home() {
