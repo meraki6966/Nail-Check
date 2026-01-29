@@ -8,63 +8,42 @@
   --font-display: 'Inter', sans-serif;
   --font-body: 'Inter', sans-serif;
 
-  /* Professional palette: Cream and Muted Rose Gold */
-  --background: 36 67% 98%;       /* Cream #FFFBF5 */
-  --foreground: 0 0% 20%;         /* Dark Gray #333333 */
+  /* Gallery White Theme */
+  --background: 0 0% 100%;       /* Pure White #FFFFFF */
+  --foreground: 0 0% 10%;        /* Near Black #1A1A1A */
   
-  --primary: 6 25% 72%;           /* Rose Gold #C9A9A6 */
+  --primary: 36 33% 52%;         /* Gold Accent #B08D57 */
   --primary-foreground: 0 0% 100%;
   
-  --secondary: 36 50% 96%;       /* Slightly deeper cream */
-  --secondary-foreground: 0 0% 20%;
+  --secondary: 0 0% 98%;         /* Very light gray for subtle contrast */
+  --secondary-foreground: 0 0% 10%;
   
-  --muted: 36 30% 94%;
-  --muted-foreground: 0 0% 45%;
+  --muted: 0 0% 96%;
+  --muted-foreground: 0 0% 40%;
   
-  --accent: 6 30% 94%;           /* Lighter Rose Gold */
-  --accent-foreground: 6 40% 45%;
+  --accent: 36 33% 96%;           /* Subtle gold wash */
+  --accent-foreground: 36 33% 40%;
   
   --destructive: 0 70% 50%;
   --destructive-foreground: 0 0% 98%;
 
-  --border: 36 20% 90%;
-  --input: 36 20% 90%;
-  --ring: 6 25% 72%;
+  --border: 0 0% 90%;
+  --input: 0 0% 90%;
+  --ring: 36 33% 52%;
   
-  --radius: 1rem; /* Highly rounded as requested */
-}
-
-.dark {
-  --background: 270 2% 12%;
-  --foreground: 0 0% 98%;
-  
-  --primary: 350 35% 65%;
-  --primary-foreground: 0 0% 98%;
-  
-  --secondary: 270 4% 20%;
-  --secondary-foreground: 0 0% 98%;
-  
-  --muted: 270 4% 20%;
-  --muted-foreground: 240 5% 65%;
-  
-  --accent: 350 30% 30%;
-  --accent-foreground: 0 0% 98%;
-  
-  --destructive: 0 62% 30%;
-  --destructive-foreground: 0 0% 98%;
-  
-  --border: 270 4% 20%;
-  --input: 270 4% 20%;
-  --ring: 350 35% 65%;
+  --radius: 0.5rem;
 }
 
 @layer base {
-  * {
-    @apply border-border;
+  html, body {
+    overflow-x: hidden;
   }
   body {
-    @apply bg-background text-foreground antialiased;
+    @apply bg-background text-foreground antialiased flex flex-col min-h-screen;
     font-family: var(--font-body);
+  }
+  * {
+    @apply border-border;
   }
   h1, h2, h3, h4, h5, h6 {
     font-family: var(--font-display);
