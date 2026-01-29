@@ -180,26 +180,9 @@ export default function Home() {
               </Button>
             </div>
             
-            {/* Limit Reached Message */}
-            {generationCount >= 3 && (
-              <motion.div 
-                initial={{ opacity: 0, scale: 0.95 }}
-                animate={{ opacity: 1, scale: 1 }}
-                className="mt-6 p-6 rounded-2xl bg-primary/10 border border-primary/20 text-center"
-              >
-                <p className="text-foreground font-medium mb-4">
-                  Free Limit Reached. Join the Inner Circle for Unlimited Generations.
-                </p>
-                <a href="https://nail-check.com/membership" target="_blank" rel="noopener noreferrer">
-                  <Button className="bg-primary text-primary-foreground hover:bg-primary/90 rounded-xl">
-                    Join the Inner Circle
-                  </Button>
-                </a>
-              </motion.div>
-            )}
             
-            {/* AI Result Area */}
-            {(isGenerating || generatedImage) && (
+            {/* AI Result Area with Paywall Overlay */}
+            {(isGenerating || generatedImage || generationCount >= 3) && (
               <motion.div 
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -210,25 +193,58 @@ export default function Home() {
                     <div className="w-12 h-12 rounded-full border-4 border-primary/20 border-t-primary animate-spin" />
                     <p className="text-muted-foreground animate-pulse">{LOADING_MESSAGES[loadingMsgIdx]}</p>
                   </div>
-                ) : generatedImage ? (
+                ) : (
                   <>
-                    <img 
-                      src={generatedImage} 
-                      alt="Generated Nail Set" 
-                      className="w-full h-full object-cover"
-                    />
-                    <div className="absolute bottom-4 right-4 flex gap-2">
-                      <Button 
-                        onClick={handleSave}
-                        variant="ghost"
-                        className="rounded-full bg-background/80 backdrop-blur-md border border-border/50 hover:bg-background h-10 px-4 flex items-center gap-2"
-                      >
-                        <Download className="h-4 w-4" />
-                        Save to Gallery
-                      </Button>
-                    </div>
+                    {generatedImage && (
+                      <img 
+                        src={generatedImage} 
+                        alt="Generated Nail Set" 
+                        className="w-full h-full object-cover"
+                      />
+                    )}
+                    
+                    {generationCount >= 3 && (
+                      <div className="absolute inset-0 z-10 flex items-center justify-center p-4">
+                        <div className="absolute inset-0 bg-background/40 backdrop-blur-xl" />
+                        <motion.div 
+                          initial={{ opacity: 0, scale: 0.9 }}
+                          animate={{ opacity: 1, scale: 1 }}
+                          className="relative z-20 bg-background border border-border p-6 md:p-10 rounded-3xl shadow-2xl max-w-sm text-center space-y-6"
+                        >
+                          <h3 className="text-xl font-display font-bold text-foreground">
+                            Unlock the Full Silhouette
+                          </h3>
+                          <p className="text-sm text-muted-foreground leading-relaxed">
+                            Join the Inner Circle for unlimited AI generation, elite supply lists, and the Collab Hub.
+                          </p>
+                          <a 
+                            href="https://nail-check.com/membership/" 
+                            target="_blank" 
+                            rel="noopener noreferrer"
+                            className="block"
+                          >
+                            <Button className="w-full h-12 rounded-full bg-foreground text-background hover:bg-foreground/90 font-bold tracking-widest uppercase text-[10px]">
+                              UPGRADE ACCESS
+                            </Button>
+                          </a>
+                        </motion.div>
+                      </div>
+                    )}
+
+                    {generatedImage && generationCount < 3 && (
+                      <div className="absolute bottom-4 right-4 flex gap-2">
+                        <Button 
+                          onClick={handleSave}
+                          variant="ghost"
+                          className="rounded-full bg-background/80 backdrop-blur-md border border-border/50 hover:bg-background h-10 px-4 flex items-center gap-2"
+                        >
+                          <Download className="h-4 w-4" />
+                          Save to Gallery
+                        </Button>
+                      </div>
+                    )}
                   </>
-                ) : null}
+                )}
               </motion.div>
             )}
           </div>
