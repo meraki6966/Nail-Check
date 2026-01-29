@@ -64,20 +64,26 @@ export default function Home() {
   });
   const [loadingMsgIdx, setLoadingMsgIdx] = useState(0);
   const [selectedItem, setSelectedItem] = useState<typeof NAIL_ART_DATA[0] | null>(null);
+  const [vault, setVault] = useState<{url: string, id: string}[]>(() => {
+    const saved = localStorage.getItem("nailCheckGallery");
+    return saved ? JSON.parse(saved) : [];
+  });
 
   useEffect(() => {
-    let interval: NodeJS.Timeout;
-    if (isGenerating) {
-      interval = setInterval(() => {
-        setLoadingMsgIdx((prev) => (prev + 1) % LOADING_MESSAGES.length);
-      }, 2000);
-    }
-    return () => clearInterval(interval);
-  }, [isGenerating]);
+    localStorage.setItem("nailCheckGallery", JSON.stringify(vault));
+  }, [vault]);
 
-  useEffect(() => {
-    localStorage.setItem("generationCount", generationCount.toString());
-  }, [generationCount]);
+  const enhancePrompt = (prompt: string) => {
+    return `${prompt}, high-end editorial nail photography, macro lens, 8k resolution, luxury lighting, flawless execution, professional hand model`;
+  };
+
+  const handleStylePreset = (preset: string) => {
+    let additive = "";
+    if (preset === "Manhattan") additive = "minimalist, neutral tones, sheer nude finish, short square";
+    if (preset === "Architect") additive = "3D textures, structural elements, matte";
+    if (preset === "Glass") additive = "high-gloss jelly finish, translucent";
+    setAiPrompt(prev => prev ? `${prev}, ${additive}` : additive);
+  };
 
   const handleGenerate = async () => {
     if (generationCount >= 3) return;
@@ -88,7 +94,7 @@ export default function Home() {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ 
-          prompt: `${aiPrompt}. Professional NYC luxury nail photography, 8k resolution, macro 3D detail.` 
+          prompt: enhancePrompt(aiPrompt)
         }),
       });
       
@@ -102,6 +108,12 @@ export default function Home() {
     } finally {
       setIsGenerating(false);
     }
+  };
+
+  const handleSaveToVault = () => {
+    if (!generatedImage) return;
+    const newEntry = { url: generatedImage, id: Date.now().toString() };
+    setVault(prev => [newEntry, ...prev]);
   };
 
   const handleSave = () => {
@@ -155,6 +167,19 @@ export default function Home() {
               <Sparkles className="h-5 w-5 text-primary" />
               AI Nail Set Designer
             </h2>
+            
+            <div className="flex gap-2 mb-4 overflow-x-auto pb-2 scrollbar-hide">
+              {["Manhattan", "Architect", "Glass"].map(style => (
+                <button
+                  key={style}
+                  onClick={() => handleStylePreset(style)}
+                  className="bg-foreground text-background text-[10px] uppercase tracking-[0.2em] px-4 py-2 rounded-none hover:opacity-80 transition-opacity whitespace-nowrap"
+                >
+                  {style}
+                </button>
+              ))}
+            </div>
+
             <div className="flex flex-col gap-4">
               <div className="relative flex-grow">
                 <Input
@@ -232,14 +257,20 @@ export default function Home() {
                     )}
 
                     {generatedImage && generationCount < 3 && (
-                      <div className="absolute bottom-4 right-4 flex gap-2">
+                      <div className="absolute bottom-4 left-4 right-4 flex gap-2">
+                        <Button 
+                          onClick={handleSaveToVault}
+                          variant="ghost"
+                          className="flex-1 rounded-none bg-foreground text-background text-[10px] uppercase tracking-[0.2em] h-10 border-none hover:bg-foreground/80"
+                        >
+                          Save to Vault
+                        </Button>
                         <Button 
                           onClick={handleSave}
                           variant="ghost"
-                          className="rounded-full bg-background/80 backdrop-blur-md border border-border/50 hover:bg-background h-10 px-4 flex items-center gap-2"
+                          className="rounded-full bg-background/80 backdrop-blur-md border border-border/50 hover:bg-background h-10 w-10 p-0 flex items-center justify-center"
                         >
                           <Download className="h-4 w-4" />
-                          Save to Gallery
                         </Button>
                       </div>
                     )}
@@ -249,6 +280,20 @@ export default function Home() {
             )}
           </div>
         </div>
+
+        {/* Local Gallery View */}
+        {vault.length > 0 && (
+          <div id="gallery-view" className="max-w-4xl mx-auto w-full mb-12">
+            <h2 className="text-xl font-display font-bold mb-6 tracking-widest uppercase">The Vault</h2>
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+              {vault.map((item) => (
+                <div key={item.id} className="aspect-square rounded-none overflow-hidden border border-border/20">
+                  <img src={item.url} alt="Vaulted Design" className="w-full h-full object-cover" />
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
 
         {/* Filters & Search */}
         <div className="sticky top-16 z-30 bg-background/95 backdrop-blur py-4 -mx-4 px-4 border-b border-border/40 md:static md:bg-transparent md:border-none md:p-0">
