@@ -283,12 +283,27 @@ export default function Home() {
 
         {/* Local Gallery View */}
         {vault.length > 0 && (
-          <div id="gallery-view" className="max-w-4xl mx-auto w-full mb-12">
-            <h2 className="text-xl font-display font-bold mb-6 tracking-widest uppercase">The Vault</h2>
+          <div id="gallery-view" className="max-w-4xl mx-auto w-full mb-12 p-6 rounded-3xl bg-background/40 backdrop-blur-xl border border-border/50 shadow-xl">
+            <h2 className="text-xl font-display font-bold mb-6 tracking-[0.3em] uppercase text-center">The Vault</h2>
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
               {vault.map((item) => (
-                <div key={item.id} className="aspect-square rounded-none overflow-hidden border border-border/20">
-                  <img src={item.url} alt="Vaulted Design" className="w-full h-full object-cover" />
+                <div key={item.id} className="aspect-square rounded-none overflow-hidden border border-border/20 group relative">
+                  <img src={item.url} alt="Vaulted Design" className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" />
+                  <div className="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                    <Button 
+                      size="icon" 
+                      variant="ghost" 
+                      className="text-white hover:text-primary"
+                      onClick={() => {
+                        const link = document.createElement('a');
+                        link.href = item.url;
+                        link.download = `vault-design-${item.id}.png`;
+                        link.click();
+                      }}
+                    >
+                      <Download className="h-5 w-5" />
+                    </Button>
+                  </div>
                 </div>
               ))}
             </div>
