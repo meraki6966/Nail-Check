@@ -5,6 +5,7 @@ import { Layout } from "@/components/Layout";
 import { TutorialCard } from "@/components/TutorialCard";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
 import {
   Select,
   SelectContent,
@@ -31,30 +32,31 @@ const LOADING_MESSAGES = [
 ];
 
 const NAIL_ART_DATA = [
-  { id: "1", title: "French Chrome Minimalist", category: "signature", url: "http://nail-check.com/wp-content/uploads/2026/01/nailcheck-french-chrome-minimalist.jpg", description: "Clean, classic NYC elegance." },
-  { id: "2", title: "Manhattan Gold", category: "signature", url: "http://nail-check.com/wp-content/uploads/2026/01/nailcheck-manhattan-gold-minimalist.jpg", description: "Minimalist luxury gold detailing." },
-  { id: "3", title: "Staten Island 3D", category: "masterpiece", url: "http://nail-check.com/wp-content/uploads/2026/01/nailcheck-staten-island-3d-sculpt.jpg", description: "Intricate architectural 3D sculpting." },
-  { id: "4", title: "Bronx Chrome", category: "signature", url: "http://nail-check.com/wp-content/uploads/2026/01/nailcheck-bronx-chrome-minimalist.jpg", description: "High-shine urban chrome finish." },
-  { id: "5", title: "Brooklyn Dimension", category: "masterpiece", url: "http://nail-check.com/wp-content/uploads/2026/01/nailcheck-brooklyn-textured-dimension.jpg", description: "Textured layers with NYC depth." },
-  { id: "6", title: "Manhattan Chrome", category: "signature", url: "http://nail-check.com/wp-content/uploads/2026/01/nailcheck-manhattan-chrome-minimalist.jpg", description: "Liquid silver Manhattan style." },
-  { id: "7", title: "Queens 3D Sculpt", category: "masterpiece", url: "http://nail-check.com/wp-content/uploads/2026/01/nailcheck-queens-ny-3d-sculpt.jpg", description: "Bold, 3D structural art." },
-  { id: "8", title: "NYC Signature Gloss", category: "signature", url: "http://nail-check.com/wp-content/uploads/2026/01/nailcheck-nyc-signature-gloss.jpg", description: "The essential high-gloss finish." },
-  { id: "9", title: "Staten Island Signature", category: "signature", url: "http://nail-check.com/wp-content/uploads/2026/01/naii-check-andrea-staten-island.jpg", description: "Andrea's classic Staten Island look." },
-  { id: "10", title: "App Store Spotlight", category: "signature", url: "http://nail-check.com/wp-content/uploads/2026/01/naii-check-andrea-staten-island-appstore.jpeg", description: "Featured App Store design." },
-  { id: "11", title: "Amazon Collection", category: "signature", url: "http://nail-check.com/wp-content/uploads/2026/01/naii-check-andrea-staten-island-amazon.jpeg", description: "Featured Amazon Kindle collection art." },
-  { id: "12", title: "Brooklyn Heritage", category: "signature", url: "http://nail-check.com/wp-content/uploads/2026/01/naii-check-andrea-brooklyn.jpg", description: "Traditional Brooklyn luxury." },
-  { id: "13", title: "Elite Tutorial", category: "masterpiece", url: "http://nail-check.com/wp-content/uploads/2026/01/nailcheck-nail-tutorial.jpg", description: "Advanced technique showcase." },
-  { id: "14", title: "Tri-State Flow", category: "signature", url: "http://nail-check.com/wp-content/uploads/2026/01/naii-check-andrea-staten-island-manhattan.jpg", description: "Connecting NYC styles." },
-  { id: "15", title: "Andrea's Masterpiece", category: "masterpiece", url: "http://nail-check.com/wp-content/uploads/2026/01/nailcheck-nail-tutorial-andrea-rodriguez.jpg", description: "Signature 3D art by Andrea." },
-  { id: "16", title: "Tri-State Texture", category: "masterpiece", url: "http://nail-check.com/wp-content/uploads/2026/01/nailcheck-nail-tutorial-tri-state.jpg", description: "Complex regional 3D textures." },
-  { id: "17", title: "Personal Signature", category: "signature", url: "http://nail-check.com/wp-content/uploads/2026/01/nailcheck-nail-tutorial-my-style.jpg", description: "Personal style minimalist set." },
-  { id: "18", title: "League City Texas", category: "masterpiece", url: "http://nail-check.com/wp-content/uploads/2026/01/nailcheck-nail-tutorial-texas-league-city.jpg", description: "Texas-inspired 3D masterpiece." },
-  { id: "19", title: "Modern Master Trends", category: "masterpiece", url: "http://nail-check.com/wp-content/uploads/2026/01/nailcheck-nail-tutorial-trends.jpg", description: "The future of 3D nail art." }
+  { id: "1", title: "French Chrome Minimalist", category: "Minimalist", url: "http://nail-check.com/wp-content/uploads/2026/01/nailcheck-french-chrome-minimalist.jpg", description: "Clean, classic technical elegance." },
+  { id: "2", title: "Technical Gold", category: "Minimalist", url: "http://nail-check.com/wp-content/uploads/2026/01/nailcheck-manhattan-gold-minimalist.jpg", description: "Minimalist luxury gold detailing." },
+  { id: "3", title: "Structural 3D", category: "Architect", url: "http://nail-check.com/wp-content/uploads/2026/01/nailcheck-staten-island-3d-sculpt.jpg", description: "Intricate architectural 3D sculpting." },
+  { id: "4", title: "Metro Chrome", category: "Minimalist", url: "http://nail-check.com/wp-content/uploads/2026/01/nailcheck-bronx-chrome-minimalist.jpg", description: "High-shine urban chrome finish." },
+  { id: "5", title: "Technical Dimension", category: "Architect", url: "http://nail-check.com/wp-content/uploads/2026/01/nailcheck-brooklyn-textured-dimension.jpg", description: "Textured layers with technical depth." },
+  { id: "6", title: "Modern Chrome", category: "Minimalist", url: "http://nail-check.com/wp-content/uploads/2026/01/nailcheck-manhattan-chrome-minimalist.jpg", description: "Liquid silver elite style." },
+  { id: "7", title: "Elite 3D Sculpt", category: "Architect", url: "http://nail-check.com/wp-content/uploads/2026/01/nailcheck-queens-ny-3d-sculpt.jpg", description: "Bold, 3D structural art." },
+  { id: "8", title: "Elite Signature Gloss", category: "Minimalist", url: "http://nail-check.com/wp-content/uploads/2026/01/nailcheck-nyc-signature-gloss.jpg", description: "The essential high-gloss finish." },
+  { id: "9", title: "Technical Signature", category: "Minimalist", url: "http://nail-check.com/wp-content/uploads/2026/01/naii-check-andrea-staten-island.jpg", description: "Classic technical signature look." },
+  { id: "10", title: "App Store Spotlight", category: "Minimalist", url: "http://nail-check.com/wp-content/uploads/2026/01/naii-check-andrea-staten-island-appstore.jpeg", description: "Featured App Store design." },
+  { id: "11", title: "Elite Collection", category: "Minimalist", url: "http://nail-check.com/wp-content/uploads/2026/01/naii-check-andrea-staten-island-amazon.jpeg", description: "Featured technical collection art." },
+  { id: "12", title: "Technical Heritage", category: "Minimalist", url: "http://nail-check.com/wp-content/uploads/2026/01/naii-check-andrea-brooklyn.jpg", description: "Traditional elite luxury." },
+  { id: "13", title: "Elite Tutorial", category: "Architect", url: "http://nail-check.com/wp-content/uploads/2026/01/nailcheck-nail-tutorial.jpg", description: "Advanced technique showcase." },
+  { id: "14", title: "Technical Flow", category: "Minimalist", url: "http://nail-check.com/wp-content/uploads/2026/01/naii-check-andrea-staten-island-manhattan.jpg", description: "Connecting technical styles." },
+  { id: "15", title: "Masterpiece Sculpt", category: "Architect", url: "http://nail-check.com/wp-content/uploads/2026/01/nailcheck-nail-tutorial-andrea-rodriguez.jpg", description: "Signature 3D art masterpiece." },
+  { id: "16", title: "Advanced Texture", category: "Architect", url: "http://nail-check.com/wp-content/uploads/2026/01/nailcheck-nail-tutorial-tri-state.jpg", description: "Complex technical 3D textures." },
+  { id: "17", title: "Personal Style", category: "Minimalist", url: "http://nail-check.com/wp-content/uploads/2026/01/nailcheck-nail-tutorial-my-style.jpg", description: "Personal style technical set." },
+  { id: "18", title: "Architectural TX", category: "Architect", url: "http://nail-check.com/wp-content/uploads/2026/01/nailcheck-nail-tutorial-texas-league-city.jpg", description: "Structural 3D masterpiece." },
+  { id: "19", title: "Modern Master Trends", category: "Glass", url: "http://nail-check.com/wp-content/uploads/2026/01/nailcheck-nail-tutorial-trends.jpg", description: "The future of elite nail art." }
 ];
 
 export default function Home() {
   const [search, setSearch] = useState("");
   const [activeCategory, setActiveCategory] = useState<string>("all");
+  const [showGallery, setShowGallery] = useState(false);
   const [aiPrompt, setAiPrompt] = useState("");
   const [isGenerating, setIsGenerating] = useState(false);
   const [generatedImage, setGeneratedImage] = useState<string | null>(null);
@@ -79,7 +81,7 @@ export default function Home() {
 
   const handleStylePreset = (preset: string) => {
     let additive = "";
-    if (preset === "Manhattan") additive = "minimalist, neutral tones, sheer nude finish, short square";
+    if (preset === "Minimalist") additive = "minimalist, neutral tones, sheer nude finish, short square";
     if (preset === "Architect") additive = "3D textures, structural elements, matte";
     if (preset === "Glass") additive = "high-gloss jelly finish, translucent";
     setAiPrompt(prev => prev ? `${prev}, ${additive}` : additive);
@@ -135,8 +137,9 @@ export default function Home() {
   });
 
   const styleOptions = [
-    { value: "signature", label: "Signature" },
-    { value: "masterpiece", label: "Masterpiece" }
+    { value: "Minimalist", label: "Minimalist" },
+    { value: "Architect", label: "Architect" },
+    { value: "Glass", label: "Glass" }
   ];
 
   return (
@@ -156,7 +159,7 @@ export default function Home() {
             Discover Your Next Look
           </h1>
           <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-            Browse our curated collection of luxury nail art and find the perfect style for your next NYC masterpiece.
+            The Nationwide Technical Hub for Nail Professionals.
           </p>
         </div>
 
@@ -172,10 +175,10 @@ export default function Home() {
               {["Manhattan", "Architect", "Glass"].map(style => (
                 <button
                   key={style}
-                  onClick={() => handleStylePreset(style)}
+                  onClick={() => handleStylePreset(style === "Manhattan" ? "Minimalist" : style)}
                   className="bg-foreground text-background text-[10px] uppercase tracking-[0.2em] px-4 py-2 rounded-none hover:opacity-80 transition-opacity whitespace-nowrap"
                 >
-                  {style}
+                  {style === "Manhattan" ? "Minimalist" : style}
                 </button>
               ))}
             </div>
@@ -183,7 +186,7 @@ export default function Home() {
             <div className="flex flex-col gap-4">
               <div className="relative flex-grow">
                 <Input
-                  placeholder="Describe your dream NYC nail set..."
+                  placeholder="Describe your dream technical nail set..."
                   className="h-12 rounded-2xl border-border/60 focus:border-primary focus:ring-primary/20 bg-background"
                   value={aiPrompt}
                   onChange={(e) => setAiPrompt(e.target.value)}
@@ -313,31 +316,49 @@ export default function Home() {
         {/* Filters & Search */}
         <div className="sticky top-16 z-30 bg-background/95 backdrop-blur py-4 -mx-4 px-4 border-b border-border/40 md:static md:bg-transparent md:border-none md:p-0">
           <div className="flex flex-col md:flex-row gap-4 max-w-4xl mx-auto">
-            <div className="relative flex-grow">
+            <div className="flex gap-2 overflow-x-auto pb-2 scrollbar-hide flex-grow">
+              {["all", "Architect", "Glass", "Minimalist"].map((cat) => (
+                <Button
+                  key={cat}
+                  onClick={() => setActiveCategory(cat)}
+                  variant={activeCategory === cat ? "default" : "outline"}
+                  className="rounded-full h-10 px-6 capitalize whitespace-nowrap"
+                >
+                  {cat === "all" ? "All" : cat}
+                </Button>
+              ))}
+            </div>
+            <div className="relative w-full md:w-64">
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
               <Input
-                placeholder="Search styles, techniques..."
-                className="pl-10 h-11 rounded-full border-border/60 focus:border-primary focus:ring-primary/20 bg-card"
+                placeholder="Search styles..."
+                className="pl-10 h-10 rounded-full border-border/60 focus:border-primary focus:ring-primary/20 bg-card"
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
               />
             </div>
-            <Select value={activeCategory} onValueChange={setActiveCategory}>
-              <SelectTrigger className="w-full md:w-[220px] h-11 rounded-full bg-card border-border/60 capitalize">
-                <SelectValue placeholder="Style" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="all">All Styles</SelectItem>
-                {styleOptions.map((s) => (
-                  <SelectItem key={s.value} value={s.value} className="capitalize">{s.label}</SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
           </div>
         </div>
 
-        {/* Content Grid - 2 Column Always (Mobile First) */}
-        <div className="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 md:gap-6">
+        {/* Member Gallery Toggle */}
+        <div className="flex justify-center my-8">
+          <Button 
+            onClick={() => setShowGallery(!showGallery)}
+            variant="outline"
+            className="rounded-full px-8 h-12 font-display font-bold tracking-widest uppercase text-xs"
+          >
+            {showGallery ? "Hide Member Gallery" : "Open Member Gallery"}
+          </Button>
+        </div>
+
+        {/* Content Grid - Togglable Member Gallery */}
+        <div 
+          id="member-gallery" 
+          className={cn(
+            "grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 md:gap-6 transition-all duration-500",
+            showGallery ? "opacity-100 visible h-auto" : "opacity-0 invisible h-0 overflow-hidden"
+          )}
+        >
           {tutorials.map((item) => (
             <motion.div
               key={item.id}
@@ -422,7 +443,7 @@ export default function Home() {
                 Forgot Password?
               </a>
             </div>
-            <p className="text-xs text-muted-foreground/40">© 2026 Nail Check New York City</p>
+            <p className="text-xs text-muted-foreground/40">© 2026 Nail Check Elite</p>
           </div>
         </footer>
       </div>
