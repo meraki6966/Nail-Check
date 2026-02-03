@@ -40,13 +40,13 @@ const NAIL_ART_DATA = [
   { id: "6", title: "Modern Chrome", category: "Minimalist", url: "http://nail-check.com/wp-content/uploads/2026/01/nailcheck-manhattan-chrome-minimalist.jpg", description: "Liquid silver elite style." },
   { id: "7", title: "Elite 3D Sculpt", category: "Architect", url: "http://nail-check.com/wp-content/uploads/2026/01/nailcheck-queens-ny-3d-sculpt.jpg", description: "Bold, 3D structural art." },
   { id: "8", title: "Elite Signature Gloss", category: "Minimalist", url: "http://nail-check.com/wp-content/uploads/2026/01/nailcheck-nyc-signature-gloss.jpg", description: "The essential high-gloss finish." },
-  { id: "9", title: "Technical Signature", category: "Minimalist", url: "http://nail-check.com/wp-content/uploads/2026/01/naii-check-andrea-staten-island.jpg", description: "Classic technical signature look." },
-  { id: "10", title: "App Store Spotlight", category: "Minimalist", url: "http://nail-check.com/wp-content/uploads/2026/01/naii-check-andrea-staten-island-appstore.jpeg", description: "Featured App Store design." },
-  { id: "11", title: "Elite Collection", category: "Minimalist", url: "http://nail-check.com/wp-content/uploads/2026/01/naii-check-andrea-staten-island-amazon.jpeg", description: "Featured technical collection art." },
-  { id: "12", title: "Technical Heritage", category: "Minimalist", url: "http://nail-check.com/wp-content/uploads/2026/01/naii-check-andrea-brooklyn.jpg", description: "Traditional elite luxury." },
+  { id: "9", title: "Technical Signature", category: "Minimalist", url: "http://nail-check.com/wp-content/uploads/2026/01/naii-check-staten-island.jpg", description: "Classic technical signature look." },
+  { id: "10", title: "App Store Spotlight", category: "Minimalist", url: "http://nail-check.com/wp-content/uploads/2026/01/naii-check-staten-island-appstore.jpeg", description: "Featured App Store design." },
+  { id: "11", title: "Elite Collection", category: "Minimalist", url: "http://nail-check.com/wp-content/uploads/2026/01/naii-check-staten-island-amazon.jpeg", description: "Featured technical collection art." },
+  { id: "12", title: "Technical Heritage", category: "Minimalist", url: "http://nail-check.com/wp-content/uploads/2026/01/naii-check-brooklyn.jpg", description: "Traditional elite luxury." },
   { id: "13", title: "Elite Tutorial", category: "Architect", url: "http://nail-check.com/wp-content/uploads/2026/01/nailcheck-nail-tutorial.jpg", description: "Advanced technique showcase." },
-  { id: "14", title: "Technical Flow", category: "Minimalist", url: "http://nail-check.com/wp-content/uploads/2026/01/naii-check-andrea-staten-island-manhattan.jpg", description: "Connecting technical styles." },
-  { id: "15", title: "Masterpiece Sculpt", category: "Architect", url: "http://nail-check.com/wp-content/uploads/2026/01/nailcheck-nail-tutorial-andrea-rodriguez.jpg", description: "Signature 3D art masterpiece." },
+  { id: "14", title: "Technical Flow", category: "Minimalist", url: "http://nail-check.com/wp-content/uploads/2026/01/naii-check-staten-island-manhattan.jpg", description: "Connecting technical styles." },
+  { id: "15", title: "Masterpiece Sculpt", category: "Architect", url: "http://nail-check.com/wp-content/uploads/2026/01/nailcheck-nail-tutorial-technical-sculpt.jpg", description: "Signature 3D art masterpiece." },
   { id: "16", title: "Advanced Texture", category: "Architect", url: "http://nail-check.com/wp-content/uploads/2026/01/nailcheck-nail-tutorial-tri-state.jpg", description: "Complex technical 3D textures." },
   { id: "17", title: "Personal Style", category: "Minimalist", url: "http://nail-check.com/wp-content/uploads/2026/01/nailcheck-nail-tutorial-my-style.jpg", description: "Personal style technical set." },
   { id: "18", title: "Architectural TX", category: "Architect", url: "http://nail-check.com/wp-content/uploads/2026/01/nailcheck-nail-tutorial-texas-league-city.jpg", description: "Structural 3D masterpiece." },
@@ -306,25 +306,7 @@ export default function Home() {
             <div className="absolute inset-0 bg-black/30 flex items-end p-8">
               <div className="text-white space-y-2">
                 <span className="text-[10px] uppercase tracking-[0.4em] font-bold text-primary">February Highlight</span>
-                <p className="text-2xl font-display font-bold tracking-tight">Andrea’s February Pick: The Glass Architect</p>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* Flavor of the Month Section */}
-        <div className="max-w-4xl mx-auto w-full mb-12">
-          <h2 className="text-xl font-display font-bold mb-6 tracking-[0.3em] uppercase text-center italic">Flavor of the Month</h2>
-          <div className="relative group overflow-hidden rounded-3xl border border-border shadow-lg aspect-video md:aspect-[21/9]">
-            <img 
-              src="http://nail-check.com/wp-content/uploads/2026/01/nailcheck-nail-tutorial-trends.jpg" 
-              alt="Flavor of the Month" 
-              className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
-            />
-            <div className="absolute inset-0 bg-black/30 flex items-end p-8">
-              <div className="text-white space-y-2">
-                <span className="text-[10px] uppercase tracking-[0.4em] font-bold text-primary">February Highlight</span>
-                <p className="text-2xl font-display font-bold tracking-tight">Andrea’s February Pick: The Glass Architect</p>
+                <p className="text-2xl font-display font-bold tracking-tight">February Pick: The Glass Architect</p>
               </div>
             </div>
           </div>
