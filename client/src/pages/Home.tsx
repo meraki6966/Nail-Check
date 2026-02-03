@@ -128,6 +128,16 @@ export default function Home() {
     document.body.removeChild(link);
   };
 
+  const handleSearchChange = (val: string) => {
+    setSearch(val);
+    if (val.length > 0) setShowGallery(true);
+  };
+
+  const handleCategoryClick = (cat: string) => {
+    setActiveCategory(cat);
+    setShowGallery(true);
+  };
+
   const tutorials = NAIL_ART_DATA.filter(t => {
     const matchesSearch = !search || 
       t.title.toLowerCase().includes(search.toLowerCase()) ||
@@ -209,7 +219,7 @@ export default function Home() {
             </div>
             
             
-            {/* AI Result Area with Paywall Overlay */}
+        {/* AI Result Area with Paywall Overlay */}
             {(isGenerating || generatedImage || generationCount >= 3) && (
               <motion.div 
                 initial={{ opacity: 0, y: 10 }}
@@ -284,6 +294,42 @@ export default function Home() {
           </div>
         </div>
 
+        {/* Flavor of the Month Section */}
+        <div className="max-w-4xl mx-auto w-full mb-12">
+          <h2 className="text-xl font-display font-bold mb-6 tracking-[0.3em] uppercase text-center italic">Flavor of the Month</h2>
+          <div className="relative group overflow-hidden rounded-3xl border border-border shadow-lg aspect-video md:aspect-[21/9]">
+            <img 
+              src="http://nail-check.com/wp-content/uploads/2026/01/nailcheck-nail-tutorial-trends.jpg" 
+              alt="Flavor of the Month" 
+              className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+            />
+            <div className="absolute inset-0 bg-black/30 flex items-end p-8">
+              <div className="text-white space-y-2">
+                <span className="text-[10px] uppercase tracking-[0.4em] font-bold text-primary">February Highlight</span>
+                <p className="text-2xl font-display font-bold tracking-tight">Andrea’s February Pick: The Glass Architect</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Flavor of the Month Section */}
+        <div className="max-w-4xl mx-auto w-full mb-12">
+          <h2 className="text-xl font-display font-bold mb-6 tracking-[0.3em] uppercase text-center italic">Flavor of the Month</h2>
+          <div className="relative group overflow-hidden rounded-3xl border border-border shadow-lg aspect-video md:aspect-[21/9]">
+            <img 
+              src="http://nail-check.com/wp-content/uploads/2026/01/nailcheck-nail-tutorial-trends.jpg" 
+              alt="Flavor of the Month" 
+              className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+            />
+            <div className="absolute inset-0 bg-black/30 flex items-end p-8">
+              <div className="text-white space-y-2">
+                <span className="text-[10px] uppercase tracking-[0.4em] font-bold text-primary">February Highlight</span>
+                <p className="text-2xl font-display font-bold tracking-tight">Andrea’s February Pick: The Glass Architect</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
         {/* Local Gallery View */}
         {vault.length > 0 && (
           <div id="gallery-view" className="max-w-4xl mx-auto w-full mb-12 p-6 rounded-3xl bg-background/40 backdrop-blur-xl border border-border/50 shadow-xl">
@@ -320,7 +366,7 @@ export default function Home() {
               {["all", "Architect", "Glass", "Minimalist"].map((cat) => (
                 <Button
                   key={cat}
-                  onClick={() => setActiveCategory(cat)}
+                  onClick={() => handleCategoryClick(cat)}
                   variant={activeCategory === cat ? "default" : "outline"}
                   className="rounded-full h-10 px-6 capitalize whitespace-nowrap"
                 >
@@ -328,13 +374,13 @@ export default function Home() {
                 </Button>
               ))}
             </div>
-            <div className="relative w-full md:w-64">
+            <div className="relative flex-grow">
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
               <Input
                 placeholder="Search styles..."
                 className="pl-10 h-10 rounded-full border-border/60 focus:border-primary focus:ring-primary/20 bg-card"
                 value={search}
-                onChange={(e) => setSearch(e.target.value)}
+                onChange={(e) => handleSearchChange(e.target.value)}
               />
             </div>
           </div>
