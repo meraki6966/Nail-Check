@@ -71,6 +71,44 @@ export default function Home() {
     return saved ? JSON.parse(saved) : [];
   });
 
+  // Spotlight state
+  const [spotlight, setSpotlight] = useState(() => {
+    const saved = localStorage.getItem("nailCheckSpotlight");
+    return saved ? JSON.parse(saved) : {
+      url: "http://nail-check.com/wp-content/uploads/2026/01/nailcheck-nail-tutorial-trends.jpg",
+      caption: "February Pick: The Glass Architect"
+    };
+  });
+
+  useEffect(() => {
+    localStorage.setItem("nailCheckSpotlight", JSON.stringify(spotlight));
+  }, [spotlight]);
+
+  const handleSpotlightUpdate = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setSpotlight((prev: any) => ({ ...prev, url: reader.result as string }));
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
+  useEffect(() => {
+    let interval: NodeJS.Timeout;
+    if (isGenerating) {
+      interval = setInterval(() => {
+        setLoadingMsgIdx((prev) => (prev + 1) % LOADING_MESSAGES.length);
+      }, 2000);
+    }
+    return () => clearInterval(interval);
+  }, [isGenerating]);
+
+  useEffect(() => {
+    localStorage.setItem("generationCount", generationCount.toString());
+  }, [generationCount]);
+
   useEffect(() => {
     localStorage.setItem("nailCheckGallery", JSON.stringify(vault));
   }, [vault]);
@@ -85,6 +123,15 @@ export default function Home() {
     if (preset === "Architect") additive = "3D textures, structural elements, matte";
     if (preset === "Glass") additive = "high-gloss jelly finish, translucent";
     setAiPrompt(prev => prev ? `${prev}, ${additive}` : additive);
+    
+    // Auto scroll to gallery
+    const gallery = document.getElementById("member-gallery");
+    if (gallery) {
+      setShowGallery(true);
+      setTimeout(() => {
+        gallery.scrollIntoView({ behavior: "smooth", block: "start" });
+      }, 100);
+    }
   };
 
   const handleGenerate = async () => {
@@ -136,6 +183,10 @@ export default function Home() {
   const handleCategoryClick = (cat: string) => {
     setActiveCategory(cat);
     setShowGallery(true);
+    setTimeout(() => {
+      const gallery = document.getElementById("member-gallery");
+      if (gallery) gallery.scrollIntoView({ behavior: "smooth", block: "start" });
+    }, 100);
   };
 
   const tutorials = NAIL_ART_DATA.filter(t => {
@@ -146,15 +197,9 @@ export default function Home() {
     return matchesSearch && matchesCategory;
   });
 
-  const styleOptions = [
-    { value: "Minimalist", label: "Minimalist" },
-    { value: "Architect", label: "Architect" },
-    { value: "Glass", label: "Glass" }
-  ];
-
   return (
     <Layout>
-      <div className="space-y-8 flex flex-col">
+      <div className="space-y-8 flex flex-col overflow-x-hidden">
         {/* Hero Section */}
         <div className="text-center space-y-4 py-8">
           <motion.div
@@ -166,7 +211,7 @@ export default function Home() {
             <Sparkles className="h-6 w-6 text-primary" />
           </motion.div>
           <h1 className="text-4xl md:text-5xl lg:text-6xl font-display font-bold text-foreground">
-            Discover Your Next Look
+            Nail Check
           </h1>
           <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
             The Nationwide Technical Hub for Nail Professionals.
@@ -174,7 +219,7 @@ export default function Home() {
         </div>
 
         {/* AI Generator Section */}
-        <div className="max-w-4xl mx-auto w-full mb-12">
+        <div className="max-w-4xl mx-auto w-full mb-12 px-4">
           <div className="bg-card/50 backdrop-blur-sm border border-border/50 rounded-3xl p-6 md:p-8 shadow-xl">
             <h2 className="text-2xl font-display font-bold mb-4 flex items-center gap-2">
               <Sparkles className="h-5 w-5 text-primary" />
@@ -182,13 +227,13 @@ export default function Home() {
             </h2>
             
             <div className="flex gap-2 mb-4 overflow-x-auto pb-2 scrollbar-hide">
-              {["Manhattan", "Architect", "Glass"].map(style => (
+              {["Minimalist", "Architect", "Glass"].map(style => (
                 <button
                   key={style}
-                  onClick={() => handleStylePreset(style === "Manhattan" ? "Minimalist" : style)}
+                  onClick={() => handleStylePreset(style)}
                   className="bg-foreground text-background text-[10px] uppercase tracking-[0.2em] px-4 py-2 rounded-none hover:opacity-80 transition-opacity whitespace-nowrap"
                 >
-                  {style === "Manhattan" ? "Minimalist" : style}
+                  {style}
                 </button>
               ))}
             </div>
@@ -218,8 +263,7 @@ export default function Home() {
               </Button>
             </div>
             
-            
-        {/* AI Result Area with Paywall Overlay */}
+            {/* AI Result Area with Paywall Overlay */}
             {(isGenerating || generatedImage || generationCount >= 3) && (
               <motion.div 
                 initial={{ opacity: 0, y: 10 }}
@@ -295,18 +339,33 @@ export default function Home() {
         </div>
 
         {/* Flavor of the Month Section */}
-        <div className="max-w-4xl mx-auto w-full mb-12">
+        <div className="max-w-4xl mx-auto w-full mb-12 px-4 relative">
           <h2 className="text-xl font-display font-bold mb-6 tracking-[0.3em] uppercase text-center italic">Flavor of the Month</h2>
+          
+          {/* Admin Control */}
+          <div className="absolute top-0 right-4 z-20">
+            <label className="cursor-pointer bg-foreground text-background px-3 py-1 text-[8px] uppercase tracking-widest rounded-full opacity-50 hover:opacity-100 transition-opacity">
+              Admin: Replace Spotlight
+              <input type="file" className="hidden" accept="image/*" onChange={handleSpotlightUpdate} />
+            </label>
+          </div>
+
           <div className="relative group overflow-hidden rounded-3xl border border-border shadow-lg aspect-video md:aspect-[21/9]">
             <img 
-              src="http://nail-check.com/wp-content/uploads/2026/01/nailcheck-nail-tutorial-trends.jpg" 
+              src={spotlight.url} 
               alt="Flavor of the Month" 
               className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
             />
             <div className="absolute inset-0 bg-black/30 flex items-end p-8">
               <div className="text-white space-y-2">
                 <span className="text-[10px] uppercase tracking-[0.4em] font-bold text-primary">February Highlight</span>
-                <p className="text-2xl font-display font-bold tracking-tight">February Pick: The Glass Architect</p>
+                <div className="flex items-center gap-2">
+                  <Input 
+                    value={spotlight.caption}
+                    onChange={(e) => setSpotlight((prev: any) => ({ ...prev, caption: e.target.value }))}
+                    className="bg-transparent border-none text-2xl font-display font-bold tracking-tight text-white p-0 h-auto focus-visible:ring-0"
+                  />
+                </div>
               </div>
             </div>
           </div>
@@ -314,7 +373,7 @@ export default function Home() {
 
         {/* Local Gallery View */}
         {vault.length > 0 && (
-          <div id="gallery-view" className="max-w-4xl mx-auto w-full mb-12 p-6 rounded-3xl bg-background/40 backdrop-blur-xl border border-border/50 shadow-xl">
+          <div id="gallery-view" className="max-w-4xl mx-auto w-full mb-12 p-6 rounded-3xl bg-background/40 backdrop-blur-xl border border-border/50 shadow-xl px-4 mx-4">
             <h2 className="text-xl font-display font-bold mb-6 tracking-[0.3em] uppercase text-center">The Vault</h2>
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
               {vault.map((item) => (
@@ -383,31 +442,37 @@ export default function Home() {
         <div 
           id="member-gallery" 
           className={cn(
-            "grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 md:gap-6 transition-all duration-500",
+            "grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 md:gap-6 transition-all duration-500 px-4",
             showGallery ? "opacity-100 visible h-auto" : "opacity-0 invisible h-0 overflow-hidden"
           )}
         >
-          {tutorials.map((item) => (
-            <motion.div
-              key={item.id}
-              layoutId={`card-${item.id}`}
-              onClick={() => setSelectedItem(item)}
-              className="group cursor-pointer rounded-xl overflow-hidden bg-card border border-border/40 shadow-sm hover:shadow-md transition-all"
-            >
-              <div className="aspect-[4/5] relative overflow-hidden">
-                <img 
-                  src={item.url} 
-                  alt={item.title}
-                  className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
-                <div className="absolute bottom-2 left-2 right-2 text-white opacity-0 group-hover:opacity-100 transition-opacity">
-                  <p className="text-[10px] font-semibold uppercase tracking-wider mb-0.5">{item.category}</p>
-                  <h3 className="font-display font-bold truncate text-sm">{item.title}</h3>
+          {tutorials.length > 0 ? (
+            tutorials.map((item) => (
+              <motion.div
+                key={item.id}
+                layoutId={`card-${item.id}`}
+                onClick={() => setSelectedItem(item)}
+                className="group cursor-pointer rounded-xl overflow-hidden bg-card border border-border/40 shadow-sm hover:shadow-md transition-all"
+              >
+                <div className="aspect-[4/5] relative overflow-hidden">
+                  <img 
+                    src={item.url} 
+                    alt={item.title}
+                    className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+                  <div className="absolute bottom-2 left-2 right-2 text-white opacity-0 group-hover:opacity-100 transition-opacity">
+                    <p className="text-[10px] font-semibold uppercase tracking-wider mb-0.5">{item.category}</p>
+                    <h3 className="font-display font-bold truncate text-sm">{item.title}</h3>
+                  </div>
                 </div>
-              </div>
-            </motion.div>
-          ))}
+              </motion.div>
+            ))
+          ) : (
+            <div className="col-span-full py-20 text-center">
+              <p className="text-muted-foreground font-display tracking-widest uppercase text-sm">More designs coming soon to this section!</p>
+            </div>
+          )}
         </div>
 
         {/* Item Detail Modal */}
@@ -464,14 +529,10 @@ export default function Home() {
               <a href="https://nail-check.com/privacy-policy/" target="_blank" rel="noopener noreferrer" className="hover:text-primary transition-colors">
                 Privacy Policy
               </a>
-              <a href="#" className="hover:text-primary transition-colors" onClick={(e) => {
-                e.preventDefault();
-                alert("Forgot password flow initiated. Check your email for instructions.");
-              }}>
-                Forgot Password?
-              </a>
             </div>
-            <p className="text-xs text-muted-foreground/40">© 2026 Nail Check Elite</p>
+            <p className="text-[10px] text-muted-foreground/40 uppercase tracking-widest mt-4">
+              © 2026 Nail Check Hub. All Rights Reserved.
+            </p>
           </div>
         </footer>
       </div>
