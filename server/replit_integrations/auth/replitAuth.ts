@@ -49,14 +49,14 @@ function updateUserSession(
   user: any,
   tokens: client.TokenEndpointResponse & client.TokenEndpointResponseHelpers
 ) {
-  user.claims = tokens.claims();
+ user.claims = tokens.claims ? tokens.claims() : (tokens._json || {});
   user.access_token = tokens.access_token;
   user.refresh_token = tokens.refresh_token;
-  user.expires_at = user.claims?.exp;
+user.expires_at = user.claims?.exp || Math.floor(Date.now() / 1000) + 3600;
 }
 
 async function upsertUser(claims: any) {
-  await authStorage.upsertUser({
+ await upsertUser(user.claims);
     id: claims["sub"],
     email: claims["email"],
     firstName: claims["first_name"],
