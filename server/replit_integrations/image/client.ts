@@ -1,6 +1,5 @@
 import { GoogleGenAI, Modality } from "@google/genai";
 
-// This is using Replit's AI Integrations service, which provides Gemini-compatible API access without requiring your own Gemini API key.
 export const ai = new GoogleGenAI({
   apiKey: process.env.AI_INTEGRATIONS_GEMINI_API_KEY,
   httpOptions: {
@@ -10,13 +9,38 @@ export const ai = new GoogleGenAI({
 });
 
 /**
- * Generate an image and return as base64 data URL.
- * Uses gemini-2.5-flash-image model via Replit AI Integrations.
+ * Generate a nail design. 
+ * If base64Image is provided, it performs an Image-to-Image modification.
  */
-export async function generateImage(prompt: string): Promise<string> {
+export async function generateImage(prompt: string, base64Image?: string): Promise<string> {
+
+  // 1. The "Brand Envelope" - This forces the AI to stay elite
+  const systemInstruction = `
+    You are the Nail Check Technical AI. 
+    Your style is: Architectural, Luxury, High-Gloss, and Elite. 
+    Instructions:
+    - If the user prompt is vague, apply high-end textures like 3D chrome, jelly finishes, or structural sculpting.
+    - Maintain a 'Vogue' editorial photography aesthetic.
+    - Focus strictly on the nail plate and technical execution.
+    - Avoid messy, amateur, or 'craft-style' art. 
+    User Request: ${prompt}
+  `;
+
+  const parts: any[] = [{ text: systemInstruction }];
+
+  if (base64Image) {
+    const base64Data = base64Image.split(',')[1] || base64Image;
+    parts.push({
+      inlineData: {
+        mimeType: "image/png",
+        data: base64Data
+      }
+    });
+  }
+
   const response = await ai.models.generateContent({
     model: "gemini-2.5-flash-image",
-    contents: [{ role: "user", parts: [{ text: prompt }] }],
+    contents: [{ role: "user", parts: parts }],
     config: {
       responseModalities: [Modality.TEXT, Modality.IMAGE],
     },
@@ -28,10 +52,9 @@ export async function generateImage(prompt: string): Promise<string> {
   );
 
   if (!imagePart?.inlineData?.data) {
-    throw new Error("No image data in response");
+    throw new Error("The AI Hub could not render this vision. Please check your canvas and try again.");
   }
 
   const mimeType = imagePart.inlineData.mimeType || "image/png";
   return `data:${mimeType};base64,${imagePart.inlineData.data}`;
 }
-
