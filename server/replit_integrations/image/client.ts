@@ -1,8 +1,9 @@
 import { GoogleGenAI, Modality } from "@google/genai";
 
-// 1. Initialize with ONLY the API Key to talk directly to Google
-// This fixes the 404 error caused by the Replit Base URL proxy.
-export const ai = new GoogleGenAI(process.env.AI_INTEGRATIONS_GEMINI_API_KEY!);
+// 1. Initialize with an options OBJECT to prevent the 'project' undefined error
+export const ai = new GoogleGenAI({
+  apiKey: process.env.AI_INTEGRATIONS_GEMINI_API_KEY!
+});
 
 /**
  * Generate a nail design. 
@@ -35,7 +36,7 @@ export async function generateImage(prompt: string, base64Image?: string): Promi
     });
   }
 
-  // 2. Use gemini-1.5-flash to ensure compatibility and avoid 404s.
+  // 2. Use gemini-1.5-flash (STABLE version) to avoid 404 Not Found errors
   const response = await ai.models.generateContent({
     model: "gemini-1.5-flash", 
     contents: [{ role: "user", parts: parts }],
