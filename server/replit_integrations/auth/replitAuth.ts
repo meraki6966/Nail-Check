@@ -1,5 +1,5 @@
 import * as client from "openid-client";
-import { Strategy } from "openid-client"; // Removed '/passport'
+import { Strategy } from "openid-client"; 
 import passport from "passport";
 import session from "express-session";
 import type { Express, RequestHandler } from "express";
@@ -49,14 +49,16 @@ function updateUserSession(
   user: any,
   tokens: client.TokenEndpointResponse & client.TokenEndpointResponseHelpers
 ) {
- user.claims = tokens.claims ? tokens.claims() : (tokens._json || {});
+  // FIX: Safely retrieve claims to prevent Railway crashes
+  user.claims = tokens.claims ? tokens.claims() : (tokens._json || {});
   user.access_token = tokens.access_token;
   user.refresh_token = tokens.refresh_token;
-user.expires_at = user.claims?.exp || Math.floor(Date.now() / 1000) + 3600;
+  user.expires_at = user.claims?.exp || Math.floor(Date.now() / 1000) + 3600;
 }
 
+// FIX: Properly defined function with correct object syntax
 async function upsertUser(claims: any) {
- await upsertUser(user.claims);
+  await authStorage.upsertUser({
     id: claims["sub"],
     email: claims["email"],
     firstName: claims["first_name"],
@@ -69,7 +71,6 @@ export async function setupAuth(app: Express) {
   app.set("trust proxy", 1);
   app.use(getSession());
   
-  // Only set up Replit OAuth if we're on Replit
   if (!isReplit) {
     console.log("Skipping Replit auth setup - not running on Replit");
     return;
@@ -80,20 +81,18 @@ export async function setupAuth(app: Express) {
 
   const config = await getOidcConfig();
 
-  const verify: VerifyFunction = async (
+  const verify = async (
     tokens: client.TokenEndpointResponse & client.TokenEndpointResponseHelpers,
     verified: passport.AuthenticateCallback
   ) => {
-    const user = {};
+    const user: any = {};
     updateUserSession(user, tokens);
-    await upsertUser(tokens.claims());
+    await upsertUser(user.claims);
     verified(null, user);
   };
 
-  // Keep track of registered strategies
   const registeredStrategies = new Set<string>();
 
-  // Helper function to ensure strategy exists for a domain
   const ensureStrategy = (domain: string) => {
     const strategyName = `replitauth:${domain}`;
     if (!registeredStrategies.has(strategyName)) {
@@ -143,14 +142,13 @@ export async function setupAuth(app: Express) {
 }
 
 export const isAuthenticated: RequestHandler = async (req, res, next) => {
-  // If not on Replit, skip auth check (or implement alternative auth)
   if (!isReplit) {
-    return next(); // Allow access without auth on Railway
+    return next(); 
   }
   
   const user = req.user as any;
 
-  if (!req.isAuthenticated() || !user.expires_at) {
+  if (!req.isAuthenticated() || !user?.expires_at) {
     return res.status(401).json({ message: "Unauthorized" });
   }
 
