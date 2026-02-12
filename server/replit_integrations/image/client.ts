@@ -36,9 +36,9 @@ export async function generateImage(prompt: string, base64Image?: string): Promi
     });
   }
 
-  // 2. Use gemini-1.5-flash (STABLE version) to avoid 404 Not Found errors
+  // 2. Use gemini-2.5-flash (STABLE version) to avoid 404 Not Found errors
   const response = await ai.models.generateContent({
-    model: "gemini-1.5-flash", 
+    model: "gemini-2.5-flash", 
     contents: [{ role: "user", parts: parts }],
     config: {
       responseModalities: [Modality.TEXT, Modality.IMAGE],
