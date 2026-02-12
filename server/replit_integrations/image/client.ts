@@ -1,32 +1,20 @@
 import { GoogleGenAI, Modality } from "@google/genai";
 
-// 1. Initialize with an options OBJECT to prevent the 'project' undefined error
+// Prevents 'project' undefined error by passing as an options object
 export const ai = new GoogleGenAI({
   apiKey: process.env.AI_INTEGRATIONS_GEMINI_API_KEY!
 });
 
-/**
- * Generate a nail design. 
- * If base64Image is provided, it performs an Image-to-Image modification.
- */
 export async function generateImage(prompt: string, base64Image?: string): Promise<string> {
-
-  // The "Brand Envelope" - This forces the AI to stay elite
   const systemInstruction = `
-    You are the Nail Check Technical AI. 
-    Your style is: Architectural, Luxury, High-Gloss, and Elite. 
-    Instructions:
-    - If the user prompt is vague, apply high-end textures like 3D chrome, jelly finishes, or structural sculpting.
-    - Maintain a 'Vogue' editorial photography aesthetic.
-    - Focus strictly on the nail plate and technical execution.
-    - Avoid messy, amateur, or 'craft-style' art. 
+    You are the Nail Check Technical AI... [Your Elite Instructions]
     User Request: ${prompt}
   `;
 
   const parts: any[] = [{ text: systemInstruction }];
 
-  // Handle image-to-image if a base image exists
   if (base64Image) {
+    // Cleanly strips the data URL prefix if it exists
     const base64Data = base64Image.split(',')[1] || base64Image;
     parts.push({
       inlineData: {
@@ -36,9 +24,9 @@ export async function generateImage(prompt: string, base64Image?: string): Promi
     });
   }
 
-  // 2. Use gemini-2.5-flash (STABLE version) to avoid 404 Not Found errors
   const response = await ai.models.generateContent({
-    model: "gemini-2.5-flash", 
+    // Using the high-fidelity 2026 model for Tier 1 Billing accounts
+    model: "gemini-3-pro-image-preview", 
     contents: [{ role: "user", parts: parts }],
     config: {
       responseModalities: [Modality.TEXT, Modality.IMAGE],
@@ -47,12 +35,11 @@ export async function generateImage(prompt: string, base64Image?: string): Promi
 
   const candidate = response.candidates?.[0];
   const imagePart = candidate?.content?.parts?.find(
-    (part: { inlineData?: { data?: string; mimeType?: string } }) => part.inlineData
+    (part: any) => part.inlineData
   );
 
-  // Error handling if the AI fails to generate an actual image
   if (!imagePart?.inlineData?.data) {
-    throw new Error("The AI Hub could not render this vision. Please check your canvas and try again.");
+    throw new Error("The AI Hub could not render this vision. Please check your regional settings.");
   }
 
   const mimeType = imagePart.inlineData.mimeType || "image/png";
