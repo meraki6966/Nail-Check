@@ -59,7 +59,11 @@
     "memoizee": "^0.4.17",
     "memorystore": "^1.6.7",
     "next-themes": "^0.4.6",
+<<<<<<< HEAD
     "openid-client": "^5.6.0",
+=======
+    "openid-client": "5.6.0",
+>>>>>>> 44a265a64a6beb1f749cf63f9baf0ee8906629be
     "p-limit": "^7.2.0",
     "p-retry": "^7.1.1",
     "passport": "^0.7.0",
