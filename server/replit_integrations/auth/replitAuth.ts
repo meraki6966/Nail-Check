@@ -8,8 +8,14 @@ import memoize from "memoizee";
 import connectPg from "connect-pg-simple";
 import { authStorage } from "./storage";
 
+// Check if we're running on Replit
+const isReplit = !!(process.env.REPL_ID && process.env.ISSUER_URL);
+
 const getOidcConfig = memoize(
   async () => {
+    if (!isReplit) {
+      throw new Error("Replit auth not available - not running on Replit");
+    }
     return await client.discovery(
       new URL(process.env.ISSUER_URL ?? "https://replit.com/oidc"),
       process.env.REPL_ID!
@@ -63,6 +69,13 @@ async function upsertUser(claims: any) {
 export async function setupAuth(app: Express) {
   app.set("trust proxy", 1);
   app.use(getSession());
+  
+  // Only set up Replit OAuth if we're on Replit
+  if (!isReplit) {
+    console.log("Skipping Replit auth setup - not running on Replit");
+    return;
+  }
+  
   app.use(passport.initialize());
   app.use(passport.session());
 
@@ -131,6 +144,11 @@ export async function setupAuth(app: Express) {
 }
 
 export const isAuthenticated: RequestHandler = async (req, res, next) => {
+  // If not on Replit, skip auth check (or implement alternative auth)
+  if (!isReplit) {
+    return next(); // Allow access without auth on Railway
+  }
+  
   const user = req.user as any;
 
   if (!req.isAuthenticated() || !user.expires_at) {
