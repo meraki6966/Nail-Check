@@ -1,12 +1,8 @@
 import { GoogleGenAI, Modality } from "@google/genai";
 
-export const ai = new GoogleGenAI({
-  apiKey: process.env.AI_INTEGRATIONS_GEMINI_API_KEY,
-  httpOptions: {
-    apiVersion: "",
-    baseUrl: process.env.AI_INTEGRATIONS_GEMINI_BASE_URL,
-  },
-});
+// 1. Initialize with ONLY the API Key to talk directly to Google
+// This fixes the 404 error caused by the Replit Base URL proxy.
+export const ai = new GoogleGenAI(process.env.AI_INTEGRATIONS_GEMINI_API_KEY!);
 
 /**
  * Generate a nail design. 
@@ -14,7 +10,7 @@ export const ai = new GoogleGenAI({
  */
 export async function generateImage(prompt: string, base64Image?: string): Promise<string> {
 
-  // 1. The "Brand Envelope" - This forces the AI to stay elite
+  // The "Brand Envelope" - This forces the AI to stay elite
   const systemInstruction = `
     You are the Nail Check Technical AI. 
     Your style is: Architectural, Luxury, High-Gloss, and Elite. 
@@ -28,6 +24,7 @@ export async function generateImage(prompt: string, base64Image?: string): Promi
 
   const parts: any[] = [{ text: systemInstruction }];
 
+  // Handle image-to-image if a base image exists
   if (base64Image) {
     const base64Data = base64Image.split(',')[1] || base64Image;
     parts.push({
@@ -38,8 +35,9 @@ export async function generateImage(prompt: string, base64Image?: string): Promi
     });
   }
 
+  // 2. Use gemini-1.5-flash to ensure compatibility and avoid 404s.
   const response = await ai.models.generateContent({
-    model: "gemini-2.5-flash-image",
+    model: "gemini-1.5-flash", 
     contents: [{ role: "user", parts: parts }],
     config: {
       responseModalities: [Modality.TEXT, Modality.IMAGE],
@@ -51,6 +49,7 @@ export async function generateImage(prompt: string, base64Image?: string): Promi
     (part: { inlineData?: { data?: string; mimeType?: string } }) => part.inlineData
   );
 
+  // Error handling if the AI fails to generate an actual image
   if (!imagePart?.inlineData?.data) {
     throw new Error("The AI Hub could not render this vision. Please check your canvas and try again.");
   }
