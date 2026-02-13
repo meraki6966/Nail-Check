@@ -1,4 +1,5 @@
-import SeasonalVault from "./pages/SeasonalVault";import { Switch, Route } from "wouter";
+import SeasonalVault from "./pages/SeasonalVault";
+import { Switch, Route } from "wouter";
 import { queryClient } from "./lib/queryClient";
 import { QueryClientProvider } from "@tanstack/react-query";
 import { Toaster } from "@/components/ui/toaster";
@@ -16,6 +17,7 @@ function Router() {
       <Route path="/tutorial/:id" component={TutorialDetail} />
       <Route path="/upload" component={Upload} />
       <Route path="/saved" component={Saved} />
+      <Route path="/seasonal" component={SeasonalVault} />
       <Route component={NotFound} />
     </Switch>
   );
