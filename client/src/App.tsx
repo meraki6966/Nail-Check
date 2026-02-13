@@ -1,3 +1,5 @@
+
+import Tutorials from "./pages/Tutorials";
 import Embed from "./pages/Embed";
 import Portal from "./pages/Portal";
 import Membership from "./pages/Membership";
@@ -18,6 +20,7 @@ import Saved from "@/pages/Saved";
 function Router() {
   return (
     <Switch>
+      <Route path="/tutorials" component={Tutorials} />
       <Route path="/embed" component={Embed} />
       <Route path="/portal" component={Portal} />
       <Route path="/membership" component={Membership} />

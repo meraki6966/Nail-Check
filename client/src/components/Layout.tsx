@@ -1,5 +1,5 @@
-import { Link, useLocation } from "wouter";
 import { Sparkles, Heart, Home, Calendar, Package, LogOut, Crown } from "lucide-react";
+import { Link, useLocation } from "wouter";
 import { cn } from "@/lib/utils";
 import { useAuth } from "@/hooks/use-auth";
 import { Button } from "@/components/ui/button";
@@ -9,11 +9,12 @@ export function Layout({ children }: { children: React.ReactNode }) {
   const { user, logout } = useAuth();
 
   const navItems = [
-    { href: "/", label: "Design Lab", icon: Home },
-    { href: "/saved", label: "Fire Vault", icon: Heart },
-    { href: "/seasonal", label: "Seasonal", icon: Calendar },
-    { href: "/supplies", label: "Supplies", icon: Package },
-  ];
+  { href: "/", label: "Design Lab", icon: Home },
+  { href: "/saved", label: "Fire Vault", icon: Heart },
+  { href: "/seasonal", label: "Seasonal", icon: Calendar },
+  { href: "/supplies", label: "Supplies", icon: Package },
+  { href: "/tutorials", label: "Tutorials", icon: Sparkles }, // ADD THIS LINE
+];
 
   const portalLinks = [
     { href: "/about", label: "About" },
