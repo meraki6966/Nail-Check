@@ -186,6 +186,85 @@ export async function registerRoutes(
     }
   });
 
+  // SUPPLY SUITE API ROUTES
+  app.get("/api/supplies", async (req, res) => {
+    try {
+      const category = req.query.category as string | undefined;
+      const products = await storage.getSupplyProducts(category);
+      res.json(products);
+    } catch (err) {
+      console.error("Error fetching supply products:", err);
+      res.status(500).json({ message: "Failed to fetch products" });
+    }
+  });
+
+  app.get("/api/supplies/featured", async (req, res) => {
+    try {
+      const products = await storage.getFeaturedSupplyProducts();
+      res.json(products);
+    } catch (err) {
+      console.error("Error fetching featured products:", err);
+      res.status(500).json({ message: "Failed to fetch featured products" });
+    }
+  });
+
+  app.get("/api/supplies/search", async (req, res) => {
+    try {
+      const query = req.query.q as string;
+      if (!query) {
+        return res.status(400).json({ message: "Search query required" });
+      }
+      const products = await storage.searchSupplyProducts(query);
+      res.json(products);
+    } catch (err) {
+      console.error("Error searching products:", err);
+      res.status(500).json({ message: "Failed to search products" });
+    }
+  });
+
+  app.get("/api/supplies/:id", async (req, res) => {
+    try {
+      const id = Number(req.params.id);
+      const product = await storage.getSupplyProduct(id);
+      if (!product) {
+        return res.status(404).json({ message: "Product not found" });
+      }
+      res.json(product);
+    } catch (err) {
+      console.error("Error fetching product:", err);
+      res.status(500).json({ message: "Failed to fetch product" });
+    }
+  });
+
+  app.post("/api/supplies", async (req, res) => {
+    try {
+      const { name, brand, category, description, imageUrl, productUrl, price, utility, tags, featured, memberOnly } = req.body;
+      
+      if (!name || !brand || !category) {
+        return res.status(400).json({ message: "name, brand, and category are required" });
+      }
+
+      const product = await storage.createSupplyProduct({
+        name,
+        brand,
+        category,
+        description,
+        imageUrl,
+        productUrl,
+        price,
+        utility,
+        tags,
+        featured,
+        memberOnly,
+      });
+      
+      res.status(201).json(product);
+    } catch (err) {
+      console.error("Error creating product:", err);
+      res.status(500).json({ message: "Failed to create product" });
+    }
+  });
+
   // CREDIT SYSTEM API
   app.get("/api/user/credits", async (req, res) => {
     try {
@@ -309,7 +388,7 @@ async function seedDatabase() {
         styleCategory: "Aura",
         difficultyLevel: "Intermediate",
         toolsRequired: ["Base Color", "Eyeshadow/Pigment", "Sponge", "Matte Top Coat"],
-        tutorialContent: "1. Apply base color (usually light/nude). Cure.\n2. Use a sponge to dab pigment in the center of the nail, fading outwards.\n3. Repeat to build intensity in the center.\n4. Seal with top coat.",
+        tutorialContent: "1. Apply base coat (usually light/nude). Cure.\n2. Use a sponge to dab pigment in the center of the nail, fading outwards.\n3. Repeat to build intensity in the center.\n4. Seal with top coat.",
         creatorCredit: "@auravibes",
       },
     ];
@@ -351,6 +430,47 @@ async function seedDatabase() {
 
     for (const sample of seasonalSamples) {
       await storage.createSeasonalDesign(sample);
+    }
+  }
+
+  // Seed supply products
+  const existingSupplies = await storage.getSupplyProducts();
+  if (existingSupplies.length === 0) {
+    const supplySamples = [
+      // BASE COATS
+      { name: "Ridge Filler Base", brand: "OPI", category: "Base Coat", description: "Smooths nail ridges for perfect application", imageUrl: "https://images.unsplash.com/photo-1610992015877-47b84e5e8b39?auto=format&fit=crop&q=80&w=400", productUrl: "https://www.opi.com", price: "$10.99", utility: "Fills ridges and creates smooth surface", tags: ["ridge filler", "smooth"], featured: true, memberOnly: true },
+      { name: "Strengthen & Grow", brand: "Sally Hansen", category: "Base Coat", description: "Nail strengthening treatment", imageUrl: "https://images.unsplash.com/photo-1632345031435-8727f6897d53?auto=format&fit=crop&q=80&w=400", productUrl: "https://www.sallyhansen.com", price: "$8.99", utility: "Strengthens weak nails", tags: ["strengthening", "growth"], featured: false, memberOnly: true },
+      
+      // TOP COATS
+      { name: "High-Gloss Structural Gel", brand: "Founder's Choice", category: "Top Coat", description: "Professional 3D sculpting gel with mirror shine", imageUrl: "https://images.unsplash.com/photo-1604654894610-df63bc536371?auto=format&fit=crop&q=80&w=400", productUrl: "#", price: "$24.99", utility: "Essential for 3D sculpting and high-gloss finish", tags: ["gel", "high-gloss", "3d"], featured: true, memberOnly: true },
+      { name: "Quick Dry Top Coat", brand: "Essie", category: "Top Coat", description: "Dries in 60 seconds", imageUrl: "https://images.unsplash.com/photo-1599692613955-32cb7c64eb07?auto=format&fit=crop&q=80&w=400", productUrl: "https://www.essie.com", price: "$9.99", utility: "Fast drying top coat", tags: ["quick-dry", "glossy"], featured: true, memberOnly: true },
+      
+      // COLORS - REDS
+      { name: "Ruby Woo", brand: "MAC Cosmetics", category: "Color - Red", description: "Classic matte red", imageUrl: "https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?auto=format&fit=crop&q=80&w=400", productUrl: "https://www.maccosmetics.com", price: "$12.00", utility: "Bold statement color", tags: ["red", "matte", "classic"], featured: true, memberOnly: true },
+      { name: "Bordeaux", brand: "Chanel", category: "Color - Red", description: "Deep burgundy wine", imageUrl: "https://images.unsplash.com/photo-1610992015877-47b84e5e8b39?auto=format&fit=crop&q=80&w=400", productUrl: "https://www.chanel.com", price: "$28.00", utility: "Luxury deep red", tags: ["burgundy", "luxury"], featured: false, memberOnly: true },
+      
+      // COLORS - NUDES
+      { name: "Ballet Slippers", brand: "Essie", category: "Color - Nude", description: "Sheer pale pink nude", imageUrl: "https://images.unsplash.com/photo-1599692613955-32cb7c64eb07?auto=format&fit=crop&q=80&w=400", productUrl: "https://www.essie.com", price: "$9.00", utility: "Classic nude shade", tags: ["nude", "pink", "sheer"], featured: true, memberOnly: true },
+      { name: "Samoan Sand", brand: "OPI", category: "Color - Nude", description: "Warm beige nude", imageUrl: "https://images.unsplash.com/photo-1632345031435-8727f6897d53?auto=format&fit=crop&q=80&w=400", productUrl: "https://www.opi.com", price: "$10.99", utility: "Perfect neutral", tags: ["nude", "beige", "neutral"], featured: false, memberOnly: true },
+      
+      // TOOLS
+      { name: "Precision Detail Brush", brand: "Technical Hub", category: "Tool - Brush", description: "Custom bristles for surgical linework", imageUrl: "https://images.unsplash.com/photo-1604654894610-df63bc536371?auto=format&fit=crop&q=80&w=400", productUrl: "#", price: "$15.99", utility: "Ultra-fine detail work and nail art", tags: ["brush", "detail", "art"], featured: true, memberOnly: true },
+      { name: "Dotting Tool Set", brand: "Winstonia", category: "Tool - Dotting", description: "5 different tip sizes", imageUrl: "https://images.unsplash.com/photo-1516975080664-ed2fc6a32937?auto=format&fit=crop&q=80&w=400", productUrl: "https://www.winstonia.com", price: "$7.99", utility: "Create perfect dots and patterns", tags: ["dotting", "nail art"], featured: false, memberOnly: true },
+      
+      // EQUIPMENT
+      { name: "UV/LED Lamp 48W", brand: "MelodySusie", category: "Equipment - Lamp", description: "Professional curing lamp", imageUrl: "https://images.unsplash.com/photo-1610992015732-2449b76344bc?auto=format&fit=crop&q=80&w=400", productUrl: "https://www.melodysusie.com", price: "$35.99", utility: "Cures gel polish in 30-60 seconds", tags: ["lamp", "uv", "gel"], featured: true, memberOnly: true },
+      { name: "Electric Nail File", brand: "Makartt", category: "Equipment - File", description: "Professional e-file system", imageUrl: "https://images.unsplash.com/photo-1604654894526-a5d7c622b90f?auto=format&fit=crop&q=80&w=400", productUrl: "https://www.makartt.com", price: "$49.99", utility: "Precision filing and shaping", tags: ["efile", "filing", "professional"], featured: true, memberOnly: true },
+      
+      // CHROME/SPECIALTY
+      { name: "Chrome Powder - Silver", brand: "Born Pretty", category: "Specialty - Chrome", description: "Mirror chrome powder", imageUrl: "https://images.unsplash.com/photo-1632345031435-8727f6897d53?auto=format&fit=crop&q=80&w=400", productUrl: "https://www.bornprettystore.com", price: "$3.99", utility: "Creates chrome mirror effect", tags: ["chrome", "powder", "mirror"], featured: true, memberOnly: true },
+      { name: "Blooming Gel", brand: "Modelones", category: "Specialty - Gel", description: "Creates watercolor effects", imageUrl: "https://images.unsplash.com/photo-1604654894610-df63bc536371?auto=format&fit=crop&q=80&w=400", productUrl: "https://www.modelones.com", price: "$6.99", utility: "Marble and watercolor nail art", tags: ["blooming", "marble", "art"], featured: false, memberOnly: true },
+      
+      // NAIL CARE
+      { name: "Cuticle Oil Pen", brand: "CND", category: "Nail Care", description: "Nourishing cuticle treatment", imageUrl: "https://images.unsplash.com/photo-1599692613955-32cb7c64eb07?auto=format&fit=crop&q=80&w=400", productUrl: "https://www.cnd.com", price: "$9.50", utility: "Hydrates cuticles and nails", tags: ["cuticle", "oil", "care"], featured: false, memberOnly: true },
+    ];
+
+    for (const sample of supplySamples) {
+      await storage.createSupplyProduct(sample);
     }
   }
 }

@@ -101,6 +101,27 @@ export async function initializeDatabase() {
 
       CREATE INDEX IF NOT EXISTS idx_seasonal_designs_season ON seasonal_designs(season);
       CREATE INDEX IF NOT EXISTS idx_seasonal_designs_featured ON seasonal_designs(featured);
+
+      -- Create supply_products table (SUPPLY SUITE)
+      CREATE TABLE IF NOT EXISTS supply_products (
+        id SERIAL PRIMARY KEY,
+        name TEXT NOT NULL,
+        brand TEXT NOT NULL,
+        category TEXT NOT NULL,
+        description TEXT,
+        image_url TEXT,
+        product_url TEXT,
+        price TEXT,
+        utility TEXT,
+        tags TEXT[],
+        featured BOOLEAN DEFAULT false,
+        member_only BOOLEAN DEFAULT true,
+        created_at TIMESTAMP DEFAULT NOW() NOT NULL
+      );
+
+      CREATE INDEX IF NOT EXISTS idx_supply_products_category ON supply_products(category);
+      CREATE INDEX IF NOT EXISTS idx_supply_products_brand ON supply_products(brand);
+      CREATE INDEX IF NOT EXISTS idx_supply_products_featured ON supply_products(featured);
     `);
     
     console.log("✅ Database tables initialized successfully!");

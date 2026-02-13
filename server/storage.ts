@@ -3,6 +3,7 @@ import {
   tutorials,
   savedDesigns,
   seasonalDesigns,
+  supplyProducts,
   users,
   type Tutorial,
   type InsertTutorial,
@@ -10,6 +11,8 @@ import {
   type InsertSavedDesign,
   type SeasonalDesign,
   type InsertSeasonalDesign,
+  type SupplyProduct,
+  type InsertSupplyProduct,
 } from "@shared/schema";
 import { eq, ilike, or, and, desc, sql } from "drizzle-orm";
 import { authStorage, type IAuthStorage } from "./replit_integrations/auth";
@@ -31,6 +34,13 @@ export interface IStorage extends IAuthStorage {
   getSeasonalDesign(id: number): Promise<SeasonalDesign | undefined>;
   createSeasonalDesign(design: InsertSeasonalDesign): Promise<SeasonalDesign>;
   getFeaturedSeasonalDesigns(): Promise<SeasonalDesign[]>;
+  
+  // Supply Suite methods
+  getSupplyProducts(category?: string): Promise<SupplyProduct[]>;
+  getSupplyProduct(id: number): Promise<SupplyProduct | undefined>;
+  createSupplyProduct(product: InsertSupplyProduct): Promise<SupplyProduct>;
+  getFeaturedSupplyProducts(): Promise<SupplyProduct[]>;
+  searchSupplyProducts(query: string): Promise<SupplyProduct[]>;
   
   // Credit system methods
   incrementGenerationsUsed(userId: string): Promise<void>;
@@ -151,6 +161,51 @@ export class DatabaseStorage implements IStorage {
       .where(eq(seasonalDesigns.featured, true))
       .orderBy(desc(seasonalDesigns.createdAt))
       .limit(8);
+  }
+
+  // SUPPLY SUITE METHODS
+  async getSupplyProducts(category?: string): Promise<SupplyProduct[]> {
+    let query = db.select().from(supplyProducts).orderBy(desc(supplyProducts.featured), supplyProducts.name);
+    
+    if (category) {
+      // @ts-ignore
+      query = query.where(eq(supplyProducts.category, category));
+    }
+    
+    return await query;
+  }
+
+  async getSupplyProduct(id: number): Promise<SupplyProduct | undefined> {
+    const [product] = await db.select().from(supplyProducts).where(eq(supplyProducts.id, id));
+    return product;
+  }
+
+  async createSupplyProduct(product: InsertSupplyProduct): Promise<SupplyProduct> {
+    const [newProduct] = await db.insert(supplyProducts).values(product).returning();
+    return newProduct;
+  }
+
+  async getFeaturedSupplyProducts(): Promise<SupplyProduct[]> {
+    return await db
+      .select()
+      .from(supplyProducts)
+      .where(eq(supplyProducts.featured, true))
+      .orderBy(supplyProducts.name)
+      .limit(12);
+  }
+
+  async searchSupplyProducts(query: string): Promise<SupplyProduct[]> {
+    return await db
+      .select()
+      .from(supplyProducts)
+      .where(
+        or(
+          ilike(supplyProducts.name, `%${query}%`),
+          ilike(supplyProducts.brand, `%${query}%`),
+          ilike(supplyProducts.description, `%${query}%`)
+        )
+      )
+      .orderBy(supplyProducts.name);
   }
 
   // CREDIT SYSTEM METHODS

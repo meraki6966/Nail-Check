@@ -1,4 +1,5 @@
 import SeasonalVault from "./pages/SeasonalVault";
+import SupplySuite from "./pages/SupplySuite";
 import { Switch, Route } from "wouter";
 import { queryClient } from "./lib/queryClient";
 import { QueryClientProvider } from "@tanstack/react-query";
@@ -18,6 +19,7 @@ function Router() {
       <Route path="/upload" component={Upload} />
       <Route path="/saved" component={Saved} />
       <Route path="/seasonal" component={SeasonalVault} />
+      <Route path="/supplies" component={SupplySuite} />
       <Route component={NotFound} />
     </Switch>
   );

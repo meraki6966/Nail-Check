@@ -60,6 +60,29 @@ export const insertSavedDesignSchema = createInsertSchema(savedDesigns).omit({
   id: true,
   createdAt: true,
 });
+// SUPPLY SUITE
+export const supplyProducts = pgTable("supply_products", {
+  id: serial("id").primaryKey(),
+  name: text("name").notNull(),
+  brand: text("brand").notNull(),
+  category: text("category").notNull(), // Base Coat, Top Coat, Color, Tool, Equipment, etc.
+  description: text("description"),
+  imageUrl: text("image_url"),
+  productUrl: text("product_url"), // Link to buy
+  price: text("price"), // e.g., "$12.99"
+  utility: text("utility"), // What it's used for
+  tags: text("tags").array(),
+  featured: boolean("featured").default(false),
+  memberOnly: boolean("member_only").default(true),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+});
 
+export const insertSupplyProductSchema = createInsertSchema(supplyProducts).omit({
+  id: true,
+  createdAt: true,
+});
+
+export type SupplyProduct = typeof supplyProducts.$inferSelect;
+export type InsertSupplyProduct = z.infer<typeof insertSupplyProductSchema>;
 export type SavedDesign = typeof savedDesigns.$inferSelect;
 export type InsertSavedDesign = z.infer<typeof insertSavedDesignSchema>;
