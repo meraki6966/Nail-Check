@@ -2,12 +2,13 @@ import { db } from "./db";
 import {
   tutorials,
   savedDesigns,
+  users,
   type Tutorial,
   type InsertTutorial,
   type SavedDesign,
   type InsertSavedDesign,
 } from "@shared/schema";
-import { eq, ilike, or, and, desc } from "drizzle-orm";
+import { eq, ilike, or, and, desc, sql } from "drizzle-orm";
 import { authStorage, type IAuthStorage } from "./replit_integrations/auth";
 
 export interface IStorage extends IAuthStorage {
@@ -21,6 +22,9 @@ export interface IStorage extends IAuthStorage {
   saveDesign(design: InsertSavedDesign): Promise<SavedDesign>;
   deleteDesign(id: number): Promise<void>;
   toggleFavorite(id: number): Promise<SavedDesign>;
+  
+  // Credit system methods
+  incrementGenerationsUsed(userId: string): Promise<void>;
 }
 
 export class DatabaseStorage implements IStorage {
@@ -108,6 +112,17 @@ export class DatabaseStorage implements IStorage {
       .returning();
     
     return updated;
+  }
+
+  // CREDIT SYSTEM METHODS
+  async incrementGenerationsUsed(userId: string): Promise<void> {
+    await db
+      .update(users)
+      .set({ 
+        generationsUsed: sql`${users.generationsUsed} + 1`,
+        updatedAt: new Date()
+      })
+      .where(eq(users.id, userId));
   }
 }
 

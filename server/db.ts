@@ -28,6 +28,9 @@ export async function initializeDatabase() {
         first_name VARCHAR,
         last_name VARCHAR,
         profile_image_url VARCHAR,
+        credits INTEGER DEFAULT 1 NOT NULL,
+        generations_used INTEGER DEFAULT 0 NOT NULL,
+        is_paid_member BOOLEAN DEFAULT false NOT NULL,
         created_at TIMESTAMP DEFAULT NOW(),
         updated_at TIMESTAMP DEFAULT NOW()
       );

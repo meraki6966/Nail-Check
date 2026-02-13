@@ -125,6 +125,76 @@ export async function registerRoutes(
     }
   });
 
+  // CREDIT SYSTEM API
+  app.get("/api/user/credits", async (req, res) => {
+    try {
+      const userId = req.query.userId as string || "guest";
+      
+      if (userId === "guest") {
+        return res.json({ 
+          credits: 1, 
+          generationsUsed: 0,
+          isPaidMember: false,
+          canGenerate: true 
+        });
+      }
+      
+      const user = await storage.getUser(userId);
+      if (!user) {
+        return res.status(404).json({ message: "User not found" });
+      }
+      
+      const canGenerate = user.isPaidMember || (user.credits > user.generationsUsed);
+      
+      res.json({
+        credits: user.credits,
+        generationsUsed: user.generationsUsed,
+        isPaidMember: user.isPaidMember,
+        canGenerate
+      });
+    } catch (err) {
+      console.error("Error fetching credits:", err);
+      res.status(500).json({ message: "Failed to fetch credits" });
+    }
+  });
+
+  app.post("/api/user/use-credit", async (req, res) => {
+    try {
+      const { userId } = req.body;
+      
+      if (!userId || userId === "guest") {
+        return res.json({ success: true, remainingCredits: 0 });
+      }
+      
+      const user = await storage.getUser(userId);
+      if (!user) {
+        return res.status(404).json({ message: "User not found" });
+      }
+      
+      if (!user.isPaidMember && user.generationsUsed >= user.credits) {
+        return res.status(403).json({ 
+          message: "No credits remaining",
+          showPaywall: true 
+        });
+      }
+      
+      await storage.incrementGenerationsUsed(userId);
+      
+      const remainingCredits = user.isPaidMember 
+        ? 999
+        : user.credits - (user.generationsUsed + 1);
+      
+      res.json({ 
+        success: true, 
+        remainingCredits,
+        showPaywall: remainingCredits <= 0 && !user.isPaidMember
+      });
+    } catch (err) {
+      console.error("Error using credit:", err);
+      res.status(500).json({ message: "Failed to use credit" });
+    }
+  });
+
   // Seed Data
   await seedDatabase();
 

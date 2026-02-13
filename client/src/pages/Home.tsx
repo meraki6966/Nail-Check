@@ -39,7 +39,7 @@ export default function Home() {
   const { user } = useAuth();
   const isAuthenticated = !!user;
 
-  // --- NANO BANANA / AI STATE ---
+  // --- AI STATE ---
   const [aiPrompt, setAiPrompt] = useState("");
   const [canvasImage, setCanvasImage] = useState<string | null>(null);
   const [isGenerating, setIsGenerating] = useState(false);
@@ -47,7 +47,12 @@ export default function Home() {
   const [loadingMsgIdx, setLoadingMsgIdx] = useState(0);
   const [isSaving, setIsSaving] = useState(false);
 
-  // --- LOCAL GALLERY STATE (Save Option) ---
+  // --- CREDIT SYSTEM STATE ---
+  const [credits, setCredits] = useState(1);
+  const [generationsUsed, setGenerationsUsed] = useState(0);
+  const [showPaywall, setShowPaywall] = useState(false);
+
+  // --- LOCAL GALLERY STATE ---
   const [localVault, setLocalVault] = useState<{url: string, id: string}[]>(() => {
     const saved = localStorage.getItem("nailCheckGallery");
     return saved ? JSON.parse(saved) : [];
@@ -67,6 +72,22 @@ export default function Home() {
     return () => clearInterval(interval);
   }, [isGenerating]);
 
+  // Fetch credits on mount
+  useEffect(() => {
+    fetchCredits();
+  }, [user]);
+
+  const fetchCredits = async () => {
+    try {
+      const response = await fetch(`/api/user/credits?userId=${user?.id || 'guest'}`);
+      const data = await response.json();
+      setCredits(data.credits);
+      setGenerationsUsed(data.generationsUsed);
+    } catch (error) {
+      console.error("Error fetching credits:", error);
+    }
+  };
+
   // --- HANDLERS ---
   const handleCanvasUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -78,6 +99,12 @@ export default function Home() {
   };
 
   const handleGenerate = async () => {
+    // Check credits first
+    if (!user && generationsUsed >= 1) {
+      setShowPaywall(true);
+      return;
+    }
+    
     setIsGenerating(true);
     try {
       const response = await fetch("/api/generate-image", {
@@ -91,6 +118,21 @@ export default function Home() {
       });
       const data = await response.json();
       setGeneratedImage(`data:${data.mimeType};base64,${data.b64_json}`);
+      
+      // Use a credit
+      const creditResponse = await fetch("/api/user/use-credit", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ userId: user?.id || 'guest' })
+      });
+      const creditData = await creditResponse.json();
+      
+      if (creditData.showPaywall) {
+        setShowPaywall(true);
+      }
+      
+      // Refresh credits
+      await fetchCredits();
     } catch (error) {
       console.error("AI Error:", error);
     } finally {
@@ -103,7 +145,6 @@ export default function Home() {
     
     setIsSaving(true);
     try {
-      // Save to database via API
       const response = await fetch("/api/designs", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -118,11 +159,8 @@ export default function Home() {
       
       if (response.ok) {
         const savedDesign = await response.json();
-        // Also save to local vault for instant UI update
         const newEntry = { url: generatedImage, id: savedDesign.id.toString() };
         setLocalVault(prev => [newEntry, ...prev]);
-        
-        // Success feedback
         alert("🔥 Saved to Fire Vault!");
       } else {
         throw new Error("Failed to save");
@@ -139,12 +177,26 @@ export default function Home() {
     <Layout>
       <div className="max-w-5xl mx-auto px-4 py-16 space-y-32">
 
-        {/* --- SECTION 1: THE DESIGN LAB (AI Upload & Save) --- */}
+        {/* --- SECTION 1: THE DESIGN LAB --- */}
         <section id="design-lab" className="space-y-12">
           <header className="text-center space-y-4">
             <span className="text-[10px] tracking-[0.8em] text-gray-400 uppercase">The Technical Hub</span>
             <h1 className={cn("text-6xl font-serif tracking-widest uppercase", GOLD_TEXT)}>Design Lab</h1>
           </header>
+
+          {/* Credit Display */}
+          <div className="flex justify-center">
+            <div className="bg-gray-50 border border-gray-200 px-6 py-3 inline-flex items-center gap-3">
+              <Sparkles className={cn("h-4 w-4", GOLD_TEXT)} />
+              <span className="text-[10px] uppercase tracking-widest">
+                {user ? (
+                  `Credits: ${credits - generationsUsed} / ${credits}`
+                ) : (
+                  `Free Generations: ${1 - generationsUsed} / 1`
+                )}
+              </span>
+            </div>
+          </div>
 
           <div className="bg-white border border-gray-100 p-10 shadow-2xl relative">
             <div className="absolute top-0 left-0 w-full h-[2px] bg-gradient-to-r from-transparent via-[#B08D57] to-transparent opacity-50"></div>
@@ -200,7 +252,7 @@ export default function Home() {
           </div>
         </section>
 
-        {/* --- SECTION 2: RECENTLY AUTHORED (The AI Saved Gallery) --- */}
+        {/* --- SECTION 2: RECENTLY AUTHORED --- */}
         <AnimatePresence>
           {localVault.length > 0 && (
             <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="space-y-8 pt-12 border-t border-gray-100">
@@ -227,7 +279,7 @@ export default function Home() {
           </div>
         </section>
 
-        {/* --- SECTION 4: SEASONAL VAULT (The Archive Gallery) --- */}
+        {/* --- SECTION 4: SEASONAL VAULT --- */}
         <section className="space-y-12">
           <h2 className="text-2xl font-serif tracking-widest uppercase text-center">Seasonal Vault</h2>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
@@ -243,7 +295,7 @@ export default function Home() {
           </div>
         </section>
 
-        {/* --- SECTION 5: STYLE VAULT (The Technical Styles) --- */}
+        {/* --- SECTION 5: STYLE VAULT --- */}
         <section className="py-20 border-t border-gray-100">
           <h2 className="text-3xl font-serif tracking-widest uppercase mb-16 text-center">The Style Vault</h2>
           <div className="grid md:grid-cols-2 gap-8">
@@ -264,7 +316,7 @@ export default function Home() {
           </div>
         </section>
 
-        {/* --- SECTION 6: SUPPLY SUITE (Curated Vendors) --- */}
+        {/* --- SECTION 6: SUPPLY SUITE --- */}
         <section className="py-20 bg-gray-50/50 -mx-4 px-4">
           <div className="max-w-5xl mx-auto space-y-12">
             <h2 className="text-2xl font-serif tracking-widest uppercase">The Supply Suite</h2>
@@ -285,6 +337,57 @@ export default function Home() {
         </section>
 
       </div>
+
+      {/* PAYWALL POPUP */}
+      {showPaywall && (
+        <div className="fixed inset-0 bg-black/80 flex items-center justify-center z-50 p-4">
+          <motion.div 
+            initial={{ scale: 0.9, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            className="bg-white max-w-md w-full p-8 relative"
+          >
+            <button 
+              onClick={() => setShowPaywall(false)}
+              className="absolute top-4 right-4 text-gray-400 hover:text-black"
+            >
+              <X className="h-6 w-6" />
+            </button>
+            
+            <div className="text-center space-y-6">
+              <img 
+                src="https://images.unsplash.com/photo-1582407947304-fd86f028f716?auto=format&fit=crop&q=80&w=400" 
+                alt="The Founder" 
+                className="w-32 h-32 mx-auto rounded-full object-cover border-4 border-[#B08D57]"
+              />
+              
+              <div>
+                <h2 className="text-3xl font-serif uppercase tracking-wider mb-2">The Founder</h2>
+                <p className="text-[10px] tracking-[0.5em] uppercase text-gray-400">Exclusive Access</p>
+              </div>
+              
+              <p className="text-sm text-gray-600 italic">
+                "You've used your complimentary generation. Unlock unlimited AI designs, 
+                exclusive vaults, and premium tools with Founder membership."
+              </p>
+              
+              <div className="space-y-3">
+                <a href="https://nail-check.com/membership/" target="_blank" rel="noopener noreferrer">
+                  <Button className={cn("w-full h-14 uppercase tracking-widest text-[11px]", GOLD_GRADIENT, "text-white")}>
+                    Become a Member
+                  </Button>
+                </a>
+                <Button 
+                  variant="outline" 
+                  onClick={() => setShowPaywall(false)}
+                  className="w-full uppercase text-[10px]"
+                >
+                  Maybe Later
+                </Button>
+              </div>
+            </div>
+          </motion.div>
+        </div>
+      )}
     </Layout>
   );
 }
