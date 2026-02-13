@@ -18,7 +18,7 @@ export async function registerRoutes(
   // AI Routes
   registerImageRoutes(app);
 
-  // API Routes
+  // Tutorial API Routes
   app.get(api.tutorials.list.path, async (req, res) => {
     const filters = {
       search: req.query.search as string,
@@ -51,6 +51,77 @@ export async function registerRoutes(
         });
       }
       throw err;
+    }
+  });
+
+  // FIRE VAULT API ROUTES
+  app.get("/api/designs", async (req, res) => {
+    try {
+      const userId = req.query.userId as string | undefined;
+      const designs = await storage.getSavedDesigns(userId);
+      res.json(designs);
+    } catch (err) {
+      console.error("Error fetching saved designs:", err);
+      res.status(500).json({ message: "Failed to fetch saved designs" });
+    }
+  });
+
+  app.get("/api/designs/:id", async (req, res) => {
+    try {
+      const id = Number(req.params.id);
+      const design = await storage.getSavedDesign(id);
+      if (!design) {
+        return res.status(404).json({ message: "Design not found" });
+      }
+      res.json(design);
+    } catch (err) {
+      console.error("Error fetching design:", err);
+      res.status(500).json({ message: "Failed to fetch design" });
+    }
+  });
+
+  app.post("/api/designs", async (req, res) => {
+    try {
+      const { imageUrl, prompt, canvasImageUrl, tags, userId } = req.body;
+      
+      if (!imageUrl || !prompt) {
+        return res.status(400).json({ message: "imageUrl and prompt are required" });
+      }
+
+      const design = await storage.saveDesign({
+        userId,
+        imageUrl,
+        prompt,
+        canvasImageUrl,
+        tags,
+      });
+      
+      res.status(201).json(design);
+    } catch (err) {
+      console.error("Error saving design:", err);
+      res.status(500).json({ message: "Failed to save design" });
+    }
+  });
+
+  app.delete("/api/designs/:id", async (req, res) => {
+    try {
+      const id = Number(req.params.id);
+      await storage.deleteDesign(id);
+      res.status(204).send();
+    } catch (err) {
+      console.error("Error deleting design:", err);
+      res.status(500).json({ message: "Failed to delete design" });
+    }
+  });
+
+  app.patch("/api/designs/:id/favorite", async (req, res) => {
+    try {
+      const id = Number(req.params.id);
+      const design = await storage.toggleFavorite(id);
+      res.json(design);
+    } catch (err) {
+      console.error("Error toggling favorite:", err);
+      res.status(500).json({ message: "Failed to toggle favorite" });
     }
   });
 
