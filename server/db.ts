@@ -70,6 +70,21 @@ export async function initializeDatabase() {
         creator_credit TEXT,
         created_at TIMESTAMP DEFAULT NOW()
       );
+
+      -- Create saved_designs table (FIRE VAULT)
+      CREATE TABLE IF NOT EXISTS saved_designs (
+        id SERIAL PRIMARY KEY,
+        user_id TEXT,
+        image_url TEXT NOT NULL,
+        prompt TEXT NOT NULL,
+        canvas_image_url TEXT,
+        tags TEXT[],
+        is_favorite BOOLEAN DEFAULT false,
+        created_at TIMESTAMP DEFAULT NOW() NOT NULL
+      );
+
+      -- Create index on user_id for faster queries
+      CREATE INDEX IF NOT EXISTS idx_saved_designs_user_id ON saved_designs(user_id);
     `);
     
     console.log("✅ Database tables initialized successfully!");
