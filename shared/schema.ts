@@ -1,6 +1,7 @@
 import { pgTable, text, serial, integer, boolean, timestamp } from "drizzle-orm/pg-core";
 import { createInsertSchema } from "drizzle-zod";
 import { z } from "zod";
+
 export * from "./models/chat";
 export * from "./models/auth";
 
@@ -23,3 +24,23 @@ export const insertTutorialSchema = createInsertSchema(tutorials).omit({
 
 export type Tutorial = typeof tutorials.$inferSelect;
 export type InsertTutorial = z.infer<typeof insertTutorialSchema>;
+
+// FIRE VAULT - Saved Designs
+export const savedDesigns = pgTable("saved_designs", {
+  id: serial("id").primaryKey(),
+  userId: text("user_id"), // Optional for now since we don't have auth yet
+  imageUrl: text("image_url").notNull(), // URL or base64 of the generated image
+  prompt: text("prompt").notNull(), // The prompt used to generate it
+  canvasImageUrl: text("canvas_image_url"), // Original canvas image if uploaded
+  tags: text("tags").array(), // Tags like ["spikey", "black", "long"]
+  isFavorite: boolean("is_favorite").default(false),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+});
+
+export const insertSavedDesignSchema = createInsertSchema(savedDesigns).omit({
+  id: true,
+  createdAt: true,
+});
+
+export type SavedDesign = typeof savedDesigns.$inferSelect;
+export type InsertSavedDesign = z.infer<typeof insertSavedDesignSchema>;
