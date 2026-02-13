@@ -1,140 +1,136 @@
 import { useState, useEffect } from "react";
 import { Layout } from "@/components/Layout";
-import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import { Textarea } from "@/components/ui/textarea";
+import { Input } from "@/components/ui/input";
+import { Sparkles, Upload, Wand2, Download, Heart, Loader2, Crown } from "lucide-react";
+import { useAuth } from "@/hooks/use-auth";
+import { useToast } from "@/hooks/use-toast";
 import { cn } from "@/lib/utils";
-import { Loader2, Sparkles, X, Download, UploadCloud, Lock } from "lucide-react";
-import { motion, AnimatePresence } from "framer-motion";
-import { useAuth } from "@/hooks/use-auth"; 
 
-// --- BRAND CONSTANTS ---
-const GOLD_GRADIENT = "bg-gradient-to-r from-[#B08D57] via-[#D4AF37] to-[#B08D57]";
 const GOLD_TEXT = "text-[#B08D57]";
-const GOLD_BORDER = "border-[#B08D57]";
-
-const LOADING_MESSAGES = [
-  "Analyzing Your Canvas...",
-  "Applying Founder's Precision...",
-  "Refining Architecture...",
-  "Finalizing NYC High-Gloss..."
-];
-
-// --- DATA FOR VAULTS & SUPPLIES ---
-const STYLE_VAULT_DATA = [
-  { id: "v1", title: "Architectural Stiletto", description: "Proprietary structural silhouettes with reinforced apex positioning.", category: "Sculpted" },
-  { id: "v2", title: "Manhattan Minimalist", description: "Precision cuticle work using NYC-inspired buffer ratios.", category: "Minimal" },
-];
-
-const SUPPLY_SUITE_DATA = [
-  { id: "s1", name: "High-Gloss Structural Gel", brand: "Founder's Choice", utility: "Essential for 3D sculpting." },
-  { id: "s2", name: "Precision Detail Brush", brand: "Technical Hub", utility: "Custom bristles for surgical linework." },
-];
-
-const SEASONAL_DATA = [
-  { id: "1", title: "French Chrome", category: "Spring", url: "https://images.unsplash.com/photo-1604654894610-df63bc536371?auto=format&fit=crop&q=80&w=800" },
-  { id: "2", title: "Technical Gold", category: "Summer", url: "https://images.unsplash.com/photo-1632345031435-8727f6897d53?auto=format&fit=crop&q=80&w=800" }
-];
+const GOLD_GRADIENT = "bg-gradient-to-r from-[#B08D57] via-[#D4AF37] to-[#B08D57]";
 
 export default function Home() {
   const { user } = useAuth();
-  const isAuthenticated = !!user;
-
-  // --- AI STATE ---
-  const [aiPrompt, setAiPrompt] = useState("");
+  const { toast } = useToast();
+  
+  const [prompt, setPrompt] = useState("");
   const [canvasImage, setCanvasImage] = useState<string | null>(null);
-  const [isGenerating, setIsGenerating] = useState(false);
   const [generatedImage, setGeneratedImage] = useState<string | null>(null);
-  const [loadingMsgIdx, setLoadingMsgIdx] = useState(0);
+  const [isGenerating, setIsGenerating] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
-
-  // --- CREDIT SYSTEM STATE ---
+  
+  // Credit system
   const [credits, setCredits] = useState(1);
   const [generationsUsed, setGenerationsUsed] = useState(0);
+  const [isPaidMember, setIsPaidMember] = useState(false);
   const [showPaywall, setShowPaywall] = useState(false);
 
-  // --- LOCAL GALLERY STATE ---
-  const [localVault, setLocalVault] = useState<{url: string, id: string}[]>(() => {
-    const saved = localStorage.getItem("nailCheckGallery");
-    return saved ? JSON.parse(saved) : [];
+  // Flavor of the Month from WordPress
+  const [flavorOfMonth, setFlavorOfMonth] = useState({
+    title: "Ruby Architecture",
+    description: "February focus: High-gloss chrome over structural red sculpting.",
+    image: "https://images.unsplash.com/photo-1632345031435-8727f6897d53?auto=format&fit=crop&q=80&w=1000"
   });
 
-  useEffect(() => {
-    localStorage.setItem("nailCheckGallery", JSON.stringify(localVault));
-  }, [localVault]);
-
-  useEffect(() => {
-    let interval: NodeJS.Timeout;
-    if (isGenerating) {
-      interval = setInterval(() => {
-        setLoadingMsgIdx((prev) => (prev + 1) % LOADING_MESSAGES.length);
-      }, 2000);
-    }
-    return () => clearInterval(interval);
-  }, [isGenerating]);
-
-  // Fetch credits on mount
+  // Fetch user credits on mount
   useEffect(() => {
     fetchCredits();
   }, [user]);
 
+  // Fetch Flavor of the Month from WordPress
+  useEffect(() => {
+    fetch("https://nail-check.com/wp-json/nail-check/v1/flavor-of-month")
+      .then(res => res.json())
+      .then(data => setFlavorOfMonth(data))
+      .catch(err => console.error("Failed to fetch flavor of month:", err));
+  }, []);
+
   const fetchCredits = async () => {
     try {
-      const response = await fetch(`/api/user/credits?userId=${user?.id || 'guest'}`);
+      const userId = user?.id || "guest";
+      const response = await fetch(`/api/user/credits?userId=${userId}`);
       const data = await response.json();
+      
       setCredits(data.credits);
       setGenerationsUsed(data.generationsUsed);
+      setIsPaidMember(data.isPaidMember);
     } catch (error) {
-      console.error("Error fetching credits:", error);
+      console.error("Failed to fetch credits:", error);
     }
   };
 
-  // --- HANDLERS ---
-  const handleCanvasUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
       const reader = new FileReader();
-      reader.onloadend = () => setCanvasImage(reader.result as string);
+      reader.onload = (event) => {
+        setCanvasImage(event.target?.result as string);
+      };
       reader.readAsDataURL(file);
     }
   };
 
   const handleGenerate = async () => {
-    // Check credits first
-    if (!user && generationsUsed >= 1) {
+    // Check credits before generation
+    if (!isPaidMember && generationsUsed >= credits) {
       setShowPaywall(true);
       return;
     }
-    
+
+    if (!prompt.trim()) {
+      toast({
+        title: "Prompt Required",
+        description: "Please describe your nail design",
+        variant: "destructive",
+      });
+      return;
+    }
+
     setIsGenerating(true);
+    setGeneratedImage(null);
+
     try {
-      const response = await fetch("/api/generate-image", {
+      const response = await fetch("/api/image/generate", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ 
-          prompt: aiPrompt,
-          image: canvasImage, 
-          type: canvasImage ? "image-to-image" : "text-to-image"
+        credentials: "include",
+        body: JSON.stringify({
+          prompt,
+          canvasImage,
         }),
       });
+
+      if (!response.ok) {
+        throw new Error("Failed to generate image");
+      }
+
       const data = await response.json();
-      setGeneratedImage(`data:${data.mimeType};base64,${data.b64_json}`);
-      
-      // Use a credit
-      const creditResponse = await fetch("/api/user/use-credit", {
+      setGeneratedImage(data.imageUrl);
+
+      // Use a credit after successful generation
+      const userId = user?.id || "guest";
+      await fetch("/api/user/use-credit", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ userId: user?.id || 'guest' })
+        body: JSON.stringify({ userId }),
       });
-      const creditData = await creditResponse.json();
-      
-      if (creditData.showPaywall) {
-        setShowPaywall(true);
-      }
-      
+
       // Refresh credits
       await fetchCredits();
+
+      toast({
+        title: "Design Generated! ✨",
+        description: "Your nail design is ready",
+      });
     } catch (error) {
-      console.error("AI Error:", error);
+      console.error("Generation error:", error);
+      toast({
+        title: "Generation Failed",
+        description: "Please try again",
+        variant: "destructive",
+      });
     } finally {
       setIsGenerating(false);
     }
@@ -142,257 +138,271 @@ export default function Home() {
 
   const handleSaveToVault = async () => {
     if (!generatedImage) return;
-    
+
     setIsSaving(true);
+
     try {
       const response = await fetch("/api/designs", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
+        credentials: "include",
         body: JSON.stringify({
+          userId: user?.id || "guest",
           imageUrl: generatedImage,
-          prompt: aiPrompt,
+          prompt: prompt,
           canvasImageUrl: canvasImage,
           tags: [],
-          userId: user?.id,
         }),
       });
-      
+
       if (response.ok) {
-        const savedDesign = await response.json();
-        const newEntry = { url: generatedImage, id: savedDesign.id.toString() };
-        setLocalVault(prev => [newEntry, ...prev]);
-        alert("🔥 Saved to Fire Vault!");
+        toast({
+          title: "Saved to Fire Vault! 🔥",
+          description: "View it in your saved designs",
+        });
       } else {
         throw new Error("Failed to save");
       }
     } catch (error) {
-      console.error("Error saving to vault:", error);
-      alert("❌ Failed to save design. Please try again.");
+      console.error("Save error:", error);
+      toast({
+        title: "Save Failed",
+        description: "Please try again",
+        variant: "destructive",
+      });
     } finally {
       setIsSaving(false);
     }
   };
 
+  const handleDownload = () => {
+    if (!generatedImage) return;
+    const link = document.createElement("a");
+    link.href = generatedImage;
+    link.download = "nail-design.png";
+    link.click();
+  };
+
   return (
     <Layout>
-      <div className="max-w-5xl mx-auto px-4 py-16 space-y-32">
+      <div className="max-w-7xl mx-auto px-4 py-12 space-y-16">
+        
+        {/* Header */}
+        <header className="text-center space-y-4">
+          <div className="flex items-center justify-center gap-3">
+            <Sparkles className={cn("h-10 w-10", GOLD_TEXT)} />
+            <h1 className="text-6xl font-serif tracking-widest uppercase">The Design Lab</h1>
+          </div>
+          <p className="text-sm text-gray-500 italic">
+            Upload your canvas. Describe your vision. Watch precision engineering create your perfect set.
+          </p>
+        </header>
 
-        {/* --- SECTION 1: THE DESIGN LAB --- */}
-        <section id="design-lab" className="space-y-12">
-          <header className="text-center space-y-4">
-            <span className="text-[10px] tracking-[0.8em] text-gray-400 uppercase">The Technical Hub</span>
-            <h1 className={cn("text-6xl font-serif tracking-widest uppercase", GOLD_TEXT)}>Design Lab</h1>
-          </header>
-
-          {/* Credit Display */}
-          <div className="flex justify-center">
-            <div className="bg-gray-50 border border-gray-200 px-6 py-3 inline-flex items-center gap-3">
-              <Sparkles className={cn("h-4 w-4", GOLD_TEXT)} />
-              <span className="text-[10px] uppercase tracking-widest">
-                {user ? (
-                  `Credits: ${credits - generationsUsed} / ${credits}`
-                ) : (
-                  `Free Generations: ${1 - generationsUsed} / 1`
-                )}
+        {/* Credit Display */}
+        <div className="flex justify-center">
+          <div className="bg-gray-50 px-6 py-3 rounded-full border border-gray-200">
+            {isPaidMember ? (
+              <span className={cn("text-sm uppercase tracking-widest", GOLD_TEXT)}>
+                ♾️ Unlimited Generations
               </span>
-            </div>
+            ) : (
+              <span className="text-sm text-gray-600">
+                Free Generations: <span className="font-bold">{generationsUsed}</span> / {credits}
+              </span>
+            )}
           </div>
-
-          <div className="bg-white border border-gray-100 p-10 shadow-2xl relative">
-            <div className="absolute top-0 left-0 w-full h-[2px] bg-gradient-to-r from-transparent via-[#B08D57] to-transparent opacity-50"></div>
-            <div className="grid md:grid-cols-2 gap-12">
-              {/* Left: Upload & Input */}
-              <div className="space-y-8">
-                <div className={cn("border rounded-none p-2 min-h-[300px] flex items-center justify-center bg-gray-50/50", canvasImage ? GOLD_BORDER : "border-gray-200")}>
-                  {canvasImage ? (
-                    <div className="relative w-full h-full p-2">
-                      <img src={canvasImage} className="object-cover w-full h-[280px]" alt="Canvas" />
-                      <Button size="icon" variant="ghost" className="absolute top-4 right-4 bg-white/80" onClick={() => setCanvasImage(null)}><X className="h-4 w-4 text-red-800" /></Button>
-                    </div>
-                  ) : (
-                    <label className="cursor-pointer flex flex-col items-center gap-4">
-                      <UploadCloud className="h-8 w-8 text-gray-300" />
-                      <span className="text-[10px] tracking-widest uppercase text-gray-400 font-bold">Upload Canvas</span>
-                      <input type="file" className="hidden" accept="image/*" onChange={handleCanvasUpload} />
-                    </label>
-                  )}
-                </div>
-                <Input placeholder="Vision Instruction..." value={aiPrompt} onChange={(e) => setAiPrompt(e.target.value)} className="h-14 rounded-none border-gray-200 focus:border-[#B08D57]" />
-                <Button onClick={handleGenerate} disabled={isGenerating || (!aiPrompt && !canvasImage)} className={cn("w-full h-16 rounded-none font-bold tracking-widest text-[11px] uppercase", GOLD_GRADIENT, "text-white")}>
-                  {isGenerating ? <Loader2 className="animate-spin h-4 w-4" /> : "Render Vision 🔥"}
-                </Button>
-              </div>
-
-              {/* Right: Output */}
-              <div className="border border-gray-100 bg-gray-50/30 flex flex-col items-center justify-center relative aspect-square h-full">
-                {isGenerating ? (
-                  <div className="text-center p-10 space-y-4">
-                    <Loader2 className={cn("h-8 w-8 animate-spin mx-auto", GOLD_TEXT)} />
-                    <p className="text-[10px] uppercase tracking-widest text-[#B08D57] animate-pulse">{LOADING_MESSAGES[loadingMsgIdx]}</p>
-                  </div>
-                ) : generatedImage ? (
-                  <div className="w-full h-full relative group">
-                    <img src={generatedImage} className="w-full h-full object-cover" alt="Result" />
-                    <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-4">
-                      <Button 
-                        onClick={handleSaveToVault} 
-                        disabled={isSaving}
-                        className="bg-white text-black rounded-none px-6 text-[10px] uppercase font-bold hover:bg-[#B08D57] hover:text-white transition-colors"
-                      >
-                        {isSaving ? <Loader2 className="animate-spin h-4 w-4" /> : "🔥 Save to Fire Vault"}
-                      </Button>
-                      <Button variant="outline" size="icon" className="bg-white/10 text-white border-white/20 rounded-none"><Download className="h-4 w-4" /></Button>
-                    </div>
-                  </div>
-                ) : (
-                  <div className="text-center opacity-30"><Sparkles className="h-8 w-8 mx-auto text-gray-300" /><p className="text-[10px] uppercase italic">Waiting for Vision...</p></div>
-                )}
-              </div>
-            </div>
-          </div>
-        </section>
-
-        {/* --- SECTION 2: RECENTLY AUTHORED --- */}
-        <AnimatePresence>
-          {localVault.length > 0 && (
-            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="space-y-8 pt-12 border-t border-gray-100">
-              <h3 className="text-[10px] tracking-[0.5em] uppercase font-bold text-gray-500">Recently Authored</h3>
-              <div className="grid grid-cols-2 md:grid-cols-5 gap-6">
-                {localVault.slice(0, 5).map(item => (
-                  <img key={item.id} src={item.url} className="aspect-square object-cover grayscale hover:grayscale-0 transition-all border border-gray-200" />
-                ))}
-              </div>
-            </motion.div>
-          )}
-        </AnimatePresence>
-
-        {/* --- SECTION 3: FLAVOR OF THE MONTH --- */}
-        <section className="py-12 border-y border-gray-100">
-          <h2 className="text-[10px] tracking-[0.5em] uppercase font-bold text-[#B08D57] mb-8">Flavor of the Month</h2>
-          <div className="grid md:grid-cols-2 gap-12 items-center bg-gray-50/50 p-8">
-             <img src="https://images.unsplash.com/photo-1632345031435-8727f6897d53?auto=format&fit=crop&q=80&w=1000" className="w-full h-[400px] object-cover border border-gray-200" alt="Flavor" />
-             <div className="space-y-6">
-                <h3 className="text-3xl font-serif uppercase tracking-wider text-black">Ruby Architecture</h3>
-                <p className="text-sm text-gray-500 italic leading-relaxed">"February focus: High-gloss chrome over structural red sculpting."</p>
-                <Button variant="outline" className="rounded-none border-black uppercase text-[10px] tracking-widest">Explore the Look</Button>
-             </div>
-          </div>
-        </section>
-
-        {/* --- SECTION 4: SEASONAL VAULT (Preview) --- */}
-<section className="space-y-12">
-  <div className="flex items-center justify-between">
-    <h2 className="text-2xl font-serif tracking-widest uppercase">Seasonal Vault</h2>
-    <a href="/seasonal">
-      <Button variant="outline" className="uppercase text-[10px] tracking-widest">
-        View All Seasons
-      </Button>
-    </a>
-  </div>
-  <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-    {SEASONAL_DATA.map((nail) => (
-      <div key={nail.id} className="group relative aspect-square overflow-hidden border border-gray-200">
-        <img src={nail.url} alt={nail.title} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" />
-        <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity flex flex-col items-center justify-center p-4">
-          <span className="text-[9px] text-[#B08D57] uppercase tracking-widest mb-2">{nail.category}</span>
-          <h4 className="text-white text-[10px] uppercase tracking-widest font-bold">{nail.title}</h4>
         </div>
-      </div>
-    ))}
-  </div>
-</section>
 
-        {/* --- SECTION 5: STYLE VAULT --- */}
-        <section className="py-20 border-t border-gray-100">
-          <h2 className="text-3xl font-serif tracking-widest uppercase mb-16 text-center">The Style Vault</h2>
-          <div className="grid md:grid-cols-2 gap-8">
-            {STYLE_VAULT_DATA.map((style) => (
-              <div key={style.id} className="group border border-gray-200 p-8 relative overflow-hidden">
-                <span className="text-[9px] text-[#B08D57] font-bold tracking-widest uppercase mb-2 block">{style.category}</span>
-                <h3 className="text-xl font-serif mb-4 uppercase">{style.title}</h3>
-                <div className={cn("transition-all", !isAuthenticated && "blur-md opacity-20")}>
-                  <p className="text-sm text-gray-500 italic">{style.description}</p>
-                </div>
-                {!isAuthenticated && (
-                  <div className="absolute inset-0 flex items-center justify-center">
-                    <Button variant="outline" className="rounded-none border-black text-[10px] bg-white"><Lock className="h-3 w-3 mr-2" /> Members Only</Button>
-                  </div>
-                )}
+        {/* AI Generator */}
+        <div className="grid md:grid-cols-2 gap-12">
+          
+          {/* Left: Input */}
+          <div className="space-y-6">
+            <div>
+              <h3 className="text-2xl font-serif mb-4">1. Upload Canvas</h3>
+              <div className={cn(
+                "border-2 border-dashed rounded-lg p-8 text-center cursor-pointer transition-all",
+                canvasImage ? "border-[#B08D57]" : "border-gray-300 hover:border-[#B08D57]"
+              )}>
+                <input
+                  type="file"
+                  accept="image/*"
+                  onChange={handleImageUpload}
+                  className="hidden"
+                  id="canvas-upload"
+                />
+                <label htmlFor="canvas-upload" className="cursor-pointer">
+                  {canvasImage ? (
+                    <img src={canvasImage} alt="Canvas" className="max-h-64 mx-auto rounded" />
+                  ) : (
+                    <>
+                      <Upload className="h-12 w-12 mx-auto mb-4 text-gray-400" />
+                      <p className="text-gray-600">Click to upload hand, prop, or nail stand</p>
+                    </>
+                  )}
+                </label>
               </div>
-            ))}
-          </div>
-        </section>
+            </div>
 
-        {/* --- SECTION 6: SUPPLY SUITE --- */}
-        <section className="py-20 bg-gray-50/50 -mx-4 px-4">
-          <div className="max-w-5xl mx-auto space-y-12">
-            <h2 className="text-2xl font-serif tracking-widest uppercase">The Supply Suite</h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              {SUPPLY_SUITE_DATA.map((item) => (
-                <div key={item.id} className="bg-white border border-gray-100 p-6 flex justify-between items-center group">
-                  <div className={cn(!isAuthenticated && "blur-[2px] opacity-40")}>
-                    <p className="text-[10px] text-gray-400 uppercase">{item.brand}</p>
-                    <h4 className="font-bold text-sm uppercase">{item.name}</h4>
-                  </div>
-                  <div className="text-right">
-                    {isAuthenticated ? <Button size="sm" className={cn("text-[10px] uppercase", GOLD_GRADIENT)}>Get Link</Button> : <Lock className="h-4 w-4 text-gray-300" />}
+            <div>
+              <h3 className="text-2xl font-serif mb-4">2. Describe Your Vision</h3>
+              <Textarea
+                value={prompt}
+                onChange={(e) => setPrompt(e.target.value)}
+                placeholder="E.g., Chrome french tips with gold accent, glossy finish, minimalist elegance..."
+                className="min-h-[150px] resize-none"
+              />
+            </div>
+
+            <Button
+              onClick={handleGenerate}
+              disabled={isGenerating || !prompt.trim()}
+              className={cn("w-full h-14 text-sm uppercase tracking-widest", GOLD_GRADIENT, "text-white")}
+            >
+              {isGenerating ? (
+                <>
+                  <Loader2 className="mr-2 h-5 w-5 animate-spin" />
+                  Generating...
+                </>
+              ) : (
+                <>
+                  <Wand2 className="mr-2 h-5 w-5" />
+                  Generate Design
+                </>
+              )}
+            </Button>
+          </div>
+
+          {/* Right: Output */}
+          <div>
+            <h3 className="text-2xl font-serif mb-4">3. Your Design</h3>
+            <div className="bg-gray-50 rounded-lg min-h-[500px] flex items-center justify-center p-8">
+              {generatedImage ? (
+                <div className="space-y-4 w-full">
+                  <img
+                    src={generatedImage}
+                    alt="Generated design"
+                    className="w-full rounded-lg shadow-xl"
+                  />
+                  <div className="flex gap-3">
+                    <Button
+                      onClick={handleSaveToVault}
+                      disabled={isSaving}
+                      variant="outline"
+                      className="flex-1"
+                    >
+                      {isSaving ? (
+                        <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                      ) : (
+                        <Heart className="mr-2 h-4 w-4" />
+                      )}
+                      Save to Vault
+                    </Button>
+                    <Button
+                      onClick={handleDownload}
+                      variant="outline"
+                      className="flex-1"
+                    >
+                      <Download className="mr-2 h-4 w-4" />
+                      Download
+                    </Button>
                   </div>
                 </div>
-              ))}
+              ) : (
+                <div className="text-center text-gray-400">
+                  <Sparkles className="h-16 w-16 mx-auto mb-4" />
+                  <p>Your generated design will appear here</p>
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
+
+        {/* Flavor of the Month */}
+        <section>
+          <div className="flex items-center justify-between mb-8">
+            <div>
+              <h2 className="text-4xl font-serif uppercase tracking-wider">Flavor of the Month</h2>
+              <p className="text-sm text-gray-500 italic mt-2">Current focus from the Technical Hub</p>
+            </div>
+          </div>
+
+          <div className="relative h-[500px] overflow-hidden group rounded-lg">
+            <img
+              src={flavorOfMonth.image}
+              alt={flavorOfMonth.title}
+              className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent flex items-end">
+              <div className="p-8 text-white">
+                <span className="text-[9px] uppercase tracking-[0.3em] text-[#D4AF37] block mb-2">
+                  Flavor of the Month
+                </span>
+                <h3 className="text-3xl font-serif mb-2">{flavorOfMonth.title}</h3>
+                <p className="text-sm text-gray-300 italic max-w-md">
+                  {flavorOfMonth.description}
+                </p>
+              </div>
             </div>
           </div>
         </section>
 
+        {/* Quick Links */}
+        <section className="grid md:grid-cols-3 gap-6">
+          <a href="/saved" className="group">
+            <div className="border border-gray-200 p-6 hover:border-[#B08D57] transition-all">
+              <Heart className={cn("h-8 w-8 mb-4 group-hover:text-[#B08D57]")} />
+              <h3 className="text-xl font-serif mb-2">Fire Vault</h3>
+              <p className="text-sm text-gray-600">Your saved AI designs</p>
+            </div>
+          </a>
+
+          <a href="/seasonal" className="group">
+            <div className="border border-gray-200 p-6 hover:border-[#B08D57] transition-all">
+              <Sparkles className={cn("h-8 w-8 mb-4 group-hover:text-[#B08D57]")} />
+              <h3 className="text-xl font-serif mb-2">Seasonal Vault</h3>
+              <p className="text-sm text-gray-600">Curated collections</p>
+            </div>
+          </a>
+
+          <a href="/supplies" className="group">
+            <div className="border border-gray-200 p-6 hover:border-[#B08D57] transition-all">
+              <Crown className={cn("h-8 w-8 mb-4 group-hover:text-[#B08D57]")} />
+              <h3 className="text-xl font-serif mb-2">Supply Suite</h3>
+              <p className="text-sm text-gray-600">Professional products</p>
+            </div>
+          </a>
+        </section>
       </div>
 
-      {/* PAYWALL POPUP */}
+      {/* Paywall Modal */}
       {showPaywall && (
         <div className="fixed inset-0 bg-black/80 flex items-center justify-center z-50 p-4">
-          <motion.div 
-            initial={{ scale: 0.9, opacity: 0 }}
-            animate={{ scale: 1, opacity: 1 }}
-            className="bg-white max-w-md w-full p-8 relative"
-          >
-            <button 
-              onClick={() => setShowPaywall(false)}
-              className="absolute top-4 right-4 text-gray-400 hover:text-black"
-            >
-              <X className="h-6 w-6" />
-            </button>
-            
-            <div className="text-center space-y-6">
-              <img 
-                src="https://images.unsplash.com/photo-1582407947304-fd86f028f716?auto=format&fit=crop&q=80&w=400" 
-                alt="The Founder" 
-                className="w-32 h-32 mx-auto rounded-full object-cover border-4 border-[#B08D57]"
-              />
-              
-              <div>
-                <h2 className="text-3xl font-serif uppercase tracking-wider mb-2">The Founder</h2>
-                <p className="text-[10px] tracking-[0.5em] uppercase text-gray-400">Exclusive Access</p>
-              </div>
-              
-              <p className="text-sm text-gray-600 italic">
-                "You've used your complimentary generation. Unlock unlimited AI designs, 
-                exclusive vaults, and premium tools with Founder membership."
-              </p>
-              
-              <div className="space-y-3">
-                <a href="https://nail-check.com/membership/" target="_blank" rel="noopener noreferrer">
-                  <Button className={cn("w-full h-14 uppercase tracking-widest text-[11px]", GOLD_GRADIENT, "text-white")}>
-                    Become a Member
-                  </Button>
-                </a>
-                <Button 
-                  variant="outline" 
-                  onClick={() => setShowPaywall(false)}
-                  className="w-full uppercase text-[10px]"
-                >
-                  Maybe Later
+          <div className="bg-white max-w-md w-full p-8 text-center">
+            <img 
+              src="https://images.unsplash.com/photo-1599643477877-530eb83abc8e?auto=format&fit=crop&q=80&w=200" 
+              alt="The Founder" 
+              className="w-24 h-24 mx-auto mb-6 rounded-full object-cover"
+            />
+            <h2 className="text-3xl font-serif mb-4">The Founder</h2>
+            <p className="text-gray-600 mb-6">
+              You've used your complimentary generation. Unlock unlimited AI designs, Fire Vault, and exclusive features.
+            </p>
+            <div className="space-y-3">
+              <a href="https://nail-check.com/membership/" target="_blank" rel="noopener noreferrer">
+                <Button className={cn("w-full h-12", GOLD_GRADIENT, "text-white")}>
+                  Become a Member - $8.99/mo
                 </Button>
-              </div>
+              </a>
+              <Button
+                onClick={() => setShowPaywall(false)}
+                variant="ghost"
+                className="w-full"
+              >
+                Maybe Later
+              </Button>
             </div>
-          </motion.div>
+          </div>
         </div>
       )}
     </Layout>
