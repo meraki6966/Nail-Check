@@ -1,5 +1,5 @@
 import { Link, useLocation } from "wouter";
-import { Sparkles, Heart, Home, PlusCircle, User, LogOut, Calendar, Package, Info, Crown } from "lucide-react";
+import { Sparkles, Heart, Home, Calendar, Package, LogOut, Crown } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useAuth } from "@/hooks/use-auth";
 import { Button } from "@/components/ui/button";
@@ -114,18 +114,6 @@ export function Layout({ children }: { children: React.ReactNode }) {
               {item.label}
             </Link>
           ))}
-          {/* Mobile Login/Join if not logged in */}
-          {!user && (
-            
-              href="https://nail-check.com/membership/"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="flex flex-col items-center justify-center gap-1 rounded-lg px-3 py-2 text-xs font-medium text-[#B08D57] transition-colors"
-            >
-              <Crown className="h-5 w-5" />
-              Join
-            </a>
-          )}
         </nav>
       </div>
     </div>
