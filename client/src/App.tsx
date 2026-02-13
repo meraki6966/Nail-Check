@@ -1,10 +1,10 @@
-import { Switch, Route } from "wouter";
+import SeasonalVault from "./pages/SeasonalVault";import { Switch, Route } from "wouter";
 import { queryClient } from "./lib/queryClient";
 import { QueryClientProvider } from "@tanstack/react-query";
 import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import NotFound from "@/pages/not-found";
-import Home from "@/pages/Home";
+import Home from "@/pages/Home"
 import TutorialDetail from "@/pages/TutorialDetail";
 import Upload from "@/pages/Upload";
 import Saved from "@/pages/Saved";

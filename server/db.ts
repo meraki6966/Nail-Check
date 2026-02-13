@@ -19,7 +19,6 @@ export async function initializeDatabase() {
   console.log("🔧 Initializing database tables...");
   
   try {
-    // Create tables using raw SQL based on schema
     await pool.query(`
       -- Create users table
       CREATE TABLE IF NOT EXISTS users (
@@ -42,7 +41,6 @@ export async function initializeDatabase() {
         expire TIMESTAMP NOT NULL
       );
 
-      -- Create index on sessions
       CREATE INDEX IF NOT EXISTS IDX_session_expire ON sessions(expire);
 
       -- Create conversations table
@@ -86,8 +84,23 @@ export async function initializeDatabase() {
         created_at TIMESTAMP DEFAULT NOW() NOT NULL
       );
 
-      -- Create index on user_id for faster queries
       CREATE INDEX IF NOT EXISTS idx_saved_designs_user_id ON saved_designs(user_id);
+
+      -- Create seasonal_designs table (SEASONAL VAULT)
+      CREATE TABLE IF NOT EXISTS seasonal_designs (
+        id SERIAL PRIMARY KEY,
+        title TEXT NOT NULL,
+        image_url TEXT NOT NULL,
+        season TEXT NOT NULL,
+        category TEXT,
+        description TEXT,
+        tags TEXT[],
+        featured BOOLEAN DEFAULT false,
+        created_at TIMESTAMP DEFAULT NOW() NOT NULL
+      );
+
+      CREATE INDEX IF NOT EXISTS idx_seasonal_designs_season ON seasonal_designs(season);
+      CREATE INDEX IF NOT EXISTS idx_seasonal_designs_featured ON seasonal_designs(featured);
     `);
     
     console.log("✅ Database tables initialized successfully!");

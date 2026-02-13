@@ -2,11 +2,14 @@ import { db } from "./db";
 import {
   tutorials,
   savedDesigns,
+  seasonalDesigns,
   users,
   type Tutorial,
   type InsertTutorial,
   type SavedDesign,
   type InsertSavedDesign,
+  type SeasonalDesign,
+  type InsertSeasonalDesign,
 } from "@shared/schema";
 import { eq, ilike, or, and, desc, sql } from "drizzle-orm";
 import { authStorage, type IAuthStorage } from "./replit_integrations/auth";
@@ -23,12 +26,17 @@ export interface IStorage extends IAuthStorage {
   deleteDesign(id: number): Promise<void>;
   toggleFavorite(id: number): Promise<SavedDesign>;
   
+  // Seasonal Vault methods
+  getSeasonalDesigns(season?: string): Promise<SeasonalDesign[]>;
+  getSeasonalDesign(id: number): Promise<SeasonalDesign | undefined>;
+  createSeasonalDesign(design: InsertSeasonalDesign): Promise<SeasonalDesign>;
+  getFeaturedSeasonalDesigns(): Promise<SeasonalDesign[]>;
+  
   // Credit system methods
   incrementGenerationsUsed(userId: string): Promise<void>;
 }
 
 export class DatabaseStorage implements IStorage {
-  // Auth methods (delegated/inherited from authStorage implementation pattern)
   async getUser(id: string) {
     return authStorage.getUser(id);
   }
@@ -112,6 +120,37 @@ export class DatabaseStorage implements IStorage {
       .returning();
     
     return updated;
+  }
+
+  // SEASONAL VAULT METHODS
+  async getSeasonalDesigns(season?: string): Promise<SeasonalDesign[]> {
+    let query = db.select().from(seasonalDesigns).orderBy(desc(seasonalDesigns.createdAt));
+    
+    if (season) {
+      // @ts-ignore
+      query = query.where(eq(seasonalDesigns.season, season));
+    }
+    
+    return await query;
+  }
+
+  async getSeasonalDesign(id: number): Promise<SeasonalDesign | undefined> {
+    const [design] = await db.select().from(seasonalDesigns).where(eq(seasonalDesigns.id, id));
+    return design;
+  }
+
+  async createSeasonalDesign(design: InsertSeasonalDesign): Promise<SeasonalDesign> {
+    const [newDesign] = await db.insert(seasonalDesigns).values(design).returning();
+    return newDesign;
+  }
+
+  async getFeaturedSeasonalDesigns(): Promise<SeasonalDesign[]> {
+    return await db
+      .select()
+      .from(seasonalDesigns)
+      .where(eq(seasonalDesigns.featured, true))
+      .orderBy(desc(seasonalDesigns.createdAt))
+      .limit(8);
   }
 
   // CREDIT SYSTEM METHODS

@@ -36,7 +36,26 @@ export const savedDesigns = pgTable("saved_designs", {
   isFavorite: boolean("is_favorite").default(false),
   createdAt: timestamp("created_at").defaultNow().notNull(),
 });
+// SEASONAL VAULT
+export const seasonalDesigns = pgTable("seasonal_designs", {
+  id: serial("id").primaryKey(),
+  title: text("title").notNull(),
+  imageUrl: text("image_url").notNull(),
+  season: text("season").notNull(), // Winter, Spring, Summer, Fall, Holiday
+  category: text("category"), // e.g., "Valentine's", "Christmas", "Beach"
+  description: text("description"),
+  tags: text("tags").array(),
+  featured: boolean("featured").default(false),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+});
 
+export const insertSeasonalDesignSchema = createInsertSchema(seasonalDesigns).omit({
+  id: true,
+  createdAt: true,
+});
+
+export type SeasonalDesign = typeof seasonalDesigns.$inferSelect;
+export type InsertSeasonalDesign = z.infer<typeof insertSeasonalDesignSchema>;
 export const insertSavedDesignSchema = createInsertSchema(savedDesigns).omit({
   id: true,
   createdAt: true,

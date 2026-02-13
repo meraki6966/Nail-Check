@@ -279,21 +279,28 @@ export default function Home() {
           </div>
         </section>
 
-        {/* --- SECTION 4: SEASONAL VAULT --- */}
-        <section className="space-y-12">
-          <h2 className="text-2xl font-serif tracking-widest uppercase text-center">Seasonal Vault</h2>
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-            {SEASONAL_DATA.map((nail) => (
-              <div key={nail.id} className="group relative aspect-square overflow-hidden border border-gray-200">
-                <img src={nail.url} alt={nail.title} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" />
-                <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity flex flex-col items-center justify-center p-4">
-                  <span className="text-[9px] text-[#B08D57] uppercase tracking-widest mb-2">{nail.category}</span>
-                  <h4 className="text-white text-[10px] uppercase tracking-widest font-bold">{nail.title}</h4>
-                </div>
-              </div>
-            ))}
-          </div>
-        </section>
+        {/* --- SECTION 4: SEASONAL VAULT (Preview) --- */}
+<section className="space-y-12">
+  <div className="flex items-center justify-between">
+    <h2 className="text-2xl font-serif tracking-widest uppercase">Seasonal Vault</h2>
+    <a href="/seasonal">
+      <Button variant="outline" className="uppercase text-[10px] tracking-widest">
+        View All Seasons
+      </Button>
+    </a>
+  </div>
+  <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+    {SEASONAL_DATA.map((nail) => (
+      <div key={nail.id} className="group relative aspect-square overflow-hidden border border-gray-200">
+        <img src={nail.url} alt={nail.title} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" />
+        <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity flex flex-col items-center justify-center p-4">
+          <span className="text-[9px] text-[#B08D57] uppercase tracking-widest mb-2">{nail.category}</span>
+          <h4 className="text-white text-[10px] uppercase tracking-widest font-bold">{nail.title}</h4>
+        </div>
+      </div>
+    ))}
+  </div>
+</section>
 
         {/* --- SECTION 5: STYLE VAULT --- */}
         <section className="py-20 border-t border-gray-100">
