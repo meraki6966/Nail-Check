@@ -45,18 +45,13 @@ export default function About() {
                 <h2 className="text-5xl font-serif uppercase tracking-widest mb-8">Our Mission</h2>
                 <div className="space-y-6 text-gray-600 leading-relaxed">
                   <p>
-                    Nail Check was born from a simple observation: the nail industry deserved 
-                    better tools. Professional technicians were limited by traditional design methods, 
-                    struggling to visualize concepts before execution.
+                    Nail Check was born from the realization that while inspiration is everywhere, 
+                    clarity is rare. As a self-taught artist, I navigated the gap between seeing a 
+                    masterpiece and understanding the technical steps required to create it.
                   </p>
                   <p>
-                    We built the Technical Hub to bridge that gap. By combining AI-powered design 
-                    generation with curated seasonal collections and professional-grade supplier access, 
-                    we've created the ultimate platform for nail artistry.
-                  </p>
-                  <p>
-                    Every feature—from the Fire Vault to the Supply Suite—is engineered with 
-                    precision and purpose. Because great nails start with great tools.
+                    This ecosystem exists to bridge that gap—bringing high-tech guidance and product 
+                    education into a single, refined sanctuary for the modern artist.
                   </p>
                 </div>
               </motion.div>
@@ -130,7 +125,7 @@ export default function About() {
               <TimelineItem
                 year="2024"
                 title="The Idea"
-                description="Founder Andrea identifies a gap in the market: nail artists need better visualization tools before committing to expensive products and time-intensive techniques."
+                description="The Founder identifies a gap in the market: nail artists need better visualization tools before committing to expensive products and time-intensive techniques."
               />
             </div>
           </div>
@@ -147,13 +142,14 @@ export default function About() {
             <div className="bg-white/5 border border-white/10 p-12">
               <div className="mb-6">
                 <div className="w-32 h-32 mx-auto rounded-full bg-gradient-to-br from-[#B08D57] to-[#D4AF37] mb-6"></div>
-                <h3 className="text-3xl font-serif uppercase tracking-wider mb-2">Andrea</h3>
-                <p className={cn("text-sm uppercase tracking-widest", GOLD_TEXT)}>Founder & Visionary</p>
+                <h3 className="text-3xl font-serif uppercase tracking-wider mb-2">The Founder</h3>
+                <p className={cn("text-sm uppercase tracking-widest", GOLD_TEXT)}>Visionary & Creator</p>
               </div>
               <p className="text-gray-300 leading-relaxed max-w-2xl mx-auto">
-                With a background in design and a passion for precision engineering, Andrea created 
-                Nail Check to solve a problem she experienced firsthand: the inability to visualize 
-                nail designs before execution. Today, the Technical Hub serves thousands of artists worldwide.
+                As a self-taught artist who navigated the gap between inspiration and execution, 
+                the Founder created Nail Check to bridge clarity with creativity. The Technical Hub 
+                now serves thousands of artists worldwide, providing high-tech guidance and product 
+                education in one refined sanctuary.
               </p>
             </div>
           </div>
@@ -167,7 +163,7 @@ export default function About() {
               Become part of the technical elite. Start creating today.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <a href="/membership">
+              <a href="https://nail-check.com/membership/" target="_blank" rel="noopener noreferrer">
                 <Button className={cn("h-16 px-12 text-[11px] uppercase tracking-widest", GOLD_GRADIENT, "text-white")}>
                   Become a Member
                 </Button>

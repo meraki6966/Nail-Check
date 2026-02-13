@@ -102,10 +102,9 @@ export default function Membership() {
                   </div>
                   <p className={cn("italic mb-6", GOLD_TEXT)}>Full technical access</p>
                   <div className="flex items-baseline gap-2">
-                    <span className="text-5xl font-bold">$29</span>
+                    <span className="text-5xl font-bold">$8.99</span>
                     <span className="text-gray-500">/month</span>
                   </div>
-                  <p className="text-sm text-gray-500 mt-2">or $290/year (save $58)</p>
                 </div>
 
                 <div className="space-y-4 mb-8">
@@ -117,9 +116,11 @@ export default function Membership() {
                   ))}
                 </div>
 
-                <Button className={cn("w-full h-14 uppercase text-[10px] tracking-widest", GOLD_GRADIENT, "text-white")}>
-                  Become a Founder Member
-                </Button>
+                <a href="https://nail-check.com/membership/" target="_blank" rel="noopener noreferrer">
+                  <Button className={cn("w-full h-14 uppercase text-[10px] tracking-widest", GOLD_GRADIENT, "text-white")}>
+                    Become a Founder Member
+                  </Button>
+                </a>
                 
                 <p className="text-center text-xs text-gray-500 mt-4">
                   Cancel anytime • No hidden fees
@@ -170,7 +171,7 @@ export default function Membership() {
               />
               <FAQItem
                 question="What payment methods do you accept?"
-                answer="We accept all major credit cards (Visa, Mastercard, Amex, Discover) and digital wallets. Payments are processed securely through Stripe."
+                answer="We accept all major credit cards (Visa, Mastercard, Amex, Discover) and digital wallets. Payments are processed securely through our WordPress membership system."
               />
               <FAQItem
                 question="Can I cancel anytime?"
@@ -181,8 +182,8 @@ export default function Membership() {
                 answer="We offer a 7-day money-back guarantee. If you're not satisfied within the first week, contact us for a full refund."
               />
               <FAQItem
-                question="What's the difference between monthly and yearly?"
-                answer="Both plans include all features. Yearly members save $58 (equivalent to 2 months free) and lock in the current price for the year."
+                question="How does the membership work?"
+                answer="Sign up through our WordPress membership page. Once your payment is confirmed, you'll gain instant access to all premium features including unlimited AI generations, seasonal vaults, and supplier links."
               />
             </div>
           </div>
@@ -195,9 +196,11 @@ export default function Membership() {
             <p className="text-xl text-gray-300">
               Unlock the full Technical Hub experience today.
             </p>
-            <Button className={cn("h-16 px-12 text-[11px] uppercase tracking-widest", GOLD_GRADIENT, "text-white")}>
-              Start Your Founder Membership
-            </Button>
+            <a href="https://nail-check.com/membership/" target="_blank" rel="noopener noreferrer">
+              <Button className={cn("h-16 px-12 text-[11px] uppercase tracking-widest", GOLD_GRADIENT, "text-white")}>
+                Start Your Founder Membership
+              </Button>
+            </a>
           </div>
         </section>
 
