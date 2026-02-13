@@ -1,5 +1,5 @@
 import { Link, useLocation } from "wouter";
-import { Sparkles, Heart, Home, PlusCircle, User, LogOut } from "lucide-react";
+import { Sparkles, Heart, Home, PlusCircle, User, LogOut, Calendar, Package, Info, Crown } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useAuth } from "@/hooks/use-auth";
 import { Button } from "@/components/ui/button";
@@ -9,9 +9,15 @@ export function Layout({ children }: { children: React.ReactNode }) {
   const { user, logout } = useAuth();
 
   const navItems = [
-    { href: "/", label: "Gallery", icon: Home },
-    { href: "/upload", label: "Upload", icon: PlusCircle },
-    { href: "/saved", label: "Saved", icon: Heart },
+    { href: "/", label: "Design Lab", icon: Home },
+    { href: "/saved", label: "Fire Vault", icon: Heart },
+    { href: "/seasonal", label: "Seasonal", icon: Calendar },
+    { href: "/supplies", label: "Supplies", icon: Package },
+  ];
+
+  const portalLinks = [
+    { href: "/about", label: "About" },
+    { href: "/membership", label: "Membership" },
   ];
 
   return (
@@ -20,8 +26,8 @@ export function Layout({ children }: { children: React.ReactNode }) {
       <header className="sticky top-0 z-50 w-full border-b border-border/40 bg-background/80 backdrop-blur-md">
         <div className="container flex h-16 items-center justify-between px-4">
           <Link href="/" className="flex items-center gap-2">
-            <div className="flex h-8 w-8 items-center justify-center rounded-full bg-primary/20 text-primary-foreground">
-              <Sparkles className="h-4 w-4" />
+            <div className="flex h-8 w-8 items-center justify-center rounded-full bg-gradient-to-br from-[#B08D57] to-[#D4AF37]">
+              <Sparkles className="h-4 w-4 text-white" />
             </div>
             <span className="font-display text-xl font-semibold tracking-tight">Nail Check</span>
           </Link>
@@ -32,8 +38,25 @@ export function Layout({ children }: { children: React.ReactNode }) {
                 key={item.href}
                 href={item.href}
                 className={cn(
-                  "text-sm font-medium transition-colors hover:text-primary",
-                  location === item.href ? "text-primary font-bold" : "text-muted-foreground"
+                  "text-sm font-medium transition-colors hover:text-[#B08D57]",
+                  location === item.href ? "text-[#B08D57] font-bold" : "text-muted-foreground"
+                )}
+              >
+                {item.label}
+              </Link>
+            ))}
+            
+            {/* Divider */}
+            <div className="h-4 w-px bg-gray-300"></div>
+            
+            {/* Portal Links */}
+            {portalLinks.map((item) => (
+              <Link
+                key={item.href}
+                href={item.href}
+                className={cn(
+                  "text-sm font-medium transition-colors hover:text-[#B08D57]",
+                  location === item.href ? "text-[#B08D57] font-bold" : "text-muted-foreground"
                 )}
               >
                 {item.label}
@@ -50,11 +73,19 @@ export function Layout({ children }: { children: React.ReactNode }) {
                  </Button>
               </div>
             ) : (
-              <a href="/api/login">
-                <Button variant="default" size="sm" className="bg-primary hover:bg-primary/90 text-primary-foreground">
-                  Member Login
-                </Button>
-              </a>
+              <div className="flex items-center gap-2">
+                <a href="https://nail-check.com/membership/" target="_blank" rel="noopener noreferrer">
+                  <Button size="sm" className="bg-gradient-to-r from-[#B08D57] via-[#D4AF37] to-[#B08D57] hover:opacity-90 text-white hidden md:inline-flex">
+                    <Crown className="h-4 w-4 mr-2" />
+                    Join
+                  </Button>
+                </a>
+                <a href="/api/login">
+                  <Button variant="outline" size="sm">
+                    Login
+                  </Button>
+                </a>
+              </div>
             )}
           </div>
         </div>
@@ -75,7 +106,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
               className={cn(
                 "flex flex-col items-center justify-center gap-1 rounded-lg px-3 py-2 text-xs font-medium transition-colors",
                 location === item.href
-                  ? "text-primary"
+                  ? "text-[#B08D57]"
                   : "text-muted-foreground hover:text-foreground"
               )}
             >
@@ -83,14 +114,16 @@ export function Layout({ children }: { children: React.ReactNode }) {
               {item.label}
             </Link>
           ))}
-          {/* Mobile Login if not logged in */}
+          {/* Mobile Login/Join if not logged in */}
           {!user && (
-            <a
-              href="/api/login"
-              className="flex flex-col items-center justify-center gap-1 rounded-lg px-3 py-2 text-xs font-medium text-muted-foreground hover:text-foreground transition-colors"
+            
+              href="https://nail-check.com/membership/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex flex-col items-center justify-center gap-1 rounded-lg px-3 py-2 text-xs font-medium text-[#B08D57] transition-colors"
             >
-              <User className="h-5 w-5" />
-              Login
+              <Crown className="h-5 w-5" />
+              Join
             </a>
           )}
         </nav>
