@@ -1,3 +1,6 @@
+import Portal from "./pages/Portal";
+import Membership from "./pages/Membership";
+import About from "./pages/About";
 import SeasonalVault from "./pages/SeasonalVault";
 import SupplySuite from "./pages/SupplySuite";
 import { Switch, Route } from "wouter";
@@ -14,6 +17,9 @@ import Saved from "@/pages/Saved";
 function Router() {
   return (
     <Switch>
+      <Route path="/portal" component={Portal} />
+      <Route path="/membership" component={Membership} />
+      <Route path="/about" component={About} />
       <Route path="/" component={Home} />
       <Route path="/tutorial/:id" component={TutorialDetail} />
       <Route path="/upload" component={Upload} />
