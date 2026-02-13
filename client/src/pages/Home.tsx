@@ -45,6 +45,7 @@ export default function Home() {
   const [isGenerating, setIsGenerating] = useState(false);
   const [generatedImage, setGeneratedImage] = useState<string | null>(null);
   const [loadingMsgIdx, setLoadingMsgIdx] = useState(0);
+  const [isSaving, setIsSaving] = useState(false);
 
   // --- LOCAL GALLERY STATE (Save Option) ---
   const [localVault, setLocalVault] = useState<{url: string, id: string}[]>(() => {
@@ -97,10 +98,41 @@ export default function Home() {
     }
   };
 
-  const handleSaveToVault = () => {
+  const handleSaveToVault = async () => {
     if (!generatedImage) return;
-    const newEntry = { url: generatedImage, id: Date.now().toString() };
-    setLocalVault(prev => [newEntry, ...prev]);
+    
+    setIsSaving(true);
+    try {
+      // Save to database via API
+      const response = await fetch("/api/designs", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          imageUrl: generatedImage,
+          prompt: aiPrompt,
+          canvasImageUrl: canvasImage,
+          tags: [],
+          userId: user?.id,
+        }),
+      });
+      
+      if (response.ok) {
+        const savedDesign = await response.json();
+        // Also save to local vault for instant UI update
+        const newEntry = { url: generatedImage, id: savedDesign.id.toString() };
+        setLocalVault(prev => [newEntry, ...prev]);
+        
+        // Success feedback
+        alert("🔥 Saved to Fire Vault!");
+      } else {
+        throw new Error("Failed to save");
+      }
+    } catch (error) {
+      console.error("Error saving to vault:", error);
+      alert("❌ Failed to save design. Please try again.");
+    } finally {
+      setIsSaving(false);
+    }
   };
 
   return (
@@ -150,7 +182,13 @@ export default function Home() {
                   <div className="w-full h-full relative group">
                     <img src={generatedImage} className="w-full h-full object-cover" alt="Result" />
                     <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-4">
-                      <Button onClick={handleSaveToVault} className="bg-white text-black rounded-none px-6 text-[10px] uppercase font-bold">Save to Vault</Button>
+                      <Button 
+                        onClick={handleSaveToVault} 
+                        disabled={isSaving}
+                        className="bg-white text-black rounded-none px-6 text-[10px] uppercase font-bold hover:bg-[#B08D57] hover:text-white transition-colors"
+                      >
+                        {isSaving ? <Loader2 className="animate-spin h-4 w-4" /> : "🔥 Save to Fire Vault"}
+                      </Button>
                       <Button variant="outline" size="icon" className="bg-white/10 text-white border-white/20 rounded-none"><Download className="h-4 w-4" /></Button>
                     </div>
                   </div>
