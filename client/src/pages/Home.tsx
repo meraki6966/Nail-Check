@@ -110,6 +110,9 @@ export default function Home() {
       const imageUrl = `data:${data.mimeType};base64,${data.b64_json}`;
       setGeneratedImage(imageUrl);
 
+      // Track generation locally for guests
+      setGenerationsUsed(prev => prev + 1);
+
       // Use a credit after successful generation
       const userId = user?.id || "guest";
       await fetch("/api/user/use-credit", {
