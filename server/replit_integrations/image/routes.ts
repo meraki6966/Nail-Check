@@ -2,7 +2,7 @@ import type { Express, Request, Response } from "express";
 import { generateImage } from "./client";
 
 export function registerImageRoutes(app: Express): void {
-  app.post("/api/generate-image", async (req: Request, res: Response) => {
+  app.post("/api/image/generate", async (req: Request, res: Response) => {
     try {
       // 1. Grab both the prompt AND the optional canvas image from the request
       const { prompt, image } = req.body;

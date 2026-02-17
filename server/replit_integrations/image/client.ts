@@ -39,9 +39,8 @@ export async function generateImage(prompt: string, base64Image?: string): Promi
     });
   }
 
-  // 2. Using the 2026 "Nano Banana Pro" model for Tier 1 Billing accounts
   const response = await ai.models.generateContent({
-    model: "gemini-3-pro-image-preview", 
+    model: "gemini-2.5-flash-image", 
     contents: [{ role: "user", parts: parts }],
     config: {
       // Explicitly request IMAGE modality to bypass regional text-only blocks
