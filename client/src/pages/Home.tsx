@@ -121,8 +121,6 @@ export default function Home() {
         body: JSON.stringify({ userId }),
       });
 
-      // Refresh credits
-      await fetchCredits();
 
       toast({
         title: "Design Generated! ✨",
