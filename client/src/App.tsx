@@ -1,4 +1,4 @@
-
+import Gallery from "./pages/Gallery";
 import Tutorials from "./pages/Tutorials";
 import Embed from "./pages/Embed";
 import Portal from "./pages/Portal";
@@ -20,6 +20,7 @@ import Saved from "@/pages/Saved";
 function Router() {
   return (
     <Switch>
+      <Route path="/gallery" element={<Gallery />} />
       <Route path="/tutorials" component={Tutorials} />
       <Route path="/embed" component={Embed} />
       <Route path="/portal" component={Portal} />
