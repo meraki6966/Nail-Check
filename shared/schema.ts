@@ -86,3 +86,44 @@ export type SupplyProduct = typeof supplyProducts.$inferSelect;
 export type InsertSupplyProduct = z.infer<typeof insertSupplyProductSchema>;
 export type SavedDesign = typeof savedDesigns.$inferSelect;
 export type InsertSavedDesign = z.infer<typeof insertSavedDesignSchema>;
+// ============================================
+// NAIL TECH LOCATOR
+// ============================================
+export const nailTechs = pgTable("nail_techs", {
+  id: serial("id").primaryKey(),
+  name: text("name").notNull(),
+  email: text("email").notNull().unique(),
+  phone: text("phone"),
+  businessName: text("business_name"),
+  city: text("city").notNull(),
+  state: text("state").notNull(),
+  zipCode: text("zip_code").notNull(),
+  bio: text("bio").notNull(),
+  profileImage: text("profile_image"),
+  bookingUrl: text("booking_url"),
+  instagram: text("instagram"),
+  website: text("website"),
+  skillLevel: text("skill_level"),
+  specialties: text("specialties").array(),
+  rating: integer("rating").default(0),
+  reviewCount: integer("review_count").default(0),
+  isApproved: boolean("is_approved").default(false),
+  isPremium: boolean("is_premium").default(false),
+  isVerified: boolean("is_verified").default(false),
+  createdAt: timestamp("created_at").defaultNow(),
+  updatedAt: timestamp("updated_at").defaultNow(),
+});
+
+export const insertNailTechSchema = createInsertSchema(nailTechs).omit({
+  id: true,
+  createdAt: true,
+  updatedAt: true,
+  rating: true,
+  reviewCount: true,
+  isApproved: true,
+  isPremium: true,
+  isVerified: true,
+});
+
+export type NailTech = typeof nailTechs.$inferSelect;
+export type InsertNailTech = z.infer<typeof insertNailTechSchema>;

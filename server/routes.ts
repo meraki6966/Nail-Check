@@ -264,7 +264,92 @@ export async function registerRoutes(
       res.status(500).json({ message: "Failed to create product" });
     }
   });
+// ============================================
+  // NAIL TECH LOCATOR API ROUTES
+  // ============================================
+  
+  // GET all approved nail techs
+  app.get("/api/techs", async (req, res) => {
+    try {
+      const techs = await storage.getNailTechs();
+      res.json(techs);
+    } catch (err) {
+      console.error("Error fetching nail techs:", err);
+      res.status(500).json({ message: "Failed to fetch nail techs" });
+    }
+  });
 
+  // GET single nail tech by ID
+  app.get("/api/techs/:id", async (req, res) => {
+    try {
+      const id = Number(req.params.id);
+      const tech = await storage.getNailTech(id);
+      if (!tech) {
+        return res.status(404).json({ message: "Nail tech not found" });
+      }
+      res.json(tech);
+    } catch (err) {
+      console.error("Error fetching nail tech:", err);
+      res.status(500).json({ message: "Failed to fetch nail tech" });
+    }
+  });
+
+  // POST register new nail tech
+  app.post("/api/techs/register", async (req, res) => {
+    try {
+      const { name, email, phone, businessName, city, state, zipCode, bio, profileImage, bookingUrl, instagram, website, skillLevel, specialties } = req.body;
+      
+      if (!name || !email || !city || !state || !zipCode || !bio) {
+        return res.status(400).json({ message: "name, email, city, state, zipCode, and bio are required" });
+      }
+
+      const tech = await storage.createNailTech({
+        name,
+        email,
+        phone,
+        businessName,
+        city,
+        state,
+        zipCode,
+        bio,
+        profileImage,
+        bookingUrl,
+        instagram,
+        website,
+        skillLevel,
+        specialties,
+      });
+      
+      res.status(201).json(tech);
+    } catch (err) {
+      console.error("Error registering nail tech:", err);
+      res.status(500).json({ message: "Failed to register nail tech" });
+    }
+  });
+
+  // PUT approve nail tech (admin)
+  app.put("/api/techs/:id/approve", async (req, res) => {
+    try {
+      const id = Number(req.params.id);
+      const tech = await storage.approveNailTech(id);
+      res.json(tech);
+    } catch (err) {
+      console.error("Error approving nail tech:", err);
+      res.status(500).json({ message: "Failed to approve nail tech" });
+    }
+  });
+
+  // DELETE nail tech
+  app.delete("/api/techs/:id", async (req, res) => {
+    try {
+      const id = Number(req.params.id);
+      await storage.deleteNailTech(id);
+      res.status(204).send();
+    } catch (err) {
+      console.error("Error deleting nail tech:", err);
+      res.status(500).json({ message: "Failed to delete nail tech" });
+    }
+  });
   // CREDIT SYSTEM API
   app.get("/api/user/credits", async (req, res) => {
     try {

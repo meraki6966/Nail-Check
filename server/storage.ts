@@ -5,6 +5,7 @@ import {
   seasonalDesigns,
   supplyProducts,
   users,
+  nailTechs,
   type Tutorial,
   type InsertTutorial,
   type SavedDesign,
@@ -13,6 +14,8 @@ import {
   type InsertSeasonalDesign,
   type SupplyProduct,
   type InsertSupplyProduct,
+  type NailTech,
+  type InsertNailTech,
 } from "@shared/schema";
 import { eq, ilike, or, and, desc, sql } from "drizzle-orm";
 import { authStorage, type IAuthStorage } from "./replit_integrations/auth";
@@ -41,8 +44,67 @@ export interface IStorage extends IAuthStorage {
   createSupplyProduct(product: InsertSupplyProduct): Promise<SupplyProduct>;
   getFeaturedSupplyProducts(): Promise<SupplyProduct[]>;
   searchSupplyProducts(query: string): Promise<SupplyProduct[]>;
-  
+  // Nail Tech Locator methods
+  getNailTechs(zipCode?: string): Promise<NailTech[]>;
+  getNailTech(id: number): Promise<NailTech | undefined>;
+  createNailTech(tech: InsertNailTech): Promise<NailTech>;
+  approveNailTech(id: number): Promise<NailTech>;
+  deleteNailTech(id: number): Promise<void>;
   // Credit system methods
+  // NAIL TECH LOCATOR METHODS
+  async getNailTechs(zipCode?: string): Promise<NailTech[]> {
+    let query = db
+      .select()
+      .from(nailTechs)
+      .where(eq(nailTechs.isApproved, true))
+      .orderBy(desc(nailTechs.isPremium), desc(nailTechs.createdAt));
+    
+    const results = await query;
+    
+    // Filter by zip code prefix if provided
+    if (zipCode && zipCode.length >= 3) {
+      const zipPrefix = zipCode.substring(0, 3);
+      return results.filter(tech => tech.zipCode.startsWith(zipPrefix));
+    }
+    
+    return results;
+  }
+
+  async getNailTech(id: number): Promise<NailTech | undefined> {
+    const [tech] = await db
+      .select()
+      .from(nailTechs)
+      .where(and(eq(nailTechs.id, id), eq(nailTechs.isApproved, true)));
+    return tech;
+  }
+
+  async createNailTech(tech: InsertNailTech): Promise<NailTech> {
+    const [newTech] = await db
+      .insert(nailTechs)
+      .values({
+        ...tech,
+        isApproved: false,
+        isPremium: false,
+        isVerified: false,
+        rating: 0,
+        reviewCount: 0,
+      })
+      .returning();
+    return newTech;
+  }
+
+  async approveNailTech(id: number): Promise<NailTech> {
+    const [tech] = await db
+      .update(nailTechs)
+      .set({ isApproved: true, updatedAt: new Date() })
+      .where(eq(nailTechs.id, id))
+      .returning();
+    return tech;
+  }
+
+  async deleteNailTech(id: number): Promise<void> {
+    await db.delete(nailTechs).where(eq(nailTechs.id, id));
+  }
   incrementGenerationsUsed(userId: string): Promise<void>;
 }
 
