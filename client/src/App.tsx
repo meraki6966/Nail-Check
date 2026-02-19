@@ -1,4 +1,6 @@
-import Gallery from "./pages/Gallery";
+
+import TechRegister from "./pages/TechRegister";
+import FindTech from "./pages/FindTech";import Gallery from "./pages/Gallery";
 import Tutorials from "./pages/Tutorials";
 import Embed from "./pages/Embed";
 import Portal from "./pages/Portal";
@@ -20,6 +22,8 @@ import Saved from "@/pages/Saved";
 function Router() {
   return (
     <Switch>
+      <Route path="/find-tech" component={FindTech} />
+      <Route path="/tech-register" component={TechRegister} />
       <Route path="/gallery" component={Gallery} />
       <Route path="/tutorials" component={Tutorials} />
       <Route path="/embed" component={Embed} />
