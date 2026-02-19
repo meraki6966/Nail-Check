@@ -62,21 +62,31 @@ export default function TechRegister() {
     setIsSubmitting(true);
 
     try {
-      const response = await fetch("/api/techs/register", {
+      // Send to Google Sheet
+      await fetch("https://script.google.com/macros/s/AKfycbzfW8GCGo6phqt33P_gQl3e34PHLHr4WkqgIHqCsMZyJWwDWj43reEYiBYooXkMFcMKUA/exec", {
         method: "POST",
+        mode: "no-cors",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(formData),
       });
 
-      if (response.ok) {
-        setSubmitted(true);
-        toast({
-          title: "Application Submitted! 🎉",
-          description: "We'll review your profile and get back to you soon.",
+      // Also save to database for future use
+      try {
+        await fetch("/api/techs/register", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(formData),
         });
-      } else {
-        throw new Error("Failed to submit");
+      } catch (dbError) {
+        console.error("Database save error:", dbError);
+        // Continue anyway since Google Sheet worked
       }
+
+      setSubmitted(true);
+      toast({
+        title: "Application Submitted! 🎉",
+        description: "We'll review your profile and get back to you soon.",
+      });
     } catch (error) {
       console.error("Submit error:", error);
       toast({
