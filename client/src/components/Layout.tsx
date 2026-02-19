@@ -1,4 +1,4 @@
-import { Sparkles, Heart, Home, Calendar, Package, LogOut, Crown } from "lucide-react";
+import { Sparkles, Heart, Home, Calendar, Package, LogOut, Crown, MapPin, BookOpen } from "lucide-react";
 import { Link, useLocation } from "wouter";
 import { cn } from "@/lib/utils";
 import { useAuth } from "@/hooks/use-auth";
@@ -9,12 +9,13 @@ export function Layout({ children }: { children: React.ReactNode }) {
   const { user, logout } = useAuth();
 
   const navItems = [
-  { href: "/", label: "Design Lab", icon: Home },
-  { href: "/saved", label: "Fire Vault", icon: Heart },
-  { href: "/seasonal", label: "Seasonal", icon: Calendar },
-  { href: "/supplies", label: "Supplies", icon: Package },
-  { href: "/tutorials", label: "Tutorials", icon: Sparkles }, // ADD THIS LINE
-];
+    { href: "/", label: "Design Lab", icon: Home },
+    { href: "/find-tech", label: "Find a Tech", icon: MapPin },
+    { href: "/saved", label: "Fire Vault", icon: Heart },
+    { href: "/seasonal", label: "Seasonal", icon: Calendar },
+    { href: "/supplies", label: "Supplies", icon: Package },
+    { href: "/tutorials", label: "Tutorials", icon: BookOpen },
+  ];
 
   const portalLinks = [
     { href: "/about", label: "About" },
@@ -27,7 +28,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
       <header className="sticky top-0 z-50 w-full border-b border-border/40 bg-background/80 backdrop-blur-md">
         <div className="container flex h-16 items-center justify-between px-4">
           <Link href="/" className="flex items-center gap-2">
-            <div className="flex h-8 w-8 items-center justify-center rounded-full bg-gradient-to-br from-[#B08D57] to-[#D4AF37]">
+            <div className="flex h-8 w-8 items-center justify-center rounded-full bg-gradient-to-br from-[#FF6B9D] to-[#9B5DE5]">
               <Sparkles className="h-4 w-4 text-white" />
             </div>
             <span className="font-display text-xl font-semibold tracking-tight">Nail Check</span>
@@ -39,8 +40,8 @@ export function Layout({ children }: { children: React.ReactNode }) {
                 key={item.href}
                 href={item.href}
                 className={cn(
-                  "text-sm font-medium transition-colors hover:text-[#B08D57]",
-                  location === item.href ? "text-[#B08D57] font-bold" : "text-muted-foreground"
+                  "text-sm font-medium transition-colors hover:text-[#FF6B9D]",
+                  location === item.href ? "text-[#FF6B9D] font-bold" : "text-muted-foreground"
                 )}
               >
                 {item.label}
@@ -56,8 +57,8 @@ export function Layout({ children }: { children: React.ReactNode }) {
                 key={item.href}
                 href={item.href}
                 className={cn(
-                  "text-sm font-medium transition-colors hover:text-[#B08D57]",
-                  location === item.href ? "text-[#B08D57] font-bold" : "text-muted-foreground"
+                  "text-sm font-medium transition-colors hover:text-[#9B5DE5]",
+                  location === item.href ? "text-[#9B5DE5] font-bold" : "text-muted-foreground"
                 )}
               >
                 {item.label}
@@ -76,7 +77,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
             ) : (
               <div className="flex items-center gap-2">
                 <a href="https://nail-check.com/membership/" target="_blank" rel="noopener noreferrer">
-                  <Button size="sm" className="bg-gradient-to-r from-[#B08D57] via-[#D4AF37] to-[#B08D57] hover:opacity-90 text-white hidden md:inline-flex">
+                  <Button size="sm" className="bg-gradient-to-r from-[#FF6B9D] to-[#9B5DE5] hover:opacity-90 text-white hidden md:inline-flex">
                     <Crown className="h-4 w-4 mr-2" />
                     Join
                   </Button>
@@ -100,14 +101,14 @@ export function Layout({ children }: { children: React.ReactNode }) {
       {/* Mobile Bottom Nav */}
       <div className="fixed bottom-0 left-0 right-0 z-50 border-t bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 md:hidden">
         <nav className="flex h-16 items-center justify-around px-2">
-          {navItems.map((item) => (
+          {navItems.slice(0, 5).map((item) => (
             <Link
               key={item.href}
               href={item.href}
               className={cn(
                 "flex flex-col items-center justify-center gap-1 rounded-lg px-3 py-2 text-xs font-medium transition-colors",
                 location === item.href
-                  ? "text-[#B08D57]"
+                  ? "text-[#FF6B9D]"
                   : "text-muted-foreground hover:text-foreground"
               )}
             >

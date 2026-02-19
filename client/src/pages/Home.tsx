@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { Layout } from "@/components/Layout";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
-import { Sparkles, Upload, Wand2, Download, Heart, Loader2, Crown, ChevronDown, ChevronUp, X, ShoppingBag, BookOpen, Play, Image } from "lucide-react";
+import { Sparkles, Upload, Wand2, Download, Heart, Loader2, Crown, ChevronDown, ChevronUp, X, ShoppingBag, BookOpen, Play, Image, MapPin } from "lucide-react";
 import { useAuth } from "@/hooks/use-auth";
 import { useToast } from "@/hooks/use-toast";
 import { cn } from "@/lib/utils";
@@ -431,6 +431,20 @@ export default function Home() {
                       <Download className="mr-2 h-4 w-4" /> Download
                     </Button>
                   </div>
+                  {/* Find a Tech CTA */}
+                  <a href="/find-tech" className="block mt-4">
+                    <div className="p-4 bg-gradient-to-r from-[#FF6B9D]/10 to-[#9B5DE5]/10 rounded-2xl border border-[#FF6B9D]/20 hover:shadow-lg hover:shadow-[#FF6B9D]/10 transition-all group">
+                      <div className="flex items-center gap-3">
+                        <div className="w-10 h-10 bg-gradient-to-r from-[#FF6B9D] to-[#9B5DE5] rounded-full flex items-center justify-center">
+                          <MapPin className="h-5 w-5 text-white" />
+                        </div>
+                        <div>
+                          <p className="font-medium text-gray-800 group-hover:text-[#FF6B9D] transition-colors">Love this design?</p>
+                          <p className="text-sm text-gray-500">Find a nail tech near you who can create it! →</p>
+                        </div>
+                      </div>
+                    </div>
+                  </a>
                   {supplyRecommendations.length > 0 && (
                     <div className="mt-6 p-5 bg-white rounded-2xl border border-[#FF6B9D]/20 shadow-sm">
                       <div className="flex items-center gap-2 mb-4"><ShoppingBag className="h-5 w-5 text-[#FF6B9D]" /><h4 className="font-serif text-lg">Recommended Supplies</h4></div>
@@ -506,10 +520,11 @@ export default function Home() {
         </section>
 
         {/* Quick Links */}
-        <section className="grid md:grid-cols-3 gap-6">
-          <a href="/saved" className="group"><div className="border border-[#FF6B9D]/20 p-6 rounded-2xl bg-gradient-to-br from-white to-[#FFF5F8] hover:shadow-lg hover:shadow-[#FF6B9D]/10 transition-all"><Heart className="h-8 w-8 mb-4 text-[#FF6B9D]" /><h3 className="text-xl font-serif mb-2 group-hover:text-[#FF6B9D] transition-colors">Fire Vault</h3><p className="text-sm text-gray-600">Your saved AI designs</p></div></a>
-          <a href="/seasonal" className="group"><div className="border border-[#9B5DE5]/20 p-6 rounded-2xl bg-gradient-to-br from-white to-[#F8F0FF] hover:shadow-lg hover:shadow-[#9B5DE5]/10 transition-all"><Sparkles className="h-8 w-8 mb-4 text-[#9B5DE5]" /><h3 className="text-xl font-serif mb-2 group-hover:text-[#9B5DE5] transition-colors">Seasonal Vault</h3><p className="text-sm text-gray-600">Curated collections</p></div></a>
-          <a href="/supplies" className="group"><div className="border border-[#00D9FF]/20 p-6 rounded-2xl bg-gradient-to-br from-white to-[#F0FFFF] hover:shadow-lg hover:shadow-[#00D9FF]/10 transition-all"><Crown className="h-8 w-8 mb-4 text-[#00D9FF]" /><h3 className="text-xl font-serif mb-2 group-hover:text-[#00D9FF] transition-colors">Supply Suite</h3><p className="text-sm text-gray-600">Professional products</p></div></a>
+        <section className="grid md:grid-cols-4 gap-6">
+          <a href="/find-tech" className="group"><div className="border border-[#FF6B9D]/20 p-6 rounded-2xl bg-gradient-to-br from-white to-[#FFF5F8] hover:shadow-lg hover:shadow-[#FF6B9D]/10 transition-all"><MapPin className="h-8 w-8 mb-4 text-[#FF6B9D]" /><h3 className="text-xl font-serif mb-2 group-hover:text-[#FF6B9D] transition-colors">Find a Tech</h3><p className="text-sm text-gray-600">Nail techs near you</p></div></a>
+          <a href="/saved" className="group"><div className="border border-[#9B5DE5]/20 p-6 rounded-2xl bg-gradient-to-br from-white to-[#F8F0FF] hover:shadow-lg hover:shadow-[#9B5DE5]/10 transition-all"><Heart className="h-8 w-8 mb-4 text-[#9B5DE5]" /><h3 className="text-xl font-serif mb-2 group-hover:text-[#9B5DE5] transition-colors">Fire Vault</h3><p className="text-sm text-gray-600">Your saved AI designs</p></div></a>
+          <a href="/seasonal" className="group"><div className="border border-[#00D9FF]/20 p-6 rounded-2xl bg-gradient-to-br from-white to-[#F0FFFF] hover:shadow-lg hover:shadow-[#00D9FF]/10 transition-all"><Sparkles className="h-8 w-8 mb-4 text-[#00D9FF]" /><h3 className="text-xl font-serif mb-2 group-hover:text-[#00D9FF] transition-colors">Seasonal Vault</h3><p className="text-sm text-gray-600">Curated collections</p></div></a>
+          <a href="/supplies" className="group"><div className="border border-[#D4AF37]/20 p-6 rounded-2xl bg-gradient-to-br from-white to-[#FFFBF0] hover:shadow-lg hover:shadow-[#D4AF37]/10 transition-all"><Crown className="h-8 w-8 mb-4 text-[#D4AF37]" /><h3 className="text-xl font-serif mb-2 group-hover:text-[#D4AF37] transition-colors">Supply Suite</h3><p className="text-sm text-gray-600">Professional products</p></div></a>
         </section>
       </div>
 
