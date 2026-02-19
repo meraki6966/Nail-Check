@@ -11,10 +11,19 @@ export default function Tutorials() {
   const [email, setEmail] = useState("");
   const [subscribed, setSubscribed] = useState(false);
 
-  const handleNotify = () => {
+  const handleNotify = async () => {
     if (email) {
-      setSubscribed(true);
-      // TODO: Connect to email service
+      try {
+        await fetch("https://script.google.com/macros/s/AKfycbymz2-QPYcX_pZ0B4wcxAvyKRSAjPmVcH4QFQKTBfh-2-3kLOuqxBeT1H5qXV1gJ3gz/exec", {
+          method: "POST",
+          mode: "no-cors",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ email: email, source: "Tutorials Page" })
+        });
+        setSubscribed(true);
+      } catch (error) {
+        console.error("Failed to subscribe:", error);
+      }
     }
   };
 
