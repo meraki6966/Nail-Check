@@ -20,7 +20,7 @@ import Saved from "@/pages/Saved";
 function Router() {
   return (
     <Switch>
-      <Route path="/gallery" element={<Gallery />} />
+      <Route path="/gallery" component={Gallery} />
       <Route path="/tutorials" component={Tutorials} />
       <Route path="/embed" component={Embed} />
       <Route path="/portal" component={Portal} />
