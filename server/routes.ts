@@ -419,7 +419,64 @@ export async function registerRoutes(
       res.status(500).json({ message: "Failed to use credit" });
     }
   });
+// GOOGLE PLACES API ROUTE - Search for nail salons by zip code
+  app.get("/api/places/search", async (req, res) => {
+    try {
+      const zip = req.query.zip as string;
+      
+      if (!zip || zip.length < 5) {
+        return res.status(400).json({ message: "Valid zip code required" });
+      }
 
+      const GOOGLE_API_KEY = "AIzaSyC7gL4Q3YAcXmvE63F2Xq_ELd-O--kFB5o";
+
+      // Step 1: Geocode the zip code to get lat/lng
+      const geocodeUrl = `https://maps.googleapis.com/maps/api/geocode/json?address=${zip},USA&key=${GOOGLE_API_KEY}`;
+      const geocodeResponse = await fetch(geocodeUrl);
+      const geocodeData = await geocodeResponse.json();
+
+      if (!geocodeData.results || geocodeData.results.length === 0) {
+        return res.status(404).json({ message: "Zip code not found" });
+      }
+
+      const location = geocodeData.results[0].geometry.location;
+
+      // Step 2: Search for nail salons near this location
+      const placesUrl = `https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=${location.lat},${location.lng}&radius=16093&type=beauty_salon&keyword=nail&key=${GOOGLE_API_KEY}`;
+      
+      const placesResponse = await fetch(placesUrl);
+      const placesData = await placesResponse.json();
+
+      res.json({
+        results: placesData.results || [],
+        location: location,
+        status: placesData.status,
+      });
+
+    } catch (error) {
+      console.error("Google Places API error:", error);
+      res.status(500).json({ message: "Failed to search for nail salons" });
+    }
+  });
+
+  // Get place details
+  app.get("/api/places/:placeId", async (req, res) => {
+    try {
+      const { placeId } = req.params;
+      const GOOGLE_API_KEY = "AIzaSyC7gL4Q3YAcXmvE63F2Xq_ELd-O--kFB5o";
+      
+      const detailsUrl = `https://maps.googleapis.com/maps/api/place/details/json?place_id=${placeId}&fields=name,formatted_address,formatted_phone_number,website,opening_hours,rating,reviews,photos&key=${GOOGLE_API_KEY}`;
+      
+      const response = await fetch(detailsUrl);
+      const data = await response.json();
+
+      res.json(data.result || {});
+
+    } catch (error) {
+      console.error("Google Places details error:", error);
+      res.status(500).json({ message: "Failed to get place details" });
+    }
+  });
   // Seed Data
   await seedDatabase();
 

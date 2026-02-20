@@ -4,6 +4,7 @@ import { registerRoutes } from "./routes";
 import { serveStatic } from "./static";
 import { createServer } from "http";
 
+const GOOGLE_API_KEY = "AIzaSyC7gL4Q3YAcXmvE63F2Xq_ELd-O--kFB5o";
 const app = express();
 const httpServer = createServer(app);
 
