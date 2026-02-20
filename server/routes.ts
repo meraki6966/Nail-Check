@@ -1,6 +1,9 @@
+import { nailTechs } from "@shared/schema";
+import { desc } from "drizzle-orm";
 import type { Express } from "express";
 import { createServer, type Server } from "http";
 import { storage } from "./storage";
+import { db } from "./db";
 import { api } from "@shared/routes";
 import { z } from "zod";
 import { setupAuth, registerAuthRoutes, isAuthenticated } from "./replit_integrations/auth";
@@ -475,6 +478,44 @@ export async function registerRoutes(
     } catch (error) {
       console.error("Google Places details error:", error);
       res.status(500).json({ message: "Failed to get place details" });
+    }
+  });
+  // ADMIN - Get pending nail techs (not approved)
+  app.get("/api/admin/techs/pending", async (req, res) => {
+    try {
+      const pendingTechs = await db
+        .select()
+        .from(nailTechs)
+        .where(eq(nailTechs.isApproved, false))
+        .orderBy(desc(nailTechs.createdAt));
+      res.json(pendingTechs);
+    } catch (error) {
+      console.error("Error fetching pending techs:", error);
+      res.status(500).json({ message: "Failed to fetch pending techs" });
+    }
+  });
+
+  // ADMIN - Add gallery image
+  app.post("/api/admin/gallery", async (req, res) => {
+    try {
+      const { title, imageUrl, category, tags, description } = req.body;
+      
+      if (!title || !imageUrl || !category) {
+        return res.status(400).json({ message: "title, imageUrl, and category are required" });
+      }
+
+      const design = await storage.saveDesign({
+        imageUrl,
+        prompt: title,
+        tags: tags || [],
+        userId: "admin",
+        canvasImageUrl: null,
+      });
+      
+      res.status(201).json(design);
+    } catch (error) {
+      console.error("Error adding gallery image:", error);
+      res.status(500).json({ message: "Failed to add gallery image" });
     }
   });
   // Seed Data

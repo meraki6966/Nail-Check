@@ -1,4 +1,4 @@
-
+import Admin from "./pages/Admin";
 import TechRegister from "./pages/TechRegister";
 import FindTech from "./pages/FindTech";import Gallery from "./pages/Gallery";
 import Tutorials from "./pages/Tutorials";
@@ -22,6 +22,7 @@ import Saved from "@/pages/Saved";
 function Router() {
   return (
     <Switch>
+      <Route path="/admin" component={Admin} />
       <Route path="/find-tech" component={FindTech} />
       <Route path="/tech-register" component={TechRegister} />
       <Route path="/gallery" component={Gallery} />
