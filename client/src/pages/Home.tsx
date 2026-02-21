@@ -6,6 +6,7 @@ import { Sparkles, Upload, Wand2, Download, Heart, Loader2, Crown, ChevronDown, 
 import { useAuth } from "@/hooks/use-auth";
 import { useToast } from "@/hooks/use-toast";
 import { cn } from "@/lib/utils";
+import { getRandomMessage } from "@/lib/microcopy";
 
 // ============================================
 // NEW PINTEREST COLOR PALETTE
@@ -178,6 +179,11 @@ export default function Home() {
   const [generationsUsed, setGenerationsUsed] = useState(0);
   const [isPaidMember, setIsPaidMember] = useState(false);
   const [showPaywall, setShowPaywall] = useState(false);
+  
+  // ============================================
+  // MICROCOPY STATE - Andrea's UX phrases
+  // ============================================
+  const [generatingText, setGeneratingText] = useState(getRandomMessage("AI_PROCESSING"));
 
   const [flavorOfMonth, setFlavorOfMonth] = useState({
     title: "Ruby Architecture",
@@ -261,10 +267,25 @@ export default function Home() {
 
   const handleGenerate = async () => {
     if (!isPaidMember && generationsUsed >= credits) { setShowPaywall(true); return; }
-    if (!prompt.trim()) { toast({ title: "Prompt Required", description: "Please describe your nail design or select styles above", variant: "destructive" }); return; }
+    if (!prompt.trim()) { 
+      toast({ 
+        title: getRandomMessage("AI_NO_RESULT"), 
+        description: "Please describe your nail design or select styles above", 
+        variant: "destructive" 
+      }); 
+      return; 
+    }
 
     setIsGenerating(true);
     setGeneratedImage(null);
+    
+    // Rotate through generating messages for variety
+    setGeneratingText(getRandomMessage("AI_PROCESSING"));
+    
+    // Change message midway through for premium feel
+    const messageInterval = setInterval(() => {
+      setGeneratingText(getRandomMessage("AI_GENERATING"));
+    }, 2000);
 
     try {
       const response = await fetch("/api/image/generate", {
@@ -284,11 +305,23 @@ export default function Home() {
       const userId = user?.id || "guest";
       await fetch("/api/user/use-credit", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ userId }) });
 
-      toast({ title: "Design Generated! ✨", description: "Your nail design is ready" });
+      // ✨ Andrea's success message
+      toast({ 
+        title: getRandomMessage("AI_SUCCESS"), 
+        description: "Your nail design is ready" 
+      });
     } catch (error) {
       console.error("Generation error:", error);
-      toast({ title: "Generation Failed", description: "Please try again", variant: "destructive" });
-    } finally { setIsGenerating(false); }
+      // ✨ Andrea's error message
+      toast({ 
+        title: getRandomMessage("GENERIC_ERROR"), 
+        description: getRandomMessage("RETRY_ACTION"), 
+        variant: "destructive" 
+      });
+    } finally { 
+      clearInterval(messageInterval);
+      setIsGenerating(false); 
+    }
   };
 
   const handleSaveToVault = async () => {
@@ -301,9 +334,20 @@ export default function Home() {
         credentials: "include",
         body: JSON.stringify({ userId: user?.id || "guest", imageUrl: generatedImage, prompt, canvasImageUrl: canvasImage, tags: Object.values(selectedStyles).flat() }),
       });
-      if (response.ok) toast({ title: "Saved to Fire Vault! 🔥", description: "View it in your saved designs" });
-      else throw new Error("Failed to save");
-    } catch (error) { toast({ title: "Save Failed", description: "Please try again", variant: "destructive" }); }
+      if (response.ok) {
+        // ✨ Andrea's save success message
+        toast({ 
+          title: getRandomMessage("SAVE_SUCCESS"), 
+          description: "View it in your saved designs" 
+        });
+      } else throw new Error("Failed to save");
+    } catch (error) { 
+      // ✨ Andrea's save error message
+      toast({ 
+        title: getRandomMessage("SAVE_ERROR"), 
+        variant: "destructive" 
+      }); 
+    }
     finally { setIsSaving(false); }
   };
 
@@ -408,12 +452,19 @@ export default function Home() {
 
             <div>
               <h3 className="text-2xl font-serif mb-4 bg-gradient-to-r from-[#9B5DE5] to-[#00D9FF] bg-clip-text text-transparent">2. Your Vision</h3>
-              <Textarea value={prompt} onChange={(e) => setPrompt(e.target.value)} placeholder="Select styles above or type your vision here..." className="min-h-[150px] resize-none rounded-xl border-gray-200 focus:border-[#9B5DE5]" />
+              {/* ✨ Andrea's AI_IDLE placeholder */}
+              <Textarea 
+                value={prompt} 
+                onChange={(e) => setPrompt(e.target.value)} 
+                placeholder={getRandomMessage("AI_IDLE")} 
+                className="min-h-[150px] resize-none rounded-xl border-gray-200 focus:border-[#9B5DE5]" 
+              />
               {getSelectedCount() > 0 && <p className="text-xs text-[#9B5DE5] mt-2 italic">✨ Prompt auto-generated from your style selections</p>}
             </div>
 
             <Button onClick={handleGenerate} disabled={isGenerating || !prompt.trim()} className={cn("w-full h-14 text-sm uppercase tracking-widest rounded-full", PINK_GRADIENT, "text-white hover:shadow-lg hover:shadow-[#FF6B9D]/30 transition-all")}>
-              {isGenerating ? <><Loader2 className="mr-2 h-5 w-5 animate-spin" /> Generating...</> : <><Wand2 className="mr-2 h-5 w-5" /> Generate Design</>}
+              {/* ✨ Andrea's generating messages */}
+              {isGenerating ? <><Loader2 className="mr-2 h-5 w-5 animate-spin" /> {generatingText}</> : <><Wand2 className="mr-2 h-5 w-5" /> Generate Design</>}
             </Button>
           </div>
 
