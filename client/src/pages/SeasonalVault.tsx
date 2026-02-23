@@ -1,9 +1,11 @@
 import { useState, useEffect } from "react";
 import { Layout } from "@/components/Layout";
 import { Button } from "@/components/ui/button";
-import { Snowflake, Flower2, Sun, Leaf, Calendar, Loader2, ChevronDown } from "lucide-react";
+import { Snowflake, Flower2, Sun, Leaf, Calendar, Loader2, Lock, Crown } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { cn } from "@/lib/utils";
+import { useAuth } from "@/hooks/use-auth";
+import { Link } from "wouter";
 
 const GOLD_TEXT = "text-[#B08D57]";
 const GOLD_GRADIENT = "bg-gradient-to-r from-[#B08D57] via-[#D4AF37] to-[#B08D57]";
@@ -35,6 +37,10 @@ export default function SeasonalVault() {
   const [selectedSeason, setSelectedSeason] = useState("");
   const [isLoading, setIsLoading] = useState(true);
   const [selectedDesign, setSelectedDesign] = useState<SeasonalDesign | null>(null);
+  
+  // Get auth state for membership gating
+  const { user, isLoading: authLoading } = useAuth();
+  const isMember = user?.isPaidMember ?? false;
 
   useEffect(() => {
     fetchDesigns();
@@ -72,7 +78,7 @@ export default function SeasonalVault() {
     return acc;
   }, {} as Record<string, SeasonalDesign[]>);
 
-  if (isLoading) {
+  if (isLoading || authLoading) {
     return (
       <Layout>
         <div className="flex justify-center items-center h-[50vh]">
@@ -82,6 +88,99 @@ export default function SeasonalVault() {
     );
   }
 
+  // If not a member, show locked state
+  if (!isMember) {
+    return (
+      <Layout>
+        <div className="max-w-7xl mx-auto px-4 py-16 space-y-16">
+          {/* Header */}
+          <header className="text-center space-y-4">
+            <span className="text-[10px] tracking-[0.8em] text-gray-400 uppercase">The Curated Collections</span>
+            <h1 className="text-6xl font-serif tracking-widest uppercase text-black">Seasonal Vault</h1>
+            <p className="text-sm text-gray-500 italic max-w-2xl mx-auto">
+              Explore our expertly curated nail designs organized by season and special occasions
+            </p>
+          </header>
+
+          {/* Locked Content Preview */}
+          <div className="relative">
+            {/* Blurred Preview Grid */}
+            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 blur-md pointer-events-none select-none opacity-50">
+              {[1, 2, 3, 4, 5, 6, 7, 8].map((i) => (
+                <div key={i} className="aspect-square bg-gradient-to-br from-gray-200 to-gray-300 border border-gray-200" />
+              ))}
+            </div>
+
+            {/* Lock Overlay */}
+            <div className="absolute inset-0 flex items-center justify-center">
+              <div className="bg-white/95 backdrop-blur-sm p-12 text-center max-w-lg border border-gray-200">
+                <div className={cn("w-20 h-20 mx-auto mb-6 rounded-full flex items-center justify-center", GOLD_GRADIENT)}>
+                  <Lock className="h-10 w-10 text-white" />
+                </div>
+                
+                <span className="text-[10px] tracking-[0.5em] text-gray-400 uppercase block mb-2">
+                  Members Only
+                </span>
+                
+                <h2 className="text-3xl font-serif tracking-wider uppercase mb-4">
+                  Unlock the Vault
+                </h2>
+                
+                <p className="text-sm text-gray-500 italic mb-8">
+                  Access {designs.length}+ curated seasonal designs, holiday collections, and trend-forward inspiration with a Nail Check membership.
+                </p>
+
+                <div className="space-y-3">
+                  <Link href="/login">
+                    <Button className={cn("w-full uppercase text-[10px] tracking-widest", GOLD_GRADIENT, "text-white")}>
+                      <Crown className="h-4 w-4 mr-2" />
+                      Become a Member
+                    </Button>
+                  </Link>
+                  
+                  <a href="https://nail-check.com/membership/" target="_blank" rel="noopener noreferrer">
+                    <Button variant="outline" className="w-full uppercase text-[10px] tracking-widest border-[#B08D57] text-[#B08D57]">
+                      View Membership Plans
+                    </Button>
+                  </a>
+                </div>
+
+                <p className="text-[10px] text-gray-400 mt-6 uppercase tracking-wider">
+                  Starting at $8.99/month
+                </p>
+              </div>
+            </div>
+          </div>
+
+          {/* Benefits Preview */}
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-6 pt-8">
+            <div className="text-center p-6 border border-gray-200">
+              <Snowflake className="h-8 w-8 mx-auto mb-3 text-blue-400" />
+              <p className="text-[10px] uppercase tracking-widest text-gray-600">Winter</p>
+              <p className="text-[9px] text-gray-400 mt-1">Holiday glam & frost</p>
+            </div>
+            <div className="text-center p-6 border border-gray-200">
+              <Flower2 className="h-8 w-8 mx-auto mb-3 text-pink-400" />
+              <p className="text-[10px] uppercase tracking-widest text-gray-600">Spring</p>
+              <p className="text-[9px] text-gray-400 mt-1">Florals & pastels</p>
+            </div>
+            <div className="text-center p-6 border border-gray-200">
+              <Sun className="h-8 w-8 mx-auto mb-3 text-yellow-400" />
+              <p className="text-[10px] uppercase tracking-widest text-gray-600">Summer</p>
+              <p className="text-[9px] text-gray-400 mt-1">Bright & bold</p>
+            </div>
+            <div className="text-center p-6 border border-gray-200">
+              <Leaf className="h-8 w-8 mx-auto mb-3 text-orange-400" />
+              <p className="text-[10px] uppercase tracking-widest text-gray-600">Fall</p>
+              <p className="text-[9px] text-gray-400 mt-1">Warm & cozy</p>
+            </div>
+          </div>
+        </div>
+      </Layout>
+    );
+  }
+
+  // Member view - full access
   return (
     <Layout>
       <div className="max-w-7xl mx-auto px-4 py-16 space-y-16">
