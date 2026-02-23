@@ -1,8 +1,9 @@
 import { useState, useEffect } from "react";
-import { BookOpen, Play, Clock, Star, ChevronRight, Filter } from "lucide-react";
+import { BookOpen, Play, Clock, Lock, Crown } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
-import { MemberGate, LockedBadge, useCanAccess } from "@/components/MemberGate";
+import { useAuth } from "@/hooks/use-auth";
+import { Link } from "wouter";
 
 interface Tutorial {
   id: number;
@@ -27,7 +28,10 @@ export default function Tutorials() {
   const [selectedTutorial, setSelectedTutorial] = useState<Tutorial | null>(null);
   const [filter, setFilter] = useState<string>("all");
   const [isLoading, setIsLoading] = useState(true);
-  const { isMember, canAccess } = useCanAccess();
+  
+  // Get auth state for membership gating
+  const { user } = useAuth();
+  const isMember = user?.isPaidMember ?? false;
 
   useEffect(() => {
     fetchTutorials();
@@ -138,16 +142,24 @@ export default function Tutorials() {
 
             {/* Show upgrade prompt if not a member */}
             {!isMember && filteredTutorials.length > FREE_PREVIEW_COUNT && (
-              <MemberGate
-                lockType="preview"
-                featureName="tutorials"
-                previewCount={{
-                  shown: Math.min(FREE_PREVIEW_COUNT, filteredTutorials.length),
-                  total: filteredTutorials.length
-                }}
-              >
-                <div /> {/* Empty div since we're using preview mode */}
-              </MemberGate>
+              <div className="mt-8 p-6 bg-gradient-to-r from-[#FF6B9D]/10 to-[#9B5DE5]/10 rounded-2xl border border-[#FF6B9D]/20">
+                <div className="flex items-center justify-between flex-wrap gap-4">
+                  <div>
+                    <p className="font-medium text-gray-800">
+                      You've seen {Math.min(FREE_PREVIEW_COUNT, filteredTutorials.length)} of {filteredTutorials.length} tutorials
+                    </p>
+                    <p className="text-sm text-gray-600">
+                      Unlock all {filteredTutorials.length} with a membership
+                    </p>
+                  </div>
+                  <Link href="/login">
+                    <Button className="bg-gradient-to-r from-[#FF6B9D] to-[#9B5DE5] text-white rounded-full">
+                      <Crown className="h-4 w-4 mr-2" />
+                      See All {filteredTutorials.length}
+                    </Button>
+                  </Link>
+                </div>
+              </div>
             )}
           </>
         )}
@@ -192,7 +204,11 @@ function TutorialCard({
             isLocked && "blur-sm"
           )}
         />
-        {isLocked && <LockedBadge />}
+        {isLocked && (
+          <span className="absolute top-2 right-2 p-1.5 rounded-full bg-black/50 backdrop-blur-sm">
+            <Lock className="h-3 w-3 text-white" />
+          </span>
+        )}
         <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent" />
         <div className="absolute bottom-3 left-3 right-3 flex items-center justify-between">
           <span className={cn(
