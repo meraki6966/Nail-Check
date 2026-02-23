@@ -25,82 +25,82 @@ const PURPLE_GRADIENT = "bg-gradient-to-r from-[#9B5DE5] to-[#FF6B9D]";
 const CYAN_GRADIENT = "bg-gradient-to-r from-[#00D9FF] to-[#9B5DE5]";
 
 // ============================================
-// NAIL STYLES WITH REAL IMAGES
+// NAIL STYLES WITH REAL IMAGES AND DESCRIPTIONS
 // ============================================
 const STYLE_CATEGORIES = {
   shape: {
     label: "The Silhouette Guide",
     color: "from-[#FF6B9D] to-[#FF8A5B]",
     options: [
-      { id: "square", label: "Square", image: "http://nail-check.com/wp-content/uploads/2026/02/Nail-Shape-Square.png" },
-      { id: "coffin", label: "Coffin", image: "http://nail-check.com/wp-content/uploads/2026/02/Nail-Shape-Coffin.png" },
-      { id: "almond", label: "Almond", image: "http://nail-check.com/wp-content/uploads/2026/02/Nail-Shape-Almond.png" },
-      { id: "stiletto", label: "Stiletto", image: "http://nail-check.com/wp-content/uploads/2026/02/Nail-Shape-Stiletto.png" },
-      { id: "duck", label: "Duck / Flare", image: "http://nail-check.com/wp-content/uploads/2026/02/Nail-Shape-Duck-Flare.png" },
-      { id: "catclaw", label: "Cat Claw", image: "http://nail-check.com/wp-content/uploads/2026/02/Nail-Shape-Cat-Claw.png" },
+      { id: "square", label: "Square", image: "http://nail-check.com/wp-content/uploads/2026/02/Nail-Shape-Square.png", description: "Classic and timeless. Clean, straight edges with a flat tip for a polished, professional look." },
+      { id: "coffin", label: "Coffin", image: "http://nail-check.com/wp-content/uploads/2026/02/Nail-Shape-Coffin.png", description: "Tapered sides with a flat tip. Bold, edgy, and perfect for longer lengths and statement designs." },
+      { id: "almond", label: "Almond", image: "http://nail-check.com/wp-content/uploads/2026/02/Nail-Shape-Almond.png", description: "Slim and elegant. Tapered sides that meet at a rounded peak, elongating the fingers beautifully." },
+      { id: "stiletto", label: "Stiletto", image: "http://nail-check.com/wp-content/uploads/2026/02/Nail-Shape-Stiletto.png", description: "Fierce and dramatic. A sharp, pointed tip that demands attention and showcases artistry." },
+      { id: "duck", label: "Duck / Flare", image: "http://nail-check.com/wp-content/uploads/2026/02/Nail-Shape-Duck-Flare.png", description: "Wide, flared tip resembling a duck's foot. Unique, bold, and perfect for creative nail art." },
+      { id: "catclaw", label: "Cat Claw", image: "http://nail-check.com/wp-content/uploads/2026/02/Nail-Shape-Cat-Claw.png", description: "Curved and dramatic with an extreme arch. Edgy, fierce, and structurally impressive." },
     ]
   },
   product: {
     label: "The Build Specs",
     color: "from-[#9B5DE5] to-[#FF6B9D]",
     options: [
-      { id: "acrylic", label: "Acrylic", image: "http://nail-check.com/wp-content/uploads/2026/02/Acrylic.png" },
-      { id: "hardgel", label: "Hard Gel", image: "http://nail-check.com/wp-content/uploads/2026/02/Hard-Gel.png" },
-      { id: "polygel", label: "Poly Gel", image: "http://nail-check.com/wp-content/uploads/2026/02/PolyGel.png" },
-      { id: "gelx", label: "Gel-X / Tips", image: "http://nail-check.com/wp-content/uploads/2026/02/Gel-X.png" },
-      { id: "builder", label: "Builder / BIAB", image: "http://nail-check.com/wp-content/uploads/2026/02/Builder-in-Bottle.png" },
+      { id: "acrylic", label: "Acrylic", image: "http://nail-check.com/wp-content/uploads/2026/02/Acrylic.png", description: "Liquid and powder polymer. The industry standard for extreme durability and crisp, structural precision." },
+      { id: "hardgel", label: "Hard Gel", image: "http://nail-check.com/wp-content/uploads/2026/02/Hard-Gel.png", description: "Non-porous, high-shine builder. Hypoallergenic and lightweight with a crystal-clear, permanent finish." },
+      { id: "polygel", label: "Poly Gel", image: "http://nail-check.com/wp-content/uploads/2026/02/PolyGel.png", description: "A hybrid of acrylic and hard gel. Odorless, flexible, and allows for infinite sculpting time before curing." },
+      { id: "gelx", label: "Gel-X / Tips", image: "http://nail-check.com/wp-content/uploads/2026/02/Gel-X.png", description: "Pre-shaped soft gel extensions. Quick application, natural flexibility, and salon-quality results at home." },
+      { id: "builder", label: "Builder / BIAB", image: "http://nail-check.com/wp-content/uploads/2026/02/Builder-in-Bottle.png", description: "Builder in a Bottle. Self-leveling gel for strength and structure without the bulk. Perfect for overlays." },
     ]
   },
   structure: {
     label: "The Anatomy",
     color: "from-[#00D9FF] to-[#9B5DE5]",
     options: [
-      { id: "apex", label: "Apex Present", image: "http://nail-check.com/wp-content/uploads/2026/02/Apex-Present.png" },
-      { id: "noapex", label: "No Apex", image: "http://nail-check.com/wp-content/uploads/2026/02/No-Apex.png" },
-      { id: "ccurve", label: "C-Curve", image: "http://nail-check.com/wp-content/uploads/2026/02/C-Curve-1-scaled.png" },
-      { id: "deepc", label: "Deep C-Curve", image: "http://nail-check.com/wp-content/uploads/2026/02/Deep-C-Curve.png" },
-      { id: "sculpted", label: "Sculpted", image: "http://nail-check.com/wp-content/uploads/2026/02/Sculpted.png" },
-      { id: "tips", label: "Tips Used", image: "http://nail-check.com/wp-content/uploads/2026/02/Tips-Used.png" },
+      { id: "apex", label: "Apex Present", image: "http://nail-check.com/wp-content/uploads/2026/02/Apex-Present.png", description: "The highest point of the nail for structural integrity. Provides strength and a natural-looking arch." },
+      { id: "noapex", label: "No Apex", image: "http://nail-check.com/wp-content/uploads/2026/02/No-Apex.png", description: "Flat, even surface without a raised center. Sleek, modern look ideal for minimalist designs." },
+      { id: "ccurve", label: "C-Curve", image: "http://nail-check.com/wp-content/uploads/2026/02/C-Curve-1-scaled.png", description: "The curve from sidewall to sidewall. A proper C-curve adds strength and an elegant finish." },
+      { id: "deepc", label: "Deep C-Curve", image: "http://nail-check.com/wp-content/uploads/2026/02/Deep-C-Curve.png", description: "An exaggerated curve for competition-level nails. Creates dramatic shadows and structural perfection." },
+      { id: "sculpted", label: "Sculpted", image: "http://nail-check.com/wp-content/uploads/2026/02/Sculpted.png", description: "Built from scratch using forms. Complete control over shape, length, and structure." },
+      { id: "tips", label: "Tips Used", image: "http://nail-check.com/wp-content/uploads/2026/02/Tips-Used.png", description: "Pre-made nail tips as a foundation. Quick, consistent base for extensions and overlays." },
     ]
   },
   designStyle: {
     label: "Visual Genre",
     color: "from-[#FF8A5B] to-[#FFC857]",
     options: [
-      { id: "classy", label: "Classy / Minimal", image: "http://nail-check.com/wp-content/uploads/2026/02/Classy.png" },
-      { id: "junk", label: "Junk Nails", image: "http://nail-check.com/wp-content/uploads/2026/02/Junk.png" },
-      { id: "3d", label: "3D / Character", image: "http://nail-check.com/wp-content/uploads/2026/02/3D-Character.png" },
-      { id: "editorial", label: "Editorial", image: "http://nail-check.com/wp-content/uploads/2026/02/Editorial.png" },
+      { id: "classy", label: "Classy / Minimal", image: "http://nail-check.com/wp-content/uploads/2026/02/Classy.png", description: "Understated elegance. Clean lines, neutral tones, and subtle accents for timeless sophistication." },
+      { id: "junk", label: "Junk Nails", image: "http://nail-check.com/wp-content/uploads/2026/02/Junk.png", description: "Maximalist chaos. Loaded with charms, rhinestones, and 3D elements. More is more!" },
+      { id: "3d", label: "3D / Character", image: "http://nail-check.com/wp-content/uploads/2026/02/3D-Character.png", description: "Sculptural nail art featuring raised designs, characters, or intricate 3D elements." },
+      { id: "editorial", label: "Editorial", image: "http://nail-check.com/wp-content/uploads/2026/02/Editorial.png", description: "Avant-garde and artistic. Designed for photoshoots, runway, and making bold statements." },
     ]
   },
   effects: {
     label: "The Finish",
     color: "from-[#B08D57] to-[#D4AF37]",
     options: [
-      { id: "chrome", label: "Chrome", image: "http://nail-check.com/wp-content/uploads/2026/02/Chrome.png" },
-      { id: "cateye", label: "Cat Eye / Velvet", image: "http://nail-check.com/wp-content/uploads/2026/02/Cat-eye.png" },
-      { id: "glass", label: "Glass Nails", image: "http://nail-check.com/wp-content/uploads/2026/02/Glass-Nails.png" },
-      { id: "matte", label: "Matte & Sugar", image: "http://nail-check.com/wp-content/uploads/2026/02/Matte-Sugar.png" },
+      { id: "chrome", label: "Chrome", image: "http://nail-check.com/wp-content/uploads/2026/02/Chrome.png", description: "Mirror-like metallic finish. Reflective, futuristic, and endlessly versatile in any color." },
+      { id: "cateye", label: "Cat Eye / Velvet", image: "http://nail-check.com/wp-content/uploads/2026/02/Cat-eye.png", description: "Magnetic gel that creates a mesmerizing light stripe. Deep, dimensional, and luxurious." },
+      { id: "glass", label: "Glass Nails", image: "http://nail-check.com/wp-content/uploads/2026/02/Glass-Nails.png", description: "Translucent, glossy finish like shattered glass. Ethereal, delicate, and absolutely stunning." },
+      { id: "matte", label: "Matte & Sugar", image: "http://nail-check.com/wp-content/uploads/2026/02/Matte-Sugar.png", description: "Non-shiny finish with a velvety or textured surface. Modern, sophisticated, and unique." },
     ]
   },
   theme: {
     label: "The Occasion",
     color: "from-[#FF6B9D] to-[#9B5DE5]",
     options: [
-      { id: "bridal", label: "Bridal Nails", image: "http://nail-check.com/wp-content/uploads/2026/02/Bridal-1.png" },
-      { id: "birthday", label: "Birthday Sets", image: "http://nail-check.com/wp-content/uploads/2026/02/Birthday.png" },
-      { id: "vacation", label: "Vacation Nails", image: "http://nail-check.com/wp-content/uploads/2026/02/Vacation.jpg" },
-      { id: "matching", label: "Matching Sets", image: "http://nail-check.com/wp-content/uploads/2026/02/Matching-Set.png" },
+      { id: "bridal", label: "Bridal Nails", image: "http://nail-check.com/wp-content/uploads/2026/02/Bridal-1.png", description: "Elegant designs for the big day. Soft tones, delicate details, and photo-perfect finishes." },
+      { id: "birthday", label: "Birthday Sets", image: "http://nail-check.com/wp-content/uploads/2026/02/Birthday.png", description: "Celebratory and fun! Glitter, charms, and personalized designs to mark your special day." },
+      { id: "vacation", label: "Vacation Nails", image: "http://nail-check.com/wp-content/uploads/2026/02/Vacation.jpg", description: "Tropical vibes and travel-ready designs. Bright colors, beach themes, and carefree energy." },
+      { id: "matching", label: "Matching Sets", image: "http://nail-check.com/wp-content/uploads/2026/02/Matching-Set.png", description: "Coordinated designs for couples, friends, or mommy-and-me. Twinning is winning!" },
     ]
   },
   skill: {
     label: "The Progression",
     color: "from-[#10B981] to-[#00D9FF]",
     options: [
-      { id: "beginner", label: "Beginner Friendly", image: "http://nail-check.com/wp-content/uploads/2026/02/Beginner-Skill.png" },
-      { id: "intermediate", label: "Intermediate", image: "http://nail-check.com/wp-content/uploads/2026/02/Intermediate-Skill.png" },
-      { id: "advanced", label: "Advanced", image: "http://nail-check.com/wp-content/uploads/2026/02/Advanced-Skill.png" },
-      { id: "competition", label: "Competition Level", image: "http://nail-check.com/wp-content/uploads/2026/02/Competition.png" },
+      { id: "beginner", label: "Beginner Friendly", image: "http://nail-check.com/wp-content/uploads/2026/02/Beginner-Skill.png", description: "Simple techniques perfect for learning. Build your foundation with forgiving designs." },
+      { id: "intermediate", label: "Intermediate", image: "http://nail-check.com/wp-content/uploads/2026/02/Intermediate-Skill.png", description: "Level up your skills. Requires steady hands and understanding of basic nail architecture." },
+      { id: "advanced", label: "Advanced", image: "http://nail-check.com/wp-content/uploads/2026/02/Advanced-Skill.png", description: "Complex techniques for experienced techs. Precision, patience, and practice required." },
+      { id: "competition", label: "Competition Level", image: "http://nail-check.com/wp-content/uploads/2026/02/Competition.png", description: "The highest level of nail artistry. Flawless execution judged by industry standards." },
     ]
   },
 };
@@ -179,6 +179,7 @@ export default function Home() {
   const [generationsUsed, setGenerationsUsed] = useState(0);
   const [isPaidMember, setIsPaidMember] = useState(false);
   const [showPaywall, setShowPaywall] = useState(false);
+  const [hoveredStyle, setHoveredStyle] = useState<{ categoryKey: string; optionId: string } | null>(null);
   
   // ============================================
   // MICROCOPY STATE - Andrea's UX phrases
@@ -255,6 +256,13 @@ export default function Home() {
 
   const clearAllSelections = () => { setSelectedStyles({}); setPrompt(""); };
   const getSelectedCount = () => Object.values(selectedStyles).flat().length;
+
+  // Get description for hovered or selected style
+  const getStyleDescription = (categoryKey: string, optionId: string) => {
+    const category = STYLE_CATEGORIES[categoryKey as CategoryKey];
+    const option = category?.options.find(opt => opt.id === optionId);
+    return option?.description || "";
+  };
 
   const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -359,6 +367,14 @@ export default function Home() {
     link.click();
   };
 
+  // Scroll to generator section
+  const scrollToGenerator = () => {
+    const generatorSection = document.getElementById("ai-generator");
+    if (generatorSection) {
+      generatorSection.scrollIntoView({ behavior: "smooth" });
+    }
+  };
+
   return (
     <Layout>
       <div className="max-w-7xl mx-auto px-4 py-8 space-y-16">
@@ -412,18 +428,36 @@ export default function Home() {
 
                   {expandedCategories.has(key) && (
                     <div className="p-4 bg-gradient-to-b from-white to-[#FFFBFC]">
-                      <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 gap-4">
+                      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-6">
                         {category.options.map((option) => {
                           const isSelected = selectedStyles[key]?.includes(option.id);
+                          const isHovered = hoveredStyle?.categoryKey === key && hoveredStyle?.optionId === option.id;
                           return (
-                            <div key={option.id} onClick={() => toggleStyleSelection(key, option.id)} className={cn("relative cursor-pointer rounded-2xl overflow-hidden transition-all duration-300 group", isSelected ? "ring-4 ring-[#FF6B9D] scale-[1.02] shadow-lg shadow-[#FF6B9D]/20" : "hover:scale-[1.03] hover:shadow-lg")}>
+                            <div 
+                              key={option.id} 
+                              onClick={() => toggleStyleSelection(key, option.id)} 
+                              onMouseEnter={() => setHoveredStyle({ categoryKey: key, optionId: option.id })}
+                              onMouseLeave={() => setHoveredStyle(null)}
+                              className={cn(
+                                "relative cursor-pointer rounded-2xl overflow-hidden transition-all duration-300 group",
+                                isSelected ? "ring-4 ring-[#FF6B9D] scale-[1.02] shadow-lg shadow-[#FF6B9D]/20" : "hover:scale-[1.03] hover:shadow-lg"
+                              )}
+                            >
                               <div className="aspect-square relative">
                                 <img src={option.image} alt={option.label} className="w-full h-full object-cover" />
                                 <div className={cn("absolute inset-0 transition-all duration-300", isSelected ? `bg-gradient-to-t ${category.color} opacity-40` : "bg-black/0 group-hover:bg-black/20")} />
                                 {isSelected && <div className="absolute top-2 right-2 w-7 h-7 bg-white rounded-full flex items-center justify-center shadow-lg"><span className="text-[#FF6B9D] text-lg font-bold">✓</span></div>}
                               </div>
                               <div className={cn("px-3 py-3 text-center transition-all", isSelected ? `bg-gradient-to-r ${category.color} text-white` : "bg-white")}>
-                                <span className="text-sm font-medium block">{option.label}</span>
+                                <span className="text-sm font-semibold block uppercase tracking-wide">{option.label}</span>
+                                {/* Description - shows on hover or when selected */}
+                                <p className={cn(
+                                  "text-xs mt-2 leading-relaxed transition-all duration-300",
+                                  isSelected ? "text-white/90" : "text-gray-500",
+                                  (isHovered || isSelected) ? "opacity-100 max-h-20" : "opacity-0 max-h-0 overflow-hidden"
+                                )}>
+                                  {option.description}
+                                </p>
                               </div>
                             </div>
                           );
@@ -433,12 +467,34 @@ export default function Home() {
                   )}
                 </div>
               ))}
+
+              {/* Generate CTA after Style Builder */}
+              {getSelectedCount() > 0 && (
+                <div className="mt-8 p-6 bg-gradient-to-r from-[#FFF5F8] via-[#F8F0FF] to-[#F0FFFF] rounded-2xl border-2 border-dashed border-[#FF6B9D]/30">
+                  <div className="flex flex-col md:flex-row items-center justify-between gap-4">
+                    <div>
+                      <h3 className="text-xl font-serif bg-gradient-to-r from-[#FF6B9D] to-[#9B5DE5] bg-clip-text text-transparent">
+                        Ready to Generate?
+                      </h3>
+                      <p className="text-sm text-gray-500 mt-1">
+                        You've selected {getSelectedCount()} style{getSelectedCount() > 1 ? 's' : ''}. Scroll down to generate your custom nail design!
+                      </p>
+                    </div>
+                    <Button 
+                      onClick={scrollToGenerator}
+                      className={cn("px-8 h-12 rounded-full text-sm uppercase tracking-wider", PINK_GRADIENT, "text-white hover:shadow-lg hover:shadow-[#FF6B9D]/30")}
+                    >
+                      <Wand2 className="mr-2 h-5 w-5" /> Generate My Design
+                    </Button>
+                  </div>
+                </div>
+              )}
             </div>
           )}
         </section>
 
         {/* AI Generator */}
-        <div className="grid md:grid-cols-2 gap-12">
+        <div id="ai-generator" className="grid md:grid-cols-2 gap-12 scroll-mt-8">
           <div className="space-y-6">
             <div>
               <h3 className="text-2xl font-serif mb-4 bg-gradient-to-r from-[#FF6B9D] to-[#9B5DE5] bg-clip-text text-transparent">1. Upload Canvas</h3>
