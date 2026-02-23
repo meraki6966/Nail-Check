@@ -1,5 +1,5 @@
 import { nailTechs } from "@shared/schema";
-import { desc } from "drizzle-orm";
+import { desc, eq } from "drizzle-orm";
 import type { Express } from "express";
 import { createServer, type Server } from "http";
 import { storage } from "./storage";
@@ -8,6 +8,36 @@ import { api } from "@shared/routes";
 import { z } from "zod";
 import { setupAuth, registerAuthRoutes, isAuthenticated } from "./replit_integrations/auth";
 import { registerImageRoutes } from "./replit_integrations/image";
+
+// WordPress API Configuration
+const WORDPRESS_API_URL = "https://nail-check.com/wp-json/nail-check/v1";
+const WORDPRESS_API_KEY = "nc_railway_auth_2026_secret_key";
+
+// Helper function to sync to WordPress
+async function syncToWordPress(endpoint: string, data: any): Promise<{ success: boolean; wordpress_id?: number; error?: string }> {
+  try {
+    const response = await fetch(`${WORDPRESS_API_URL}${endpoint}`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "X-API-Key": WORDPRESS_API_KEY,
+      },
+      body: JSON.stringify(data),
+    });
+    
+    if (!response.ok) {
+      const errorText = await response.text();
+      console.error(`WordPress sync failed: ${response.status} - ${errorText}`);
+      return { success: false, error: `HTTP ${response.status}` };
+    }
+    
+    const result = await response.json();
+    return result;
+  } catch (error) {
+    console.error("WordPress sync error:", error);
+    return { success: false, error: String(error) };
+  }
+}
 
 export async function registerRoutes(
   httpServer: Server,
@@ -267,7 +297,8 @@ export async function registerRoutes(
       res.status(500).json({ message: "Failed to create product" });
     }
   });
-// ============================================
+
+  // ============================================
   // NAIL TECH LOCATOR API ROUTES
   // ============================================
   
@@ -353,6 +384,7 @@ export async function registerRoutes(
       res.status(500).json({ message: "Failed to delete nail tech" });
     }
   });
+
   // CREDIT SYSTEM API
   app.get("/api/user/credits", async (req, res) => {
     try {
@@ -422,7 +454,8 @@ export async function registerRoutes(
       res.status(500).json({ message: "Failed to use credit" });
     }
   });
-// GOOGLE PLACES API ROUTE - Search for nail salons by zip code
+
+  // GOOGLE PLACES API ROUTE - Search for nail salons by zip code
   app.get("/api/places/search", async (req, res) => {
     try {
       const zip = req.query.zip as string;
@@ -480,6 +513,7 @@ export async function registerRoutes(
       res.status(500).json({ message: "Failed to get place details" });
     }
   });
+
   // ADMIN - Get pending nail techs (not approved)
   app.get("/api/admin/techs/pending", async (req, res) => {
     try {
@@ -518,6 +552,150 @@ export async function registerRoutes(
       res.status(500).json({ message: "Failed to add gallery image" });
     }
   });
+
+  // ============================================
+  // WORDPRESS SYNC API ROUTES (Server-side)
+  // ============================================
+
+  // Sync Gallery to WordPress
+  app.post("/api/sync/gallery", async (req, res) => {
+    try {
+      const { title, imageUrl, category, tags, description, memberOnly, railwayId } = req.body;
+      
+      const wpResult = await syncToWordPress("/content/gallery", {
+        title,
+        imageUrl,
+        category,
+        tags,
+        description,
+        memberOnly,
+        railwayId,
+      });
+      
+      res.json(wpResult);
+    } catch (error) {
+      console.error("Error syncing gallery to WordPress:", error);
+      res.status(500).json({ success: false, error: "Sync failed" });
+    }
+  });
+
+  // Sync Tutorial to WordPress
+  app.post("/api/sync/tutorial", async (req, res) => {
+    try {
+      const { title, imageSource, styleCategory, difficultyLevel, toolsRequired, tutorialContent, creatorCredit, railwayId } = req.body;
+      
+      const wpResult = await syncToWordPress("/content/tutorials", {
+        title,
+        imageSource,
+        styleCategory,
+        difficultyLevel,
+        toolsRequired,
+        tutorialContent,
+        creatorCredit,
+        railwayId,
+      });
+      
+      res.json(wpResult);
+    } catch (error) {
+      console.error("Error syncing tutorial to WordPress:", error);
+      res.status(500).json({ success: false, error: "Sync failed" });
+    }
+  });
+
+  // Sync Seasonal to WordPress
+  app.post("/api/sync/seasonal", async (req, res) => {
+    try {
+      const { title, imageUrl, season, category, description, tags, featured, railwayId } = req.body;
+      
+      const wpResult = await syncToWordPress("/content/seasonal", {
+        title,
+        imageUrl,
+        season,
+        category,
+        description,
+        tags,
+        featured,
+        railwayId,
+      });
+      
+      res.json(wpResult);
+    } catch (error) {
+      console.error("Error syncing seasonal to WordPress:", error);
+      res.status(500).json({ success: false, error: "Sync failed" });
+    }
+  });
+
+  // Sync Supply to WordPress
+  app.post("/api/sync/supply", async (req, res) => {
+    try {
+      const { name, brand, category, description, imageUrl, productUrl, price, utility, tags, featured, memberOnly, railwayId } = req.body;
+      
+      const wpResult = await syncToWordPress("/content/supplies", {
+        name,
+        brand,
+        category,
+        description,
+        imageUrl,
+        productUrl,
+        price,
+        utility,
+        tags,
+        featured,
+        memberOnly,
+        railwayId,
+      });
+      
+      res.json(wpResult);
+    } catch (error) {
+      console.error("Error syncing supply to WordPress:", error);
+      res.status(500).json({ success: false, error: "Sync failed" });
+    }
+  });
+
+  // Sync Nail Tech to WordPress
+  app.post("/api/sync/tech", async (req, res) => {
+    try {
+      const techData = req.body;
+      
+      const wpResult = await syncToWordPress("/content/techs", techData);
+      
+      res.json(wpResult);
+    } catch (error) {
+      console.error("Error syncing tech to WordPress:", error);
+      res.status(500).json({ success: false, error: "Sync failed" });
+    }
+  });
+
+  // Update Flavor of the Month
+  app.post("/api/sync/flavor-of-month", async (req, res) => {
+    try {
+      const { title, description, image } = req.body;
+      
+      const wpResult = await syncToWordPress("/flavor-of-month", {
+        title,
+        description,
+        image,
+      });
+      
+      res.json(wpResult);
+    } catch (error) {
+      console.error("Error updating flavor of month:", error);
+      res.status(500).json({ success: false, error: "Update failed" });
+    }
+  });
+
+  // Get Flavor of the Month
+  app.get("/api/sync/flavor-of-month", async (req, res) => {
+    try {
+      const response = await fetch(`${WORDPRESS_API_URL}/flavor-of-month`);
+      const data = await response.json();
+      res.json(data);
+    } catch (error) {
+      console.error("Error fetching flavor of month:", error);
+      res.status(500).json({ title: "", description: "", image: "" });
+    }
+  });
+
   // Seed Data
   await seedDatabase();
 
