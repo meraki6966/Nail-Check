@@ -1,6 +1,7 @@
 import Admin from "./pages/Admin";
 import TechRegister from "./pages/TechRegister";
-import FindTech from "./pages/FindTech";import Gallery from "./pages/Gallery";
+import FindTech from "./pages/FindTech";
+import Gallery from "./pages/Gallery";
 import Tutorials from "./pages/Tutorials";
 import Embed from "./pages/Embed";
 import Portal from "./pages/Portal";
@@ -8,6 +9,7 @@ import Membership from "./pages/Membership";
 import About from "./pages/About";
 import SeasonalVault from "./pages/SeasonalVault";
 import SupplySuite from "./pages/SupplySuite";
+import Login from "./pages/Login";
 import { Switch, Route } from "wouter";
 import { queryClient } from "./lib/queryClient";
 import { QueryClientProvider } from "@tanstack/react-query";
@@ -22,6 +24,7 @@ import Saved from "@/pages/Saved";
 function Router() {
   return (
     <Switch>
+      <Route path="/login" component={Login} />
       <Route path="/admin" component={Admin} />
       <Route path="/find-tech" component={FindTech} />
       <Route path="/tech-register" component={TechRegister} />
