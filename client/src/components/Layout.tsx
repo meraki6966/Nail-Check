@@ -82,7 +82,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
                     Join
                   </Button>
                 </a>
-                <a href="/api/login">
+                <a href="/login">
                   <Button variant="outline" size="sm">
                     Login
                   </Button>
