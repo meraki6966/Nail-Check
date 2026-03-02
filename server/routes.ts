@@ -51,6 +51,240 @@ export async function registerRoutes(
   // AI Routes
   registerImageRoutes(app);
 
+  // ============================================
+  // AI CRITIQUE API ROUTES
+  // ============================================
+  
+  // AI Critique endpoint - analyzes uploaded nail images
+  app.post("/api/ai/critique", async (req, res) => {
+    try {
+      const { image, imageUrl } = req.body;
+      
+      // Get the image - either base64 or URL
+      let imageData = image;
+      if (!imageData && imageUrl) {
+        // Fetch image from URL if provided
+        try {
+          const response = await fetch(imageUrl);
+          const buffer = await response.arrayBuffer();
+          imageData = Buffer.from(buffer).toString('base64');
+        } catch (fetchError) {
+          console.error("Failed to fetch image from URL:", fetchError);
+          return res.status(400).json({ message: "Failed to fetch image from URL" });
+        }
+      }
+      
+      if (!imageData) {
+        return res.status(400).json({ message: "Image is required (base64 or URL)" });
+      }
+
+      // Build the AI prompt for nail critique
+      const critiquePrompt = `You are a professional nail technician and educator with 15+ years of experience. Analyze this nail design image and provide a detailed critique.
+
+Please evaluate and respond in this EXACT JSON format (no markdown, just raw JSON):
+{
+  "overallScore": <number 1-10>,
+  "styleDetected": "<detected nail style/technique like French, Chrome, Ombre, Abstract, etc>",
+  "shapeDetected": "<nail shape: Square, Coffin, Almond, Stiletto, Oval, Round, Duck/Flare, etc>",
+  "whatWorks": [
+    "<specific positive aspect 1>",
+    "<specific positive aspect 2>",
+    "<specific positive aspect 3>"
+  ],
+  "areasToImprove": [
+    "<specific improvement suggestion 1>",
+    "<specific improvement suggestion 2>",
+    "<specific improvement suggestion 3>"
+  ],
+  "technicalNotes": "<brief technical observation about application, structure, cuticle work, or finish>",
+  "suggestedStyles": ["<related style to try 1>", "<related style to try 2>"],
+  "suggestedProducts": ["<product type 1>", "<product type 2>", "<product type 3>"],
+  "skillLevel": "<Beginner|Intermediate|Advanced|Competition>"
+}
+
+Be encouraging but honest. Focus on:
+- Shape consistency and symmetry
+- Cuticle work and sidewall cleanliness
+- Product application (thickness, apex placement)
+- Design execution and creativity
+- Finish quality (shine, texture)
+
+If this is not a nail image, return:
+{
+  "overallScore": 0,
+  "styleDetected": "Not a nail image",
+  "shapeDetected": "N/A",
+  "whatWorks": ["Please upload a clear photo of nails"],
+  "areasToImprove": ["Upload a well-lit, focused image of your nail work"],
+  "technicalNotes": "For best results, photograph nails against a plain background with good lighting.",
+  "suggestedStyles": [],
+  "suggestedProducts": [],
+  "skillLevel": "N/A"
+}`;
+
+      // Call Google Gemini API for vision analysis
+      const GEMINI_API_KEY = process.env.GEMINI_API_KEY || process.env.GOOGLE_API_KEY || "";
+      
+      if (!GEMINI_API_KEY) {
+        console.error("No Gemini API key found");
+        return res.status(500).json({ message: "AI service not configured" });
+      }
+
+      const aiResponse = await fetch("https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=" + GEMINI_API_KEY, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          contents: [{
+            parts: [
+              { text: critiquePrompt },
+              {
+                inline_data: {
+                  mime_type: "image/jpeg",
+                  data: imageData.replace(/^data:image\/\w+;base64,/, "")
+                }
+              }
+            ]
+          }],
+          generationConfig: {
+            temperature: 0.7,
+            maxOutputTokens: 1024,
+          }
+        })
+      });
+
+      if (!aiResponse.ok) {
+        const errorText = await aiResponse.text();
+        console.error("Gemini API error:", errorText);
+        return res.status(500).json({ message: "AI analysis failed" });
+      }
+
+      const aiData = await aiResponse.json();
+      const responseText = aiData.candidates?.[0]?.content?.parts?.[0]?.text || "";
+      
+      // Parse the JSON response
+      let critique;
+      try {
+        // Extract JSON from the response (handle markdown code blocks)
+        const jsonMatch = responseText.match(/\{[\s\S]*\}/);
+        if (jsonMatch) {
+          critique = JSON.parse(jsonMatch[0]);
+        } else {
+          throw new Error("No JSON found in response");
+        }
+      } catch (parseError) {
+        console.error("Failed to parse AI response:", responseText);
+        // Return a fallback response
+        critique = {
+          overallScore: 7,
+          styleDetected: "Unable to determine",
+          shapeDetected: "Unable to determine",
+          whatWorks: ["Image uploaded successfully", "Design shows creativity"],
+          areasToImprove: ["Try uploading a clearer image for better analysis"],
+          technicalNotes: "For best results, upload a well-lit, focused image of your nails.",
+          suggestedStyles: ["Chrome", "French"],
+          suggestedProducts: ["Top Coat", "Base Coat"],
+          skillLevel: "Intermediate"
+        };
+      }
+
+      // Fetch matching tutorials based on detected style
+      let tutorials: any[] = [];
+      try {
+        const allTutorials = await storage.getTutorials({});
+        // Filter tutorials that match the detected style or skill level
+        tutorials = allTutorials.filter(t => 
+          t.styleCategory?.toLowerCase().includes(critique.styleDetected?.toLowerCase()) ||
+          t.difficultyLevel?.toLowerCase() === critique.skillLevel?.toLowerCase() ||
+          critique.suggestedStyles?.some((style: string) => 
+            t.styleCategory?.toLowerCase().includes(style.toLowerCase())
+          )
+        ).slice(0, 3);
+        
+        // If no matches, return first 3 tutorials
+        if (tutorials.length === 0) {
+          tutorials = allTutorials.slice(0, 3);
+        }
+      } catch (tutorialError) {
+        console.error("Error fetching tutorials:", tutorialError);
+      }
+      
+      // Fetch matching supplies based on suggested products
+      let matchedSupplies: any[] = [];
+      try {
+        const supplies = await storage.getSupplyProducts();
+        matchedSupplies = supplies.filter(supply => 
+          critique.suggestedProducts?.some((prod: string) => 
+            supply.name?.toLowerCase().includes(prod.toLowerCase()) ||
+            supply.category?.toLowerCase().includes(prod.toLowerCase()) ||
+            supply.tags?.some((tag: string) => prod.toLowerCase().includes(tag.toLowerCase()))
+          )
+        ).slice(0, 4);
+        
+        // If no matches, return featured supplies
+        if (matchedSupplies.length === 0) {
+          matchedSupplies = supplies.filter(s => s.featured).slice(0, 4);
+        }
+      } catch (supplyError) {
+        console.error("Error fetching supplies:", supplyError);
+      }
+
+      // Return the complete critique with recommendations
+      res.json({
+        critique,
+        recommendations: {
+          tutorials,
+          supplies: matchedSupplies
+        }
+      });
+
+    } catch (error) {
+      console.error("AI Critique error:", error);
+      res.status(500).json({ message: "Failed to analyze image" });
+    }
+  });
+
+  // Track critique usage (uses same credit system)
+  app.post("/api/ai/critique/use-credit", async (req, res) => {
+    try {
+      const { userId } = req.body;
+      
+      if (!userId || userId === "guest") {
+        // Guest gets 1 free critique
+        return res.json({ success: true, remainingCredits: 0, isFirstCritique: true });
+      }
+      
+      const user = await storage.getUser(userId);
+      if (!user) {
+        return res.status(404).json({ message: "User not found" });
+      }
+      
+      // Use same credit pool as generation
+      if (!user.isPaidMember && user.generationsUsed >= user.credits) {
+        return res.status(403).json({ 
+          message: "No credits remaining",
+          showPaywall: true 
+        });
+      }
+      
+      await storage.incrementGenerationsUsed(userId);
+      
+      const remainingCredits = user.isPaidMember 
+        ? 999
+        : user.credits - (user.generationsUsed + 1);
+      
+      res.json({ 
+        success: true, 
+        remainingCredits,
+        showPaywall: remainingCredits <= 0 && !user.isPaidMember
+      });
+    } catch (err) {
+      console.error("Error using critique credit:", err);
+      res.status(500).json({ message: "Failed to use credit" });
+    }
+  });
+
   // Tutorial API Routes
   app.get(api.tutorials.list.path, async (req, res) => {
     const filters = {

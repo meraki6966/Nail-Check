@@ -1,3 +1,4 @@
+import Critique from "@/pages/Critique";
 import Admin from "./pages/Admin";
 import TechRegister from "./pages/TechRegister";
 import FindTech from "./pages/FindTech";
@@ -24,6 +25,7 @@ import Saved from "@/pages/Saved";
 function Router() {
   return (
     <Switch>
+      <Route path="/critique" element={<Critique />} />
       <Route path="/login" component={Login} />
       <Route path="/admin" component={Admin} />
       <Route path="/find-tech" component={FindTech} />
