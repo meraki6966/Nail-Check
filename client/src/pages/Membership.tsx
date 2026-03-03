@@ -1,14 +1,16 @@
 import { Layout } from "@/components/Layout";
 import { Button } from "@/components/ui/button";
-import { Check, Crown, Sparkles, Lock } from "lucide-react";
+import { Check, Crown, Sparkles, Lock, Star, Zap, Camera } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { motion } from "framer-motion";
 
 const GOLD_TEXT = "text-[#B08D57]";
 const GOLD_GRADIENT = "bg-gradient-to-r from-[#B08D57] via-[#D4AF37] to-[#B08D57]";
+const PURPLE_GRADIENT = "bg-gradient-to-r from-[#9B5DE5] to-[#00D9FF]";
 
 const FOUNDER_BENEFITS = [
   "Unlimited AI design generations",
+  "Unlimited AI Nail Critiques with personalized feedback",
   "Access to all 4 seasonal vaults (Winter, Spring, Summer, Fall)",
   "Premium product links in Supply Suite",
   "Save unlimited designs to Fire Vault",
@@ -20,6 +22,7 @@ const FOUNDER_BENEFITS = [
 
 const FREE_TIER = [
   "1 free AI generation",
+  "1 free AI critique",
   "Browse seasonal collections (view-only)",
   "Limited Fire Vault (5 saves)",
   "Supply Suite (no product links)",
@@ -45,6 +48,78 @@ export default function Membership() {
                 Join the technical elite. Unlock unlimited AI designs, exclusive collections, 
                 and premium supplier access.
               </p>
+            </motion.div>
+          </div>
+        </section>
+
+        {/* NEW FEATURE HIGHLIGHT - AI CRITIQUE */}
+        <section className="py-16 px-4 bg-gradient-to-r from-[#F8F0FF] to-[#F0FFFF]">
+          <div className="max-w-5xl mx-auto">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.1 }}
+              className="bg-white rounded-3xl shadow-xl overflow-hidden"
+            >
+              <div className="grid md:grid-cols-2 gap-0">
+                {/* Left: Feature Info */}
+                <div className="p-8 md:p-12 flex flex-col justify-center">
+                  <div className="inline-flex items-center gap-2 bg-gradient-to-r from-[#9B5DE5] to-[#00D9FF] text-white text-xs font-bold uppercase tracking-wider px-3 py-1 rounded-full w-fit mb-4">
+                    <Zap className="h-3 w-3" /> New Feature
+                  </div>
+                  <h2 className="text-4xl font-serif uppercase tracking-wider mb-4">
+                    AI Nail Critique
+                  </h2>
+                  <p className="text-gray-600 mb-6 leading-relaxed">
+                    Upload your nail work and get instant professional feedback from our AI nail tech expert. 
+                    Receive a score out of 10, detailed analysis of what's working and areas to improve, 
+                    plus personalized tutorial and supply recommendations.
+                  </p>
+                  <ul className="space-y-3 mb-8">
+                    <li className="flex items-center gap-3 text-sm">
+                      <Star className="h-5 w-5 text-[#9B5DE5]" />
+                      <span>Professional score (1-10) with detailed breakdown</span>
+                    </li>
+                    <li className="flex items-center gap-3 text-sm">
+                      <Check className="h-5 w-5 text-green-500" />
+                      <span>What's working well in your design</span>
+                    </li>
+                    <li className="flex items-center gap-3 text-sm">
+                      <Sparkles className="h-5 w-5 text-amber-500" />
+                      <span>Areas to improve with specific tips</span>
+                    </li>
+                    <li className="flex items-center gap-3 text-sm">
+                      <Camera className="h-5 w-5 text-[#FF6B9D]" />
+                      <span>Upload, paste URL, or select from Fire Vault</span>
+                    </li>
+                  </ul>
+                  <a href="/critique">
+                    <Button className={cn("w-full md:w-auto h-12 px-8 rounded-full", PURPLE_GRADIENT, "text-white")}>
+                      Try AI Critique →
+                    </Button>
+                  </a>
+                </div>
+                
+                {/* Right: Visual */}
+                <div className="bg-gradient-to-br from-[#9B5DE5] to-[#00D9FF] p-8 md:p-12 flex items-center justify-center">
+                  <div className="bg-white/10 backdrop-blur rounded-2xl p-6 w-full max-w-sm">
+                    <div className="flex items-center justify-between mb-4">
+                      <span className="text-white/80 text-sm uppercase tracking-wider">Your Score</span>
+                      <Star className="h-6 w-6 text-yellow-300 fill-yellow-300" />
+                    </div>
+                    <div className="text-6xl font-bold text-white mb-2">8.5/10</div>
+                    <div className="text-white/80 text-sm mb-4">Chrome • Coffin • Advanced</div>
+                    <div className="space-y-2">
+                      <div className="bg-white/20 rounded-lg p-3">
+                        <p className="text-white text-xs">✓ Excellent apex placement and structure</p>
+                      </div>
+                      <div className="bg-white/20 rounded-lg p-3">
+                        <p className="text-white text-xs">→ Work on sidewall consistency</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
             </motion.div>
           </div>
         </section>
@@ -95,7 +170,14 @@ export default function Membership() {
               >
                 <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-[#B08D57] via-[#D4AF37] to-[#B08D57]"></div>
                 
-                <div className="mb-8">
+                {/* Popular Badge */}
+                <div className="absolute -top-4 left-1/2 -translate-x-1/2">
+                  <span className="bg-gradient-to-r from-[#9B5DE5] to-[#00D9FF] text-white text-xs font-bold uppercase tracking-wider px-4 py-1 rounded-full">
+                    Most Popular
+                  </span>
+                </div>
+                
+                <div className="mb-8 mt-4">
                   <div className="flex items-center justify-between mb-4">
                     <h3 className="text-3xl font-serif uppercase tracking-wider">Founder Member</h3>
                     <Crown className={cn("h-8 w-8", GOLD_TEXT)} />
@@ -111,7 +193,17 @@ export default function Membership() {
                   {FOUNDER_BENEFITS.map((benefit, idx) => (
                     <div key={idx} className="flex items-start gap-3">
                       <Check className={cn("h-5 w-5 flex-shrink-0 mt-0.5", GOLD_TEXT)} />
-                      <span className="text-sm">{benefit}</span>
+                      <span className={cn(
+                        "text-sm",
+                        benefit.includes("AI Nail Critiques") && "font-semibold text-[#9B5DE5]"
+                      )}>
+                        {benefit}
+                        {benefit.includes("AI Nail Critiques") && (
+                          <span className="ml-2 text-[9px] bg-gradient-to-r from-[#9B5DE5] to-[#00D9FF] text-white px-1.5 py-0.5 rounded-full font-bold uppercase">
+                            New
+                          </span>
+                        )}
+                      </span>
                     </div>
                   ))}
                 </div>
@@ -139,11 +231,17 @@ export default function Membership() {
               <p className="text-gray-500 italic">Precision tools for technical excellence</p>
             </div>
 
-            <div className="grid md:grid-cols-3 gap-12">
+            <div className="grid md:grid-cols-4 gap-8">
               <BenefitCard
                 icon={<Sparkles className="h-10 w-10" />}
                 title="Unlimited Creation"
                 description="Generate as many AI designs as you want. No daily limits, no restrictions."
+              />
+              <BenefitCard
+                icon={<Star className="h-10 w-10" />}
+                title="AI Critique"
+                description="Get professional feedback on your work with scores, tips, and personalized recommendations."
+                isNew
               />
               <BenefitCard
                 icon={<Crown className="h-10 w-10" />}
@@ -167,7 +265,11 @@ export default function Membership() {
             <div className="space-y-8">
               <FAQItem
                 question="Can I try it for free first?"
-                answer="Yes! All guests get 1 free AI generation to test the Design Lab. You can browse the seasonal collections and Supply Suite (without product links) before committing to membership."
+                answer="Yes! All guests get 1 free AI generation and 1 free AI critique to test our features. You can browse the seasonal collections and Supply Suite (without product links) before committing to membership."
+              />
+              <FAQItem
+                question="What is AI Nail Critique?"
+                answer="AI Nail Critique is our newest feature that analyzes your nail work and provides professional feedback. Upload any nail image and receive a score out of 10, detailed analysis of technique, shape, and finish, plus personalized recommendations for tutorials and supplies to help you improve."
               />
               <FAQItem
                 question="What payment methods do you accept?"
@@ -183,7 +285,7 @@ export default function Membership() {
               />
               <FAQItem
                 question="How does the membership work?"
-                answer="Sign up through our WordPress membership page. Once your payment is confirmed, you'll gain instant access to all premium features including unlimited AI generations, seasonal vaults, and supplier links."
+                answer="Sign up through our WordPress membership page. Once your payment is confirmed, you'll gain instant access to all premium features including unlimited AI generations, unlimited AI critiques, seasonal vaults, and supplier links."
               />
             </div>
           </div>
@@ -196,11 +298,18 @@ export default function Membership() {
             <p className="text-xl text-gray-300">
               Unlock the full Technical Hub experience today.
             </p>
-            <a href="https://nail-check.com/membership/" target="_blank" rel="noopener noreferrer">
-              <Button className={cn("h-16 px-12 text-[11px] uppercase tracking-widest", GOLD_GRADIENT, "text-white")}>
-                Start Your Founder Membership
-              </Button>
-            </a>
+            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+              <a href="https://nail-check.com/membership/" target="_blank" rel="noopener noreferrer">
+                <Button className={cn("h-16 px-12 text-[11px] uppercase tracking-widest", GOLD_GRADIENT, "text-white")}>
+                  Start Your Founder Membership
+                </Button>
+              </a>
+              <a href="/critique">
+                <Button variant="outline" className="h-16 px-12 text-[11px] uppercase tracking-widest border-white text-white hover:bg-white hover:text-black">
+                  Try AI Critique Free
+                </Button>
+              </a>
+            </div>
           </div>
         </section>
 
@@ -209,14 +318,22 @@ export default function Membership() {
   );
 }
 
-function BenefitCard({ icon, title, description }: {
+function BenefitCard({ icon, title, description, isNew }: {
   icon: React.ReactNode;
   title: string;
   description: string;
+  isNew?: boolean;
 }) {
   return (
-    <div className="text-center space-y-4">
-      <div className={cn("mx-auto w-fit", GOLD_TEXT)}>
+    <div className="text-center space-y-4 relative">
+      {isNew && (
+        <div className="absolute -top-2 left-1/2 -translate-x-1/2">
+          <span className="bg-gradient-to-r from-[#9B5DE5] to-[#00D9FF] text-white text-[9px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full">
+            New
+          </span>
+        </div>
+      )}
+      <div className={cn("mx-auto w-fit", isNew ? "text-[#9B5DE5]" : GOLD_TEXT)}>
         {icon}
       </div>
       <h3 className="text-xl font-serif uppercase tracking-wider">{title}</h3>
