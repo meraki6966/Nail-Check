@@ -130,8 +130,7 @@ If this is not a nail image, return:
         return res.status(500).json({ message: "AI service not configured" });
       }
 
-      const aiResponse = await fetch(https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent" + GEMINI_API_KEY, {
-        method: "POST",
+const aiResponse = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${GEMINI_API_KEY}`, {        method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
