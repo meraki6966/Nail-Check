@@ -66,6 +66,7 @@ export async function setupAuth(app: Express) {
   app.set("trust proxy", 1);
   app.use(getSession());
   console.log("WordPress auth initialized with standalone auth file");
+  console.log("AUTH ENDPOINT:", WORDPRESS_URL);
 }
 
 /**
@@ -78,8 +79,12 @@ async function verifyWithWordPress(email: string, password: string): Promise<{
   message?: string;
 }> {
   try {
+    const fullUrl = `${WORDPRESS_URL}?action=verify`;
+    console.log("DEBUG: Calling WordPress auth URL:", fullUrl);
+    console.log("DEBUG: Using API Secret:", API_SECRET);
+    
     // Use standalone auth file that bypasses ALL WordPress routing and caching
-    const response = await fetch(`${WORDPRESS_URL}?action=verify`, {
+    const response = await fetch(fullUrl, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -88,7 +93,20 @@ async function verifyWithWordPress(email: string, password: string): Promise<{
       body: JSON.stringify({ email, password }),
     });
 
-    const data = await response.json();
+    console.log("DEBUG: Response status:", response.status);
+    console.log("DEBUG: Response Content-Type:", response.headers.get('content-type'));
+    
+    const rawText = await response.text();
+    console.log("DEBUG: Raw response (first 200 chars):", rawText.substring(0, 200));
+    
+    let data;
+    try {
+      data = JSON.parse(rawText);
+    } catch (parseError) {
+      console.error("DEBUG: JSON parse failed:", parseError);
+      console.error("DEBUG: Full response text:", rawText);
+      throw new Error("WordPress returned non-JSON response");
+    }
 
     if (!response.ok || !data.success) {
       return {
