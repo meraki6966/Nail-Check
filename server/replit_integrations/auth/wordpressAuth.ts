@@ -65,7 +65,7 @@ export function getSession() {
 export async function setupAuth(app: Express) {
   app.set("trust proxy", 1);
   app.use(getSession());
-  console.log("WordPress auth initialized");
+  console.log("WordPress auth initialized with custom endpoints");
 }
 
 /**
@@ -78,7 +78,8 @@ async function verifyWithWordPress(email: string, password: string): Promise<{
   message?: string;
 }> {
   try {
-    const response = await fetch(`${WORDPRESS_URL}/wp-json/nail-check/v1/auth/verify`, {
+    // Use custom auth endpoint that bypasses SiteGround REST API restrictions
+    const response = await fetch(`${WORDPRESS_URL}/?nc_auth=verify`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -137,7 +138,8 @@ async function registerWithWordPress(
   message?: string;
 }> {
   try {
-    const response = await fetch(`${WORDPRESS_URL}/wp-json/nail-check/v1/auth/register`, {
+    // Use custom auth endpoint that bypasses SiteGround REST API restrictions
+    const response = await fetch(`${WORDPRESS_URL}/?nc_auth=register`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -190,7 +192,8 @@ async function checkMembershipStatus(userId: number): Promise<{
   status: string;
 }> {
   try {
-    const response = await fetch(`${WORDPRESS_URL}/wp-json/nail-check/v1/auth/membership/${userId}`, {
+    // Use custom auth endpoint that bypasses SiteGround REST API restrictions
+    const response = await fetch(`${WORDPRESS_URL}/?nc_auth=membership/${userId}`, {
       headers: {
         "X-API-Key": API_SECRET,
       },
