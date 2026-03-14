@@ -2,8 +2,8 @@ import type { Express, RequestHandler } from "express";
 import session from "express-session";
 import connectPg from "connect-pg-simple";
 
-// WordPress API configuration
-const WORDPRESS_URL = "https://nail-check.com";
+// WordPress API configuration - using standalone auth file
+const WORDPRESS_URL = "https://nail-check.com/nc-auth.php";
 const API_SECRET = "nc_railway_auth_2026_secret_key";
 
 // Session user type
@@ -65,7 +65,7 @@ export function getSession() {
 export async function setupAuth(app: Express) {
   app.set("trust proxy", 1);
   app.use(getSession());
-  console.log("WordPress auth initialized with custom endpoints");
+  console.log("WordPress auth initialized with standalone auth file");
 }
 
 /**
@@ -78,8 +78,8 @@ async function verifyWithWordPress(email: string, password: string): Promise<{
   message?: string;
 }> {
   try {
-    // Use custom auth endpoint that bypasses SiteGround REST API restrictions
-    const response = await fetch(`${WORDPRESS_URL}/?nc_auth=verify`, {
+    // Use standalone auth file that bypasses ALL WordPress routing and caching
+    const response = await fetch(`${WORDPRESS_URL}?action=verify`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -138,8 +138,8 @@ async function registerWithWordPress(
   message?: string;
 }> {
   try {
-    // Use custom auth endpoint that bypasses SiteGround REST API restrictions
-    const response = await fetch(`${WORDPRESS_URL}/?nc_auth=register`, {
+    // Use standalone auth file that bypasses ALL WordPress routing and caching
+    const response = await fetch(`${WORDPRESS_URL}?action=register`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -192,8 +192,8 @@ async function checkMembershipStatus(userId: number): Promise<{
   status: string;
 }> {
   try {
-    // Use custom auth endpoint that bypasses SiteGround REST API restrictions
-    const response = await fetch(`${WORDPRESS_URL}/?nc_auth=membership/${userId}`, {
+    // Use standalone auth file that bypasses ALL WordPress routing and caching
+    const response = await fetch(`${WORDPRESS_URL}?action=membership&user_id=${userId}`, {
       headers: {
         "X-API-Key": API_SECRET,
       },
