@@ -27,6 +27,8 @@ import Saved from "@/pages/Saved";
 function Router() {
   return (
     <Switch>
+      <Route path="/creators" component={Creators} />
+<Route path="/creators/:username" component={CreatorProfile} />
       <Route path="/content-editing" component={ContentEditing} />
 <Route path="/ai-critique" component={AICritique} />
       <Route path="/critique" component={Critique} />

@@ -1,3 +1,4 @@
+import { registerCreatorsRoutes } from "./creators-routes";
 import { registerImageEditRoute } from "./image-edit-route";
 import { registerImageCritiqueRoute } from "./image-critique-route";
 import { registerStripeWebhook } from "./stripe-webhook";
@@ -47,12 +48,15 @@ export async function registerRoutes(
   app: Express
 ): Promise<Server> {
   
+  registerCreatorsRoutes(app);
+  
   // Auth Setup
   await setupAuth(app);
   registerAuthRoutes(app);
-  registerStripeWebhook(app);  // ← ADD THIS LINE HERE
-registerImageEditRoute(app);
-registerImageCritiqueRoute(app);
+  registerStripeWebhook(app);
+  registerImageEditRoute(app);
+  registerImageCritiqueRoute(app);
+  
   // AI Routes
   registerImageRoutes(app);
 
@@ -560,20 +564,28 @@ const aiResponse = await fetch(`https://generativelanguage.googleapis.com/v1beta
         return res.status(404).json({ message: "Nail tech not found" });
       }
       res.json(tech);
-    } catch (err) {r
+    } catch (err) {
       console.error("Error fetching nail tech:", err);
       res.status(500).json({ message: "Failed to fetch nail tech" });
     }
   });
 
-  // POST register new nail tech
+  // POST register new nail tech (UPDATED WITH CREATOR FIELDS)
   app.post("/api/techs/register", async (req, res) => {
     try {
-      const { name, email, phone, businessName, city, state, zipCode, bio, profileImage, bookingUrl, instagram, website, skillLevel, specialties } = req.body;
+      const { 
+        name, email, phone, businessName, city, state, zipCode, bio, 
+        profileImage, bookingUrl, instagram, website, skillLevel, specialties,
+        // NEW CREATOR FIELDS:
+        username, linktree, affiliateLink, showInDirectory 
+      } = req.body;
       
       if (!name || !email || !city || !state || !zipCode || !bio) {
         return res.status(400).json({ message: "name, email, city, state, zipCode, and bio are required" });
       }
+
+      // Generate username if not provided
+      const techUsername = username || name.toLowerCase().replace(/\s+/g, '_');
 
       const tech = await storage.createNailTech({
         name,
@@ -590,6 +602,11 @@ const aiResponse = await fetch(`https://generativelanguage.googleapis.com/v1beta
         website,
         skillLevel,
         specialties,
+        // NEW FIELDS:
+        username: techUsername,
+        linktree,
+        affiliateLink,
+        showInDirectory: showInDirectory !== undefined ? showInDirectory : true // Default opt-in
       });
       
       res.status(201).json(tech);
