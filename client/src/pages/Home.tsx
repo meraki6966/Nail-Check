@@ -1,3 +1,4 @@
+import { AIToolsNav } from "@/components/AIToolsNav";
 import { useState, useEffect } from "react";
 import { Layout } from "@/components/Layout";
 import { Button } from "@/components/ui/button";
@@ -400,6 +401,7 @@ export default function Home() {
           </div>
           <p className="text-sm text-gray-500 italic">Select styles below or describe your vision. Watch precision engineering create your perfect set.</p>
         </header>
+<AIToolsNav />
 
         {/* Credits */}
         <div className="flex justify-center">

@@ -1,3 +1,5 @@
+import ContentEditing from "@/pages/ContentEditing";
+import AICritique from "@/pages/AICritique";
 import Critique from "@/pages/Critique";
 import Admin from "./pages/Admin";
 import TechRegister from "./pages/TechRegister";
@@ -25,6 +27,8 @@ import Saved from "@/pages/Saved";
 function Router() {
   return (
     <Switch>
+      <Route path="/content-editing" component={ContentEditing} />
+<Route path="/ai-critique" component={AICritique} />
       <Route path="/critique" component={Critique} />
       <Route path="/login" component={Login} />
       <Route path="/admin" component={Admin} />

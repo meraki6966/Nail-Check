@@ -1,3 +1,5 @@
+import { registerImageEditRoute } from "./image-edit-route";
+import { registerImageCritiqueRoute } from "./image-critique-route";
 import { registerStripeWebhook } from "./stripe-webhook";
 import { nailTechs } from "@shared/schema";
 import { desc, eq } from "drizzle-orm";
@@ -49,7 +51,8 @@ export async function registerRoutes(
   await setupAuth(app);
   registerAuthRoutes(app);
   registerStripeWebhook(app);  // ← ADD THIS LINE HERE
-
+registerImageEditRoute(app);
+registerImageCritiqueRoute(app);
   // AI Routes
   registerImageRoutes(app);
 
