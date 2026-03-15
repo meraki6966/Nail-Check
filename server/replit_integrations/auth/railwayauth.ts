@@ -2,7 +2,7 @@ import type { Express, RequestHandler } from "express";
 import session from "express-session";
 import connectPg from "connect-pg-simple";
 import bcrypt from "bcrypt";
-import { db } from "../db";
+import { db } from "../../db";
 import { sql } from "drizzle-orm";
 
 // Session user type
