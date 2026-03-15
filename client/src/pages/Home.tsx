@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { Layout } from "@/components/Layout";
 import { Button } from "@/components/ui/button";
@@ -8,6 +7,7 @@ import { useAuth } from "@/hooks/use-auth";
 import { useToast } from "@/hooks/use-toast";
 import { cn } from "@/lib/utils";
 import { getRandomMessage } from "@/lib/microcopy";
+import { downloadWithWatermark } from "@/lib/watermark";
 
 // ============================================
 // NEW PINTEREST COLOR PALETTE
@@ -360,12 +360,22 @@ export default function Home() {
     finally { setIsSaving(false); }
   };
 
-  const handleDownload = () => {
+  const handleDownload = async () => {
     if (!generatedImage) return;
-    const link = document.createElement("a");
-    link.href = generatedImage;
-    link.download = "nail-design.png";
-    link.click();
+    try {
+      await downloadWithWatermark(generatedImage, 'nail-check-design.png');
+      toast({ 
+        title: "Download complete", 
+        description: "Your design has been saved with the Nail Check watermark" 
+      });
+    } catch (error) {
+      console.error("Download error:", error);
+      toast({ 
+        title: "Download failed", 
+        description: "Please try again", 
+        variant: "destructive" 
+      });
+    }
   };
 
   // Scroll to generator section
@@ -395,9 +405,9 @@ export default function Home() {
         <div className="flex justify-center">
           <div className="bg-gradient-to-r from-[#FFF5F8] to-[#F8F0FF] px-6 py-3 rounded-full border border-[#FF6B9D]/30">
             {isPaidMember ? (
-              <span className="text-sm uppercase tracking-widest bg-gradient-to-r from-[#FF6B9D] to-[#9B5DE5] bg-clip-text text-transparent font-semibold">♾️ Unlimited Generations</span>
+              <span className="text-sm uppercase tracking-widest bg-gradient-to-r from-[#FF6B9D] to-[#9B5DE5] bg-clip-text text-transparent font-semibold">♾️ Unlimited Designs</span>
             ) : (
-              <span className="text-sm text-gray-600">Free Generations: <span className="font-bold text-[#9B5DE5]">{generationsUsed}</span> / {credits}</span>
+              <span className="text-sm text-gray-600">Free Designs: <span className="font-bold text-[#9B5DE5]">{generationsUsed}</span> / {credits}</span>
             )}
           </div>
         </div>

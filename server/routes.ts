@@ -1,3 +1,4 @@
+import { registerStripeWebhook } from "./stripe-webhook";
 import { nailTechs } from "@shared/schema";
 import { desc, eq } from "drizzle-orm";
 import type { Express } from "express";
@@ -47,6 +48,7 @@ export async function registerRoutes(
   // Auth Setup
   await setupAuth(app);
   registerAuthRoutes(app);
+  registerStripeWebhook(app);  // ← ADD THIS LINE HERE
 
   // AI Routes
   registerImageRoutes(app);
@@ -555,7 +557,7 @@ const aiResponse = await fetch(`https://generativelanguage.googleapis.com/v1beta
         return res.status(404).json({ message: "Nail tech not found" });
       }
       res.json(tech);
-    } catch (err) {
+    } catch (err) {r
       console.error("Error fetching nail tech:", err);
       res.status(500).json({ message: "Failed to fetch nail tech" });
     }
