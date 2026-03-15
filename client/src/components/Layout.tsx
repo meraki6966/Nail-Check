@@ -15,16 +15,16 @@ export function Layout({ children }: { children: React.ReactNode }) {
   const [location] = useLocation();
   const { user, logout } = useAuth();
 
-  const navItems: NavItem[] = [
-    { href: "/", label: "Design Lab", icon: Home },
-    { href: "/critique", label: "AI Critique", icon: Star, isNew: true },
-    { href: "/find-tech", label: "Find a Tech", icon: MapPin },
-    { href: "/saved", label: "Fire Vault", icon: Heart },
-    { href: "/seasonal", label: "Seasonal", icon: Calendar },
-    { href: "/supplies", label: "Supplies", icon: Package },
-    { href: "/tutorials", label: "Tutorials", icon: BookOpen },
-  ];
-
+ const navItems: NavItem[] = [
+  { href: "/", label: "Design Lab", icon: Home },
+  { href: "/critique", label: "AI Critique", icon: Star, isNew: true },
+  { href: "/find-tech", label: "Find a Tech", icon: MapPin },
+  { href: "/creators", label: "Creators", icon: Crown }, // ADD THIS LINE
+  { href: "/saved", label: "Fire Vault", icon: Heart },
+  { href: "/seasonal", label: "Seasonal", icon: Calendar },
+  { href: "/supplies", label: "Supplies", icon: Package },
+  { href: "/tutorials", label: "Tutorials", icon: BookOpen },
+];
   // Mobile nav items (limit to 5 for bottom bar)
   const mobileNavItems: NavItem[] = [
     { href: "/", label: "Create", icon: Home },
