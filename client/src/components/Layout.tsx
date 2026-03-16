@@ -32,7 +32,6 @@ export function Layout({ children }: { children: React.ReactNode }) {
     { href: "/tutorials", label: "Tutorials", icon: BookOpen },
   ];
 
-  // Mobile nav items (limit to 5 for bottom bar)
   const mobileNavItems: NavItem[] = [
     { href: "/", label: "Create", icon: Home },
     { href: "/critique", label: "Critique", icon: Star, isNew: true },
@@ -48,7 +47,6 @@ export function Layout({ children }: { children: React.ReactNode }) {
 
   return (
     <div className="min-h-screen bg-background font-body text-foreground pb-20 md:pb-0">
-      {/* Desktop Header */}
       <header className="sticky top-0 z-50 w-full border-b border-border/40 bg-background/80 backdrop-blur-md">
         <div className="container flex h-16 items-center justify-between px-4">
           <Link href="/" className="flex items-center gap-2">
@@ -80,10 +78,8 @@ export function Layout({ children }: { children: React.ReactNode }) {
               </Link>
             ))}
             
-            {/* Divider */}
             <div className="h-4 w-px bg-gray-300"></div>
             
-            {/* Portal Links */}
             {portalLinks.map((item) => (
               item.external ? (
                 
@@ -137,12 +133,10 @@ export function Layout({ children }: { children: React.ReactNode }) {
         </div>
       </header>
 
-      {/* Main Content */}
       <main className="container px-4 py-8 mx-auto max-w-7xl animate-in fade-in slide-in-from-bottom-4 duration-500">
         {children}
       </main>
 
-      {/* Mobile Bottom Nav */}
       <div className="fixed bottom-0 left-0 right-0 z-50 border-t bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 md:hidden">
         <nav className="flex h-16 items-center justify-around px-2">
           {mobileNavItems.map((item) => (
