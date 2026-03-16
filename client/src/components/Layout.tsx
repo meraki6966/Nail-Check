@@ -16,6 +16,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
   const { user, logout } = useAuth();
 
  const navItems: NavItem[] = [
+  const navItems: NavItem[] = [
   { href: "/", label: "Design Lab", icon: Home },
   { href: "/critique", label: "AI Critique", icon: Star, isNew: true },
   { href: "/find-tech", label: "Find a Tech", icon: MapPin },
@@ -24,6 +25,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
   { href: "/seasonal", label: "Seasonal", icon: Calendar },
   { href: "/supplies", label: "Supplies", icon: Package },
   { href: "/tutorials", label: "Tutorials", icon: BookOpen },
+];
 ];
   // Mobile nav items (limit to 5 for bottom bar)
   const mobileNavItems: NavItem[] = [
@@ -34,10 +36,10 @@ export function Layout({ children }: { children: React.ReactNode }) {
     { href: "/supplies", label: "Shop", icon: Package },
   ];
 
-  const portalLinks = [
-    { href: "/about", label: "About" },
-    { href: "/membership", label: "Membership" },
-  ];
+ const portalLinks = [
+  { href: "/about", label: "About" },
+  { href: "https://nail-check.com/member-hub/", label: "Membership" },
+];
 
   return (
     <div className="min-h-screen bg-background font-body text-foreground pb-20 md:pb-0">
@@ -101,7 +103,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
               </div>
             ) : (
               <div className="flex items-center gap-2">
-                <a href="https://nail-check.com/membership/" target="_blank" rel="noopener noreferrer">
+                <a href="https://nail-check.com/member-hub/" target="_blank" rel="noopener noreferrer">
                   <Button size="sm" className="bg-gradient-to-r from-[#FF6B9D] to-[#9B5DE5] hover:opacity-90 text-white hidden md:inline-flex">
                     <Crown className="h-4 w-4 mr-2" />
                     Join
