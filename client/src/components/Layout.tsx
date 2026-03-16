@@ -11,20 +11,26 @@ interface NavItem {
   isNew?: boolean;
 }
 
+interface PortalLink {
+  href: string;
+  label: string;
+  external?: boolean;
+}
+
 export function Layout({ children }: { children: React.ReactNode }) {
   const [location] = useLocation();
   const { user, logout } = useAuth();
 
- const navItems: NavItem[] = [
-  { href: "/", label: "Design Lab", icon: Home },
-  { href: "/critique", label: "AI Critique", icon: Star, isNew: true },
-  { href: "/find-tech", label: "Find a Tech", icon: MapPin },
-  { href: "/creators", label: "Creators", icon: Crown }, // ADD THIS LINE
-  { href: "/saved", label: "Fire Vault", icon: Heart },
-  { href: "/seasonal", label: "Seasonal", icon: Calendar },
-  { href: "/supplies", label: "Supplies", icon: Package },
-  { href: "/tutorials", label: "Tutorials", icon: BookOpen },
-];
+  const navItems: NavItem[] = [
+    { href: "/", label: "Design Lab", icon: Home },
+    { href: "/critique", label: "AI Critique", icon: Star, isNew: true },
+    { href: "/find-tech", label: "Find a Tech", icon: MapPin },
+    { href: "/creators", label: "Creators", icon: Crown },
+    { href: "/saved", label: "Fire Vault", icon: Heart },
+    { href: "/seasonal", label: "Seasonal", icon: Calendar },
+    { href: "/supplies", label: "Supplies", icon: Package },
+    { href: "/tutorials", label: "Tutorials", icon: BookOpen },
+  ];
 
   // Mobile nav items (limit to 5 for bottom bar)
   const mobileNavItems: NavItem[] = [
@@ -35,10 +41,10 @@ export function Layout({ children }: { children: React.ReactNode }) {
     { href: "/supplies", label: "Shop", icon: Package },
   ];
 
- const portalLinks = [
-  { href: "/about", label: "About" },
-  { href: "https://nail-check.com/member-hub/", label: "Membership" },
-];
+  const portalLinks: PortalLink[] = [
+    { href: "/about", label: "About" },
+    { href: "https://nail-check.com/member-hub/", label: "Membership", external: true },
+  ];
 
   return (
     <div className="min-h-screen bg-background font-body text-foreground pb-20 md:pb-0">
@@ -79,16 +85,28 @@ export function Layout({ children }: { children: React.ReactNode }) {
             
             {/* Portal Links */}
             {portalLinks.map((item) => (
-              <Link
-                key={item.href}
-                href={item.href}
-                className={cn(
-                  "text-sm font-medium transition-colors hover:text-[#9B5DE5]",
-                  location === item.href ? "text-[#9B5DE5] font-bold" : "text-muted-foreground"
-                )}
-              >
-                {item.label}
-              </Link>
+              item.external ? (
+                
+                  key={item.href}
+                  href={item.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-sm font-medium transition-colors hover:text-[#9B5DE5] text-muted-foreground"
+                >
+                  {item.label}
+                </a>
+              ) : (
+                <Link
+                  key={item.href}
+                  href={item.href}
+                  className={cn(
+                    "text-sm font-medium transition-colors hover:text-[#9B5DE5]",
+                    location === item.href ? "text-[#9B5DE5] font-bold" : "text-muted-foreground"
+                  )}
+                >
+                  {item.label}
+                </Link>
+              )
             ))}
           </nav>
 
