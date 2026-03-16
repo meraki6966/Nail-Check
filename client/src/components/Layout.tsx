@@ -82,7 +82,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
             
             {portalLinks.map((item) => (
               item.external ? (
-                
+                <a
                   key={item.href}
                   href={item.href}
                   target="_blank"
@@ -164,4 +164,4 @@ export function Layout({ children }: { children: React.ReactNode }) {
       </div>
     </div>
   );
-}
+}}
