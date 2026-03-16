@@ -16,7 +16,6 @@ export function Layout({ children }: { children: React.ReactNode }) {
   const { user, logout } = useAuth();
 
  const navItems: NavItem[] = [
-  const navItems: NavItem[] = [
   { href: "/", label: "Design Lab", icon: Home },
   { href: "/critique", label: "AI Critique", icon: Star, isNew: true },
   { href: "/find-tech", label: "Find a Tech", icon: MapPin },
