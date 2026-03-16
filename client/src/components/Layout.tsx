@@ -25,7 +25,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
   { href: "/supplies", label: "Supplies", icon: Package },
   { href: "/tutorials", label: "Tutorials", icon: BookOpen },
 ];
-];
+
   // Mobile nav items (limit to 5 for bottom bar)
   const mobileNavItems: NavItem[] = [
     { href: "/", label: "Create", icon: Home },
