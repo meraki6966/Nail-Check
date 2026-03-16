@@ -38,7 +38,8 @@ const STYLE_CATEGORIES = {
       { id: "coffin", label: "Coffin", image: "http://nail-check.com/wp-content/uploads/2026/02/Nail-Shape-Coffin.png", description: "Tapered sides with a flat tip. Bold, edgy, and perfect for longer lengths and statement designs." },
       { id: "almond", label: "Almond", image: "http://nail-check.com/wp-content/uploads/2026/02/Nail-Shape-Almond.png", description: "Slim and elegant. Tapered sides that meet at a rounded peak, elongating the fingers beautifully." },
       { id: "stiletto", label: "Stiletto", image: "http://nail-check.com/wp-content/uploads/2026/02/Nail-Shape-Stiletto.png", description: "Fierce and dramatic. A sharp, pointed tip that demands attention and showcases artistry." },
-      { id: "duck", label: "Duck / Flare", image: "http://nail-check.com/wp-content/uploads/2026/02/Nail-Shape-Duck-Flare.png", description: "Wide, flared tip resembling a duck's foot. Unique, bold, and perfect for creative nail art." },
+      { id: "longsquarestiletto", label: "Long Square Stiletto", image: "http://nail-check.com/wp-content/uploads/2026/02/Nail-Shape-Duck-Flare.png", description: "Extended length with squared edges tapering to sharp points. Maximum drama with structural integrity." },
+      { id: "duck", label: "Duck / Flare", image: "http://nail-check.com/wp-content/uploads/2026/03/duck.jpeg", description: "Wide, flared tip resembling a duck's foot. Unique, bold, and perfect for creative nail art." },
       { id: "catclaw", label: "Cat Claw", image: "http://nail-check.com/wp-content/uploads/2026/02/Nail-Shape-Cat-Claw.png", description: "Curved and dramatic with an extreme arch. Edgy, fierce, and structurally impressive." },
     ]
   },
@@ -63,6 +64,7 @@ const STYLE_CATEGORIES = {
       { id: "deepc", label: "Deep C-Curve", image: "http://nail-check.com/wp-content/uploads/2026/02/Deep-C-Curve.png", description: "An exaggerated curve for competition-level nails. Creates dramatic shadows and structural perfection." },
       { id: "sculpted", label: "Sculpted", image: "http://nail-check.com/wp-content/uploads/2026/02/Sculpted.png", description: "Built from scratch using forms. Complete control over shape, length, and structure." },
       { id: "tips", label: "Tips Used", image: "http://nail-check.com/wp-content/uploads/2026/02/Tips-Used.png", description: "Pre-made nail tips as a foundation. Quick, consistent base for extensions and overlays." },
+      { id: "nailform", label: "Nail Form", image: "http://nail-check.com/wp-content/uploads/2026/03/nail-form-1.png", description: "Disposable template placed beneath the free edge. The foundation for building custom sculpted extensions without tips." },
     ]
   },
   designStyle: {

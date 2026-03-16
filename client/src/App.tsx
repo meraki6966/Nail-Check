@@ -2,7 +2,6 @@ import ContentEditing from "@/pages/ContentEditing";
 import AICritique from "@/pages/AICritique";
 import Creators from "@/pages/Creators";
 import CreatorProfile from "@/pages/CreatorProfile";
-import Critique from "@/pages/Critique";
 import Admin from "./pages/Admin";
 import TechRegister from "./pages/TechRegister";
 import FindTech from "./pages/FindTech";
@@ -33,7 +32,6 @@ function Router() {
       <Route path="/creators/:username" component={CreatorProfile} />
       <Route path="/content-editing" component={ContentEditing} />
       <Route path="/ai-critique" component={AICritique} />
-      <Route path="/critique" component={Critique} />
       <Route path="/login" component={Login} />
       <Route path="/admin" component={Admin} />
       <Route path="/find-tech" component={FindTech} />
