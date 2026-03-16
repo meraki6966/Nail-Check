@@ -24,10 +24,7 @@ export interface IStorage extends IAuthStorage {
   getTutorials(filters?: { search?: string; style?: string; difficulty?: string }): Promise<Tutorial[]>;
   getTutorial(id: number): Promise<Tutorial | undefined>;
   createTutorial(tutorial: InsertTutorial): Promise<Tutorial>;
-  // Creators methods
-getCreators(): Promise<NailTech[]>;
-getCreatorByUsername(username: string): Promise<NailTech | undefined>;
-
+  
   // Fire Vault methods
   getSavedDesigns(userId?: string): Promise<SavedDesign[]>;
   getSavedDesign(id: number): Promise<SavedDesign | undefined>;
@@ -54,6 +51,10 @@ getCreatorByUsername(username: string): Promise<NailTech | undefined>;
   createNailTech(tech: InsertNailTech): Promise<NailTech>;
   approveNailTech(id: number): Promise<NailTech>;
   deleteNailTech(id: number): Promise<void>;
+  
+  // Creators methods
+  getCreators(): Promise<NailTech[]>;
+  getCreatorByUsername(username: string): Promise<NailTech | undefined>;
   
   // Credit system methods
   incrementGenerationsUsed(userId: string): Promise<void>;
@@ -286,27 +287,28 @@ export class DatabaseStorage implements IStorage {
       })
       .where(eq(users.id, userId));
   }
-}
-// CREATORS METHODS
-async getCreators(): Promise<NailTech[]> {
-  return await db
-    .select()
-    .from(nailTechs)
-    .where(eq(nailTechs.showInDirectory, true))
-    .orderBy(desc(nailTechs.createdAt));
-}
 
-async getCreatorByUsername(username: string): Promise<NailTech | undefined> {
-  const [creator] = await db
-    .select()
-    .from(nailTechs)
-    .where(
-      and(
-        eq(nailTechs.username, username),
-        eq(nailTechs.showInDirectory, true)
-      )
-    );
-  return creator;
+  // CREATORS METHODS
+  async getCreators(): Promise<NailTech[]> {
+    return await db
+      .select()
+      .from(nailTechs)
+      .where(eq(nailTechs.showInDirectory, true))
+      .orderBy(desc(nailTechs.createdAt));
+  }
+
+  async getCreatorByUsername(username: string): Promise<NailTech | undefined> {
+    const [creator] = await db
+      .select()
+      .from(nailTechs)
+      .where(
+        and(
+          eq(nailTechs.username, username),
+          eq(nailTechs.showInDirectory, true)
+        )
+      );
+    return creator;
+  }
 }
 
 export const storage = new DatabaseStorage();
