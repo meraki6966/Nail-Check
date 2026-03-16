@@ -110,6 +110,12 @@ export const nailTechs = pgTable("nail_techs", {
   isApproved: boolean("is_approved").default(false),
   isPremium: boolean("is_premium").default(false),
   isVerified: boolean("is_verified").default(false),
+  // CREATORS FIELDS
+  username: text("username"),
+  portfolioImages: text("portfolio_images").array(),
+  affiliateLink: text("affiliate_link"),
+  linktree: text("linktree"),
+  showInDirectory: boolean("show_in_directory").default(false),
   createdAt: timestamp("created_at").defaultNow(),
   updatedAt: timestamp("updated_at").defaultNow(),
 });
