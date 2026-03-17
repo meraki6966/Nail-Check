@@ -42,6 +42,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
 
   const portalLinks: PortalLink[] = [
     { href: "/about", label: "About" },
+    { href: "/contact", label: "Contact" }, // Added Contact link here
     { href: "https://nail-check.com/member-hub/", label: "Membership", external: true },
   ];
 

@@ -1,4 +1,11 @@
 import { Switch, Route } from "wouter";
+import { queryClient } from "./lib/queryClient";
+import { QueryClientProvider } from "@tanstack/react-query";
+import { Toaster } from "@/components/ui/toaster";
+import { TooltipProvider } from "@/components/ui/tooltip";
+
+// Page Imports
+import Home from "@/pages/Home";
 import ContactPage from "@/pages/contact-page";
 import ContentEditing from "@/pages/ContentEditing";
 import AICritique from "@/pages/AICritique";
@@ -9,6 +16,7 @@ import TechRegister from "./pages/TechRegister";
 import FindTech from "./pages/FindTech";
 import Gallery from "./pages/Gallery";
 import Tutorials from "./pages/Tutorials";
+import TutorialDetail from "@/pages/TutorialDetail";
 import Embed from "./pages/Embed";
 import Portal from "./pages/Portal";
 import Membership from "./pages/Membership";
@@ -16,41 +24,58 @@ import About from "./pages/About";
 import SeasonalVault from "./pages/SeasonalVault";
 import SupplySuite from "./pages/SupplySuite";
 import Login from "./pages/Login";
-import { Switch, Route } from "wouter";
-import { queryClient } from "./lib/queryClient";
-import { QueryClientProvider } from "@tanstack/react-query";
-import { Toaster } from "@/components/ui/toaster";
-import { TooltipProvider } from "@/components/ui/tooltip";
-import NotFound from "@/pages/not-found";
-import Home from "@/pages/Home";
-import TutorialDetail from "@/pages/TutorialDetail";
 import Upload from "@/pages/Upload";
 import Saved from "@/pages/Saved";
+import NotFound from "@/pages/not-found";
 
+/**
+ * Nail Check: Master Router
+ * Launch Date: April 1, 2026
+ * 
+ * This router handles the cinematic transitions between the 
+ * Design Lab, Studio Support, and the Technical Vaults.
+ */
 function Router() {
   return (
     <Switch>
+      {/* Primary Studio Routes */}
+      <Route path="/" component={Home} />
       <Route path="/contact" component={ContactPage} />
+      
+      {/* AI & Content Lab */}
+      <Route path="/ai-critique" component={AICritique} />
+      <Route path="/content-editing" component={ContentEditing} />
+      
+      {/* Community & Creators */}
       <Route path="/creators" component={Creators} />
       <Route path="/creators/:username" component={CreatorProfile} />
-      <Route path="/content-editing" component={ContentEditing} />
-      <Route path="/ai-critique" component={AICritique} />
-      <Route path="/login" component={Login} />
-      <Route path="/admin" component={Admin} />
+      <Route path="/gallery" component={Gallery} />
+      
+      {/* Technician Ecosystem */}
       <Route path="/find-tech" component={FindTech} />
       <Route path="/tech-register" component={TechRegister} />
-      <Route path="/gallery" component={Gallery} />
+      
+      {/* Education & Tutorials */}
       <Route path="/tutorials" component={Tutorials} />
-      <Route path="/embed" component={Embed} />
-      <Route path="/portal" component={Portal} />
-      <Route path="/membership" component={Membership} />
-      <Route path="/about" component={About} />
-      <Route path="/" component={Home} />
       <Route path="/tutorial/:id" component={TutorialDetail} />
-      <Route path="/upload" component={Upload} />
+      
+      {/* Personal Vaults */}
       <Route path="/saved" component={Saved} />
+      <Route path="/upload" component={Upload} />
       <Route path="/seasonal" component={SeasonalVault} />
       <Route path="/supplies" component={SupplySuite} />
+      
+      {/* Membership & Auth */}
+      <Route path="/login" component={Login} />
+      <Route path="/membership" component={Membership} />
+      <Route path="/portal" component={Portal} />
+      <Route path="/about" component={About} />
+      
+      {/* System Routes */}
+      <Route path="/admin" component={Admin} />
+      <Route path="/embed" component={Embed} />
+      
+      {/* Fallback: The 404 Gallery */}
       <Route component={NotFound} />
     </Switch>
   );
