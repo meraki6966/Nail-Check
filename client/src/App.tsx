@@ -8,7 +8,7 @@ import { Layout } from "@/components/Layout";
 
 // Page Imports
 import Home from "@/pages/Home";
-import ContactPage from "@/pages/contact-page";
+import ContactPage from "@/pages/Contact";
 import ContentEditing from "@/pages/ContentEditing";
 import AICritique from "@/pages/AICritique";
 import Creators from "@/pages/Creators";
@@ -38,11 +38,9 @@ function Router() {
   return (
     <Layout>
       <Switch>
-        <Route path="/contact" element={<Contact />} />
-        
         {/* Primary Studio Routes */}
         <Route path="/" component={Home} />
-        <Route path="/contact" component={ContactPage} />
+        <Route path="/contact" element={<Contact />} />
         
         {/* AI & Content Lab */}
         <Route path="/ai-critique" component={AICritique} />
