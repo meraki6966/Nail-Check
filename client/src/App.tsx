@@ -1,3 +1,5 @@
+import { Switch, Route } from "wouter";
+import ContactPage from "@/pages/contact-page";
 import ContentEditing from "@/pages/ContentEditing";
 import AICritique from "@/pages/AICritique";
 import Creators from "@/pages/Creators";
@@ -28,6 +30,7 @@ import Saved from "@/pages/Saved";
 function Router() {
   return (
     <Switch>
+      <Route path="/contact" component={ContactPage} />
       <Route path="/creators" component={Creators} />
       <Route path="/creators/:username" component={CreatorProfile} />
       <Route path="/content-editing" component={ContentEditing} />
