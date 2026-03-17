@@ -1,4 +1,4 @@
-import { Sparkles, Heart, Home, Calendar, Package, LogOut, Crown, MapPin, BookOpen, Star } from "lucide-react";
+import { Sparkles, Heart, Home, Calendar, Package, LogOut, Crown, MapPin, BookOpen, Star, Mail } from "lucide-react";
 import { Link, useLocation } from "wouter";
 import { cn } from "@/lib/utils";
 import { useAuth } from "@/hooks/use-auth";
@@ -23,7 +23,6 @@ export function Layout({ children }: { children: React.ReactNode }) {
 
   const navItems: NavItem[] = [
     { href: "/", label: "Design Lab", icon: Home },
-    { href: "/critique", label: "AI Critique", icon: Star, isNew: true },
     { href: "/find-tech", label: "Find a Tech", icon: MapPin },
     { href: "/creators", label: "Creators", icon: Crown },
     { href: "/saved", label: "Fire Vault", icon: Heart },
@@ -34,7 +33,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
 
   const mobileNavItems: NavItem[] = [
     { href: "/", label: "Create", icon: Home },
-    { href: "/critique", label: "Critique", icon: Star, isNew: true },
+    { href: "/ai-critique", label: "Critique", icon: Star, isNew: true },
     { href: "/saved", label: "Vault", icon: Heart },
     { href: "/find-tech", label: "Techs", icon: MapPin },
     { href: "/supplies", label: "Shop", icon: Package },
@@ -42,7 +41,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
 
   const portalLinks: PortalLink[] = [
     { href: "/about", label: "About" },
-    { href: "/contact", label: "Contact" }, // Added Contact link here
+    { href: "/contact", label: "Contact" },
     { href: "https://nail-check.com/member-hub/", label: "Membership", external: true },
   ];
 

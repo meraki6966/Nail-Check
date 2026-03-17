@@ -1,4 +1,3 @@
-import { Layout } from "@/components/Layout";
 import { Button } from "@/components/ui/button";
 import { Target, Lightbulb, Users, Sparkles, Star, Heart } from "lucide-react";
 import { cn } from "@/lib/utils";
@@ -17,7 +16,7 @@ const FULL_GRADIENT = "bg-gradient-to-r from-[#FF6B9D] via-[#9B5DE5] to-[#00D9FF
 
 export default function About() {
   return (
-    <Layout>
+    
       <div className="bg-white">
         
         {/* HERO */}
@@ -213,7 +212,7 @@ export default function About() {
         </section>
 
       </div>
-    </Layout>
+    
   );
 }
 

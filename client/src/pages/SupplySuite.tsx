@@ -1,5 +1,4 @@
 import { useState, useEffect } from "react";
-import { Layout } from "@/components/Layout";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Package, Search, Loader2, Lock, ExternalLink, Star } from "lucide-react";
@@ -104,16 +103,16 @@ export default function SupplySuite() {
 
   if (isLoading) {
     return (
-      <Layout>
+      
         <div className="flex justify-center items-center h-[50vh]">
           <Loader2 className={cn("h-8 w-8 animate-spin", GOLD_TEXT)} />
         </div>
-      </Layout>
+      
     );
   }
 
   return (
-    <Layout>
+    
       <div className="max-w-7xl mx-auto px-4 py-16 space-y-16">
         
         {/* Header */}
@@ -328,7 +327,7 @@ export default function SupplySuite() {
           </div>
         )}
       </AnimatePresence>
-    </Layout>
+    
   );
 }
 

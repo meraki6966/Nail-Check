@@ -1,5 +1,4 @@
 import { useState, useEffect } from "react";
-import { Layout } from "@/components/Layout";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { MapPin, Search, Sparkles, Star, Instagram, Globe, Calendar, Filter, ChevronDown, UserPlus, Phone, ExternalLink, Loader2 } from "lucide-react";
@@ -299,7 +298,7 @@ export default function FindTech() {
     : [];
 
   return (
-    <Layout>
+    
       <div className="min-h-screen bg-gradient-to-b from-[#FFFBFC] to-[#FFF5F8]">
         <div className="max-w-6xl mx-auto px-4 py-12">
           
@@ -501,6 +500,6 @@ export default function FindTech() {
 
         </div>
       </div>
-    </Layout>
+    
   );
 }

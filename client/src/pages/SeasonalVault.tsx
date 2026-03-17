@@ -1,5 +1,4 @@
 import { useState, useEffect } from "react";
-import { Layout } from "@/components/Layout";
 import { Button } from "@/components/ui/button";
 import { Snowflake, Flower2, Sun, Leaf, Calendar, Loader2, Lock, Crown } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
@@ -80,18 +79,18 @@ export default function SeasonalVault() {
 
   if (isLoading || authLoading) {
     return (
-      <Layout>
+      
         <div className="flex justify-center items-center h-[50vh]">
           <Loader2 className={cn("h-8 w-8 animate-spin", GOLD_TEXT)} />
         </div>
-      </Layout>
+      
     );
   }
 
   // If not a member, show locked state
   if (!isMember) {
     return (
-      <Layout>
+      
         <div className="max-w-7xl mx-auto px-4 py-16 space-y-16">
           {/* Header */}
           <header className="text-center space-y-4">
@@ -176,13 +175,13 @@ export default function SeasonalVault() {
             </div>
           </div>
         </div>
-      </Layout>
+      
     );
   }
 
   // Member view - full access
   return (
-    <Layout>
+    
       <div className="max-w-7xl mx-auto px-4 py-16 space-y-16">
         
         {/* Header */}
@@ -342,7 +341,7 @@ export default function SeasonalVault() {
           </div>
         )}
       </AnimatePresence>
-    </Layout>
+    
   );
 }
 
