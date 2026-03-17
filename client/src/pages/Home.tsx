@@ -1,5 +1,4 @@
 import { useState, useEffect } from "react";
-import { Layout } from "@/components/Layout";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Sparkles, Upload, Wand2, Download, Heart, Loader2, Crown, ChevronDown, ChevronUp, X, ShoppingBag, BookOpen, Play, Image, MapPin } from "lucide-react";
@@ -389,7 +388,6 @@ export default function Home() {
   };
 
   return (
-    <Layout>
       <div className="max-w-7xl mx-auto px-4 py-8 space-y-16">
         
         {/* HEADER */}
@@ -662,7 +660,6 @@ export default function Home() {
           </div>
         </div>
       )}
-    </Layout>
   
   );
 }

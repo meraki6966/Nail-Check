@@ -1,4 +1,3 @@
-import { Layout } from "@/components/Layout";
 import { Mail, Shield, MessageCircle, MapPin } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
@@ -7,7 +6,6 @@ const PURPLE_GRADIENT = "bg-gradient-to-r from-[#9B5DE5] to-[#FF6B9D]";
 
 export default function Contact() {
   return (
-    <Layout>
       <div className="max-w-4xl mx-auto px-4 py-16">
         {/* Header */}
         <div className="text-center mb-16">
@@ -102,6 +100,5 @@ export default function Contact() {
           </p>
         </div>
       </div>
-    </Layout>
   );
 }
