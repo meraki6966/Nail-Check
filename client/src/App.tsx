@@ -39,8 +39,7 @@ function Router() {
       <Switch>
         {/* Primary Studio Routes */}
         <Route path="/" component={Home} />
-        <Route path="/contact" element={<Contact />} />
-        
+        <Route path="/contact" component={Contact} />        
         {/* AI & Content Lab */}
         <Route path="/ai-critique" component={AICritique} />
         <Route path="/content-editing" component={ContentEditing} />
