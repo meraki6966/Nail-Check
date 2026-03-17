@@ -388,6 +388,7 @@ export default function Home() {
   };
 
   return (
+    <>
       <div className="max-w-7xl mx-auto px-4 py-8 space-y-16">
         
         {/* HEADER */}
@@ -660,6 +661,6 @@ export default function Home() {
           </div>
         </div>
       )}
-  
+    </>
   );
 }
