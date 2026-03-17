@@ -4,7 +4,7 @@ import { QueryClientProvider } from "@tanstack/react-query";
 import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { AuthProvider } from "@/hooks/use-auth"; // CRITICAL: Restored Auth
-import { Layout } from "@/components/layout"; // CRITICAL: Restored Layout
+import { Layout } from "@/components/Layout"; // CRITICAL: Restored Layout
 
 // Page Imports
 import Home from "@/pages/Home";
