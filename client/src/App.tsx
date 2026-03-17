@@ -1,4 +1,3 @@
-
 import { Switch, Route } from "wouter";
 import { queryClient } from "./lib/queryClient";
 import { QueryClientProvider } from "@tanstack/react-query";
@@ -8,7 +7,7 @@ import { Layout } from "@/components/Layout";
 
 // Page Imports
 import Home from "@/pages/Home";
-import ContactPage from "@/pages/Contact";
+import Contact from "@/pages/Contact";
 import ContentEditing from "@/pages/ContentEditing";
 import AICritique from "@/pages/AICritique";
 import Creators from "@/pages/Creators";
@@ -94,4 +93,3 @@ function App() {
 }
 
 export default App;
-
