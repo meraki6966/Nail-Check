@@ -3,6 +3,8 @@ import { queryClient } from "./lib/queryClient";
 import { QueryClientProvider } from "@tanstack/react-query";
 import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
+import { AuthProvider } from "@/hooks/use-auth"; // CRITICAL: Restored Auth
+import { Layout } from "@/components/layout"; // CRITICAL: Restored Layout
 
 // Page Imports
 import Home from "@/pages/Home";
@@ -30,64 +32,65 @@ import NotFound from "@/pages/not-found";
 
 /**
  * Nail Check: Master Router
- * Launch Date: April 1, 2026
- * 
- * This router handles the cinematic transitions between the 
- * Design Lab, Studio Support, and the Technical Vaults.
+ * This handles the seamless transitions between the Studio and the Lab.
  */
 function Router() {
   return (
-    <Switch>
-      {/* Primary Studio Routes */}
-      <Route path="/" component={Home} />
-      <Route path="/contact" component={ContactPage} />
-      
-      {/* AI & Content Lab */}
-      <Route path="/ai-critique" component={AICritique} />
-      <Route path="/content-editing" component={ContentEditing} />
-      
-      {/* Community & Creators */}
-      <Route path="/creators" component={Creators} />
-      <Route path="/creators/:username" component={CreatorProfile} />
-      <Route path="/gallery" component={Gallery} />
-      
-      {/* Technician Ecosystem */}
-      <Route path="/find-tech" component={FindTech} />
-      <Route path="/tech-register" component={TechRegister} />
-      
-      {/* Education & Tutorials */}
-      <Route path="/tutorials" component={Tutorials} />
-      <Route path="/tutorial/:id" component={TutorialDetail} />
-      
-      {/* Personal Vaults */}
-      <Route path="/saved" component={Saved} />
-      <Route path="/upload" component={Upload} />
-      <Route path="/seasonal" component={SeasonalVault} />
-      <Route path="/supplies" component={SupplySuite} />
-      
-      {/* Membership & Auth */}
-      <Route path="/login" component={Login} />
-      <Route path="/membership" component={Membership} />
-      <Route path="/portal" component={Portal} />
-      <Route path="/about" component={About} />
-      
-      {/* System Routes */}
-      <Route path="/admin" component={Admin} />
-      <Route path="/embed" component={Embed} />
-      
-      {/* Fallback: The 404 Gallery */}
-      <Route component={NotFound} />
-    </Switch>
+    <Layout> {/* Wraps all pages in the Header/Navbar */}
+      <Switch>
+        {/* Primary Studio Routes */}
+        <Route path="/" component={Home} />
+        <Route path="/contact" component={ContactPage} />
+        
+        {/* AI & Content Lab */}
+        <Route path="/ai-critique" component={AICritique} />
+        <Route path="/content-editing" component={ContentEditing} />
+        
+        {/* Community & Creators */}
+        <Route path="/creators" component={Creators} />
+        <Route path="/creators/:username" component={CreatorProfile} />
+        <Route path="/gallery" component={Gallery} />
+        
+        {/* Technician Ecosystem */}
+        <Route path="/find-tech" component={FindTech} />
+        <Route path="/tech-register" component={TechRegister} />
+        
+        {/* Education & Tutorials */}
+        <Route path="/tutorials" component={Tutorials} />
+        <Route path="/tutorial/:id" component={TutorialDetail} />
+        
+        {/* Personal Vaults */}
+        <Route path="/saved" component={Saved} />
+        <Route path="/upload" component={Upload} />
+        <Route path="/seasonal" component={SeasonalVault} />
+        <Route path="/supplies" component={SupplySuite} />
+        
+        {/* Membership & Auth */}
+        <Route path="/login" component={Login} />
+        <Route path="/membership" component={Membership} />
+        <Route path="/portal" component={Portal} />
+        <Route path="/about" component={About} />
+        
+        {/* System Routes */}
+        <Route path="/admin" component={Admin} />
+        <Route path="/embed" component={Embed} />
+        
+        {/* Fallback */}
+        <Route component={NotFound} />
+      </Switch>
+    </Layout>
   );
 }
 
 function App() {
   return (
     <QueryClientProvider client={queryClient}>
-      <TooltipProvider>
-        <Toaster />
-        <Router />
-      </TooltipProvider>
+      <AuthProvider> {/* Ensures useAuth() works across the app */}
+        <TooltipProvider>
+          <Toaster />
+          <Router />
+        </TooltipProvider>
+      </AuthProvider>
     </QueryClientProvider>
   );
 }
