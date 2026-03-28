@@ -1,4 +1,5 @@
 import { useEffect } from "react";
+import { useQuery } from "@tanstack/react-query";
 import { Link, useLocation } from "wouter";
 import {
   X, Home, Image, Palette, Package, BookOpen, Calendar,
@@ -100,6 +101,23 @@ const AUTH_SECTIONS: MenuSection[] = [
 export function HamburgerMenu({ isOpen, onClose, user, onLogout }: HamburgerMenuProps) {
   const [location] = useLocation();
 
+  // AI usage badge for logged-in users
+  const { data: subStatus } = useQuery<{
+    tier: "free" | "base" | "premium";
+    aiGenerationsUsedThisMonth: number;
+    aiGenerationsRemaining: number | "unlimited";
+  }>({
+    queryKey: ["/api/subscriptions/status", user?.id],
+    queryFn: async () => {
+      if (!user?.id) return null;
+      const res = await fetch(`/api/subscriptions/status/${user.id}`, { credentials: "include" });
+      if (!res.ok) return null;
+      return res.json();
+    },
+    enabled: !!user?.id && isOpen,
+    staleTime: 1000 * 60 * 2,
+  });
+
   // Close on ESC key
   useEffect(() => {
     const handler = (e: KeyboardEvent) => {
@@ -166,11 +184,54 @@ export function HamburgerMenu({ isOpen, onClose, user, onLogout }: HamburgerMenu
         {/* Scrollable nav content */}
         <div className="flex-1 overflow-y-auto py-4">
 
-          {/* Logged-in user greeting */}
+          {/* Logged-in user greeting + AI usage badge */}
           {user && (
-            <div className="mx-4 mb-4 px-4 py-3 rounded-xl bg-gradient-to-r from-[#FF6B9D]/10 to-[#9B5DE5]/10 border border-[#FF6B9D]/20">
-              <p className="text-xs text-muted-foreground uppercase tracking-widest font-medium mb-0.5">Signed in as</p>
-              <p className="font-semibold text-sm truncate">{user.firstName || user.email || "Creator"}</p>
+            <div className="mx-4 mb-4 px-4 py-3 rounded-xl bg-gradient-to-r from-[#FF6B9D]/10 to-[#9B5DE5]/10 border border-[#FF6B9D]/20 space-y-2">
+              <div>
+                <p className="text-xs text-muted-foreground uppercase tracking-widest font-medium mb-0.5">Signed in as</p>
+                <p className="font-semibold text-sm truncate">{user.firstName || user.email || "Creator"}</p>
+              </div>
+
+              {/* AI generation usage */}
+              {subStatus && (
+                <div className="flex items-center justify-between gap-2 pt-1 border-t border-[#FF6B9D]/20">
+                  {subStatus.tier === "premium" ? (
+                    <div className="flex items-center gap-1.5">
+                      <div className="w-4 h-4 rounded-full bg-gradient-to-br from-[#9B5DE5] to-[#7c3acd] flex items-center justify-center">
+                        <Crown className="h-2.5 w-2.5 text-white" />
+                      </div>
+                      <span className="text-xs font-bold text-[#9B5DE5] uppercase tracking-wide">Unlimited AI ∞</span>
+                    </div>
+                  ) : subStatus.tier === "base" ? (
+                    <>
+                      <div>
+                        <p className="text-[10px] text-muted-foreground uppercase tracking-wide font-medium">AI Designs</p>
+                        <p className="text-sm font-bold text-foreground">
+                          {subStatus.aiGenerationsUsedThisMonth}
+                          <span className="text-muted-foreground font-normal"> / 20</span>
+                        </p>
+                      </div>
+                      {typeof subStatus.aiGenerationsRemaining === "number" && subStatus.aiGenerationsRemaining <= 5 && (
+                        <Link
+                          href="/subscribe"
+                          onClick={onClose}
+                          className="text-[10px] bg-gradient-to-r from-[#9B5DE5] to-[#FF6B9D] text-white px-2.5 py-1 rounded-full font-bold uppercase tracking-wide hover:opacity-90 transition-opacity"
+                        >
+                          Upgrade
+                        </Link>
+                      )}
+                    </>
+                  ) : (
+                    <Link
+                      href="/subscribe"
+                      onClick={onClose}
+                      className="text-xs text-[#9B5DE5] font-semibold hover:underline"
+                    >
+                      Subscribe to unlock AI →
+                    </Link>
+                  )}
+                </div>
+              )}
             </div>
           )}
 

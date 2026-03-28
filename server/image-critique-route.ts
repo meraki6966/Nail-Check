@@ -1,5 +1,6 @@
 import type { Express } from "express";
 import { GoogleGenerativeAI } from "@google/generative-ai";
+import { checkAIGenerationLimit, incrementAIGeneration } from "./subscriptions";
 
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY || "");
 
@@ -11,6 +12,22 @@ export function registerImageCritiqueRoute(app: Express) {
       if (!image) {
         return res.status(400).json({ error: "Image required" });
       }
+
+      // ── Subscription limit check ───────────────────────────────
+      const userId = (req.session as any)?.user?.id
+        ? String((req.session as any).user.id)
+        : null;
+
+      if (userId) {
+        const allowed = await checkAIGenerationLimit(userId);
+        if (!allowed) {
+          return res.status(403).json({
+            error: "limit_reached",
+            message: "AI generation limit reached. Upgrade to Premium for unlimited generations.",
+          });
+        }
+      }
+      // ──────────────────────────────────────────────────────────
 
       // Extract base64 data from data URL
       const base64Data = image.split(',')[1];
@@ -68,6 +85,13 @@ Be constructive, specific, and encouraging. Focus on actionable improvements.`;
       // Extract JSON from markdown code blocks if present
       const jsonMatch = text.match(/```json\s*([\s\S]*?)\s*```/) || text.match(/\{[\s\S]*\}/);
       const critiqueData = jsonMatch ? JSON.parse(jsonMatch[1] || jsonMatch[0]) : JSON.parse(text);
+
+      // Increment AFTER successful critique
+      if (userId) {
+        incrementAIGeneration(userId).catch((err) =>
+          console.error("[subscriptions] increment failed:", err)
+        );
+      }
 
       res.json({ critique: critiqueData });
 

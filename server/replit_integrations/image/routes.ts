@@ -1,33 +1,49 @@
 import type { Express, Request, Response } from "express";
 import { generateImage } from "./client";
+import { checkAIGenerationLimit, incrementAIGeneration } from "../../subscriptions";
 
 export function registerImageRoutes(app: Express): void {
   app.post("/api/image/generate", async (req: Request, res: Response) => {
     try {
-      // 1. Grab both the prompt AND the optional canvas image from the request
       const { prompt, image } = req.body;
 
       if (!prompt && !image) {
         return res.status(400).json({ error: "A prompt or a canvas image is required to begin." });
       }
 
-      // 2. Call our upgraded function from client.ts
-      // This now handles both Text-to-Image and Image-to-Image (Canvas)
-      const dataUrl = await generateImage(prompt, image);
+      // ── Subscription limit check ───────────────────────────────
+      const userId = (req.session as any)?.user?.id
+        ? String((req.session as any).user.id)
+        : null;
 
-      // 3. Extract the base64 data to send back to the frontend
+      if (userId) {
+        const allowed = await checkAIGenerationLimit(userId);
+        if (!allowed) {
+          return res.status(403).json({
+            error: "limit_reached",
+            message: "AI generation limit reached. Upgrade to Premium for unlimited generations.",
+          });
+        }
+      }
+      // ──────────────────────────────────────────────────────────
+
+      const dataUrl = await generateImage(prompt, image);
       const [header, base64Data] = dataUrl.split(",");
       const mimeType = header.split(":")[1].split(";")[0];
 
-      res.json({
-        b64_json: base64Data,
-        mimeType,
-      });
+      // Increment AFTER successful generation so failed calls don't count
+      if (userId) {
+        incrementAIGeneration(userId).catch((err) =>
+          console.error("[subscriptions] increment failed:", err)
+        );
+      }
+
+      res.json({ b64_json: base64Data, mimeType });
 
     } catch (error) {
       console.error("Nail Check AI Error:", error);
-      res.status(500).json({ 
-        error: "The Technical Hub encountered an error rendering your vision. Please try again." 
+      res.status(500).json({
+        error: "The Technical Hub encountered an error rendering your vision. Please try again."
       });
     }
   });

@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Sparkles, Upload, Wand2, Download, Heart, Loader2, Crown, ChevronDown, ChevronUp, X, ShoppingBag, BookOpen, Play, Image, MapPin } from "lucide-react";
@@ -7,6 +8,7 @@ import { useToast } from "@/hooks/use-toast";
 import { cn } from "@/lib/utils";
 import { getRandomMessage } from "@/lib/microcopy";
 import { downloadWithWatermark } from "@/lib/watermark";
+import { UpgradeModal } from "@/components/UpgradeModal";
 
 // ============================================
 // NEW PINTEREST COLOR PALETTE
@@ -167,7 +169,8 @@ type CategoryKey = keyof typeof STYLE_CATEGORIES;
 export default function Home() {
   const { user } = useAuth();
   const { toast } = useToast();
-  
+  const queryClient = useQueryClient();
+
   const [prompt, setPrompt] = useState("");
   const [canvasImage, setCanvasImage] = useState<string | null>(null);
   const [generatedImage, setGeneratedImage] = useState<string | null>(null);
@@ -177,11 +180,32 @@ export default function Home() {
   const [expandedCategories, setExpandedCategories] = useState<Set<string>>(new Set(["shape", "designStyle", "effects"]));
   const [showStylesMenu, setShowStylesMenu] = useState(true);
   const [supplyRecommendations, setSupplyRecommendations] = useState<{ name: string; category: string; link: string }[]>([]);
-  const [credits, setCredits] = useState(1);
-  const [generationsUsed, setGenerationsUsed] = useState(0);
-  const [isPaidMember, setIsPaidMember] = useState(false);
-  const [showPaywall, setShowPaywall] = useState(false);
+  const [showUpgradeModal, setShowUpgradeModal] = useState(false);
   const [hoveredStyle, setHoveredStyle] = useState<{ categoryKey: string; optionId: string } | null>(null);
+
+  // ── Subscription status ──────────────────────────────────────────────────
+  const { data: subStatus } = useQuery<{
+    tier: "free" | "base" | "premium";
+    status: string;
+    aiGenerationsUsedThisMonth: number;
+    aiGenerationsRemaining: number | "unlimited";
+    resetDate: string | null;
+  }>({
+    queryKey: ["/api/subscriptions/status", user?.id],
+    queryFn: async () => {
+      if (!user?.id) return { tier: "free", status: "none", aiGenerationsUsedThisMonth: 0, aiGenerationsRemaining: 0, resetDate: null };
+      const res = await fetch(`/api/subscriptions/status/${user.id}`, { credentials: "include" });
+      if (!res.ok) return { tier: "free", status: "none", aiGenerationsUsedThisMonth: 0, aiGenerationsRemaining: 0, resetDate: null };
+      return res.json();
+    },
+    enabled: !!user?.id,
+    staleTime: 1000 * 60 * 2,
+  });
+
+  const subTier = subStatus?.tier ?? "free";
+  const aiUsed = subStatus?.aiGenerationsUsedThisMonth ?? 0;
+  const aiRemaining = subStatus?.aiGenerationsRemaining ?? 0;
+  const isPremium = subTier === "premium";
   
   // ============================================
   // MICROCOPY STATE - Andrea's UX phrases
@@ -193,8 +217,6 @@ export default function Home() {
     description: "February focus: High-gloss chrome over structural red sculpting.",
     image: "http://nail-check.com/wp-content/uploads/2026/02/Chrome.png"
   });
-
-  useEffect(() => { fetchCredits(); }, [user]);
 
   useEffect(() => {
     fetch("https://nail-check.com/wp-json/nail-check/v1/flavor-of-month")
@@ -226,17 +248,6 @@ export default function Home() {
       });
     });
     setSupplyRecommendations(recommendations.slice(0, 6));
-  };
-
-  const fetchCredits = async () => {
-    try {
-      const userId = user?.id || "guest";
-      const response = await fetch(`/api/user/credits?userId=${userId}`);
-      const data = await response.json();
-      setCredits(data.credits);
-      setGenerationsUsed(data.generationsUsed);
-      setIsPaidMember(data.isPaidMember);
-    } catch (error) { console.error("Failed to fetch credits:", error); }
   };
 
   const toggleCategory = (categoryKey: string) => {
@@ -276,23 +287,19 @@ export default function Home() {
   };
 
   const handleGenerate = async () => {
-    if (!isPaidMember && generationsUsed >= credits) { setShowPaywall(true); return; }
-    if (!prompt.trim()) { 
-      toast({ 
-        title: getRandomMessage("AI_NO_RESULT"), 
-        description: "Please describe your nail design or select styles above", 
-        variant: "destructive" 
-      }); 
-      return; 
+    if (!prompt.trim()) {
+      toast({
+        title: getRandomMessage("AI_NO_RESULT"),
+        description: "Please describe your nail design or select styles above",
+        variant: "destructive",
+      });
+      return;
     }
 
     setIsGenerating(true);
     setGeneratedImage(null);
-    
-    // Rotate through generating messages for variety
     setGeneratingText(getRandomMessage("AI_PROCESSING"));
-    
-    // Change message midway through for premium feel
+
     const messageInterval = setInterval(() => {
       setGeneratingText(getRandomMessage("AI_GENERATING"));
     }, 2000);
@@ -305,32 +312,35 @@ export default function Home() {
         body: JSON.stringify({ prompt, image: canvasImage }),
       });
 
+      // Limit reached → show upgrade modal instead of generic error
+      if (response.status === 403) {
+        const errData = await response.json();
+        if (errData.error === "limit_reached") {
+          setShowUpgradeModal(true);
+          return;
+        }
+      }
+
       if (!response.ok) throw new Error("Failed to generate image");
 
       const data = await response.json();
       const imageUrl = `data:${data.mimeType};base64,${data.b64_json}`;
       setGeneratedImage(imageUrl);
-      setGenerationsUsed(prev => prev + 1);
 
-      const userId = user?.id || "guest";
-      await fetch("/api/user/use-credit", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ userId }) });
+      // Refresh subscription status so the usage counter updates
+      queryClient.invalidateQueries({ queryKey: ["/api/subscriptions/status", user?.id] });
 
-      // ✨ Andrea's success message
-      toast({ 
-        title: getRandomMessage("AI_SUCCESS"), 
-        description: "Your nail design is ready" 
-      });
+      toast({ title: getRandomMessage("AI_SUCCESS"), description: "Your nail design is ready" });
     } catch (error) {
       console.error("Generation error:", error);
-      // ✨ Andrea's error message
-      toast({ 
-        title: getRandomMessage("GENERIC_ERROR"), 
-        description: getRandomMessage("RETRY_ACTION"), 
-        variant: "destructive" 
+      toast({
+        title: getRandomMessage("GENERIC_ERROR"),
+        description: getRandomMessage("RETRY_ACTION"),
+        variant: "destructive",
       });
-    } finally { 
+    } finally {
       clearInterval(messageInterval);
-      setIsGenerating(false); 
+      setIsGenerating(false);
     }
   };
 
@@ -402,13 +412,34 @@ export default function Home() {
           <p className="text-sm text-gray-500 italic">Select styles below or describe your vision. Watch precision engineering create your perfect set.</p>
         </header>
 
-        {/* Credits */}
+        {/* AI generation usage counter */}
         <div className="flex justify-center">
-          <div className="bg-gradient-to-r from-[#FFF5F8] to-[#F8F0FF] px-6 py-3 rounded-full border border-[#FF6B9D]/30">
-            {isPaidMember ? (
-              <span className="text-sm uppercase tracking-widest bg-gradient-to-r from-[#FF6B9D] to-[#9B5DE5] bg-clip-text text-transparent font-semibold">♾️ Unlimited Designs</span>
+          <div className="bg-gradient-to-r from-[#FFF5F8] to-[#F8F0FF] px-6 py-3 rounded-full border border-[#FF6B9D]/30 flex items-center gap-3">
+            {isPremium ? (
+              <span className="text-sm uppercase tracking-widest bg-gradient-to-r from-[#FF6B9D] to-[#9B5DE5] bg-clip-text text-transparent font-semibold">♾️ Unlimited AI Designs</span>
+            ) : subTier === "base" ? (
+              <>
+                <span className="text-sm text-gray-600">
+                  AI Designs: <span className="font-bold text-[#9B5DE5]">{aiUsed}</span> / 20 this month
+                </span>
+                {typeof aiRemaining === "number" && aiRemaining <= 3 && aiRemaining > 0 && (
+                  <span className="text-[10px] bg-orange-100 text-orange-600 px-2 py-0.5 rounded-full font-bold uppercase tracking-wide">
+                    {aiRemaining} left
+                  </span>
+                )}
+                {typeof aiRemaining === "number" && aiRemaining === 0 && (
+                  <button
+                    onClick={() => setShowUpgradeModal(true)}
+                    className="text-[10px] bg-[#9B5DE5] text-white px-2 py-0.5 rounded-full font-bold uppercase tracking-wide hover:opacity-90"
+                  >
+                    Upgrade
+                  </button>
+                )}
+              </>
             ) : (
-              <span className="text-sm text-gray-600">Free Designs: <span className="font-bold text-[#9B5DE5]">{generationsUsed}</span> / {credits}</span>
+              <span className="text-sm text-gray-500">
+                <a href="/subscribe" className="text-[#9B5DE5] font-semibold hover:underline">Subscribe</a> to unlock AI designs
+              </span>
             )}
           </div>
         </div>
@@ -647,20 +678,12 @@ export default function Home() {
         </section>
       </div>
 
-      {/* Paywall Modal */}
-      {showPaywall && (
-        <div className="fixed inset-0 bg-black/80 flex items-center justify-center z-50 p-4">
-          <div className="bg-white max-w-md w-full p-8 text-center rounded-3xl">
-            <div className="w-24 h-24 mx-auto mb-6 rounded-full bg-gradient-to-r from-[#FF6B9D] to-[#9B5DE5] flex items-center justify-center"><Crown className="h-12 w-12 text-white" /></div>
-            <h2 className="text-3xl font-serif mb-4 bg-gradient-to-r from-[#FF6B9D] to-[#9B5DE5] bg-clip-text text-transparent">Unlock Unlimited</h2>
-            <p className="text-gray-600 mb-6">You've used your complimentary generation. Unlock unlimited AI designs, Fire Vault, and exclusive features.</p>
-            <div className="space-y-3">
-              <a href="/subscribe"><Button className={cn("w-full h-12 rounded-full", PINK_GRADIENT, "text-white")}>Subscribe — From $8.99/mo</Button></a>
-              <Button onClick={() => setShowPaywall(false)} variant="ghost" className="w-full text-gray-500 hover:text-[#9B5DE5]">Maybe Later</Button>
-            </div>
-          </div>
-        </div>
-      )}
+      <UpgradeModal
+        isOpen={showUpgradeModal}
+        onClose={() => setShowUpgradeModal(false)}
+        onUpgrade={() => { setShowUpgradeModal(false); window.location.href = "/subscribe"; }}
+        generationsRemaining={typeof aiRemaining === "number" ? aiRemaining : undefined}
+      />
     </>
   );
 }

@@ -1,8 +1,13 @@
 import { Layout } from "@/components/Layout";
-import { Image, Sparkles, Lock, Bell, Filter } from "lucide-react";
+import { Image, Sparkles, Lock, Bell, Filter, Download, Crown } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { useState } from "react";
+import { useQuery } from "@tanstack/react-query";
+import { useAuth } from "@/hooks/use-auth";
+import { downloadWithWatermark } from "@/lib/watermark";
+import { addNailCheckWatermark } from "@/lib/watermark";
+import { UpgradeModal } from "@/components/UpgradeModal";
 
 const PINK_GRADIENT = "bg-gradient-to-r from-[#FF6B9D] to-[#FF8A5B]";
 const PURPLE_GRADIENT = "bg-gradient-to-r from-[#9B5DE5] to-[#FF6B9D]";
@@ -33,13 +38,57 @@ const GALLERY_ITEMS = [
 const CATEGORIES = ["All", "Nail Shapes", "Effects", "Design Styles", "Themes"];
 
 export default function Gallery() {
+  const { user } = useAuth();
   const [selectedCategory, setSelectedCategory] = useState("All");
   const [email, setEmail] = useState("");
   const [subscribed, setSubscribed] = useState(false);
+  const [showUpgradeModal, setShowUpgradeModal] = useState(false);
+  const [downloadingId, setDownloadingId] = useState<number | null>(null);
 
-  const filteredItems = selectedCategory === "All" 
-    ? GALLERY_ITEMS 
+  const filteredItems = selectedCategory === "All"
+    ? GALLERY_ITEMS
     : GALLERY_ITEMS.filter(item => item.category === selectedCategory);
+
+  // Subscription status
+  const { data: subStatus } = useQuery<{ tier: "free" | "base" | "premium"; aiGenerationsRemaining: number | "unlimited" }>({
+    queryKey: ["/api/subscriptions/status", user?.id],
+    queryFn: async () => {
+      if (!user?.id) return { tier: "free", aiGenerationsRemaining: 0 };
+      const res = await fetch(`/api/subscriptions/status/${user.id}`, { credentials: "include" });
+      if (!res.ok) return { tier: "free", aiGenerationsRemaining: 0 };
+      return res.json();
+    },
+    enabled: !!user?.id,
+    staleTime: 1000 * 60 * 2,
+  });
+
+  const isPremium = subStatus?.tier === "premium";
+
+  const handleDownload = async (item: typeof GALLERY_ITEMS[0]) => {
+    setDownloadingId(item.id);
+    try {
+      if (isPremium) {
+        // Premium: clean download, no watermark
+        const link = document.createElement("a");
+        link.href = item.image;
+        link.download = `nail-check-${item.name.toLowerCase().replace(/\s+/g, "-")}.png`;
+        link.target = "_blank";
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+      } else {
+        // Base/Free: download with watermark, then prompt upgrade
+        await downloadWithWatermark(item.image, `nail-check-${item.name.toLowerCase().replace(/\s+/g, "-")}.png`);
+        if (subStatus?.tier !== "premium") {
+          setShowUpgradeModal(true);
+        }
+      }
+    } catch (err) {
+      console.error("Download failed:", err);
+    } finally {
+      setDownloadingId(null);
+    }
+  };
 
   const handleNotify = async () => {
     if (email) {
@@ -96,30 +145,54 @@ export default function Gallery() {
           {/* Gallery Grid */}
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5 mb-16">
             {filteredItems.map((item) => (
-              <div 
+              <div
                 key={item.id}
-                className="group relative aspect-square rounded-2xl overflow-hidden bg-white shadow-sm hover:shadow-xl hover:shadow-[#FF6B9D]/15 transition-all duration-500 cursor-pointer"
+                className="group relative aspect-square rounded-2xl overflow-hidden bg-white shadow-sm hover:shadow-xl hover:shadow-[#FF6B9D]/15 transition-all duration-500"
               >
                 <img
                   src={item.image}
                   alt={item.name}
                   className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
                 />
-                
-                {/* Overlay */}
-                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-5">
-                  <span className="text-[10px] uppercase tracking-widest text-[#FF6B9D] mb-1">
+
+                {/* Overlay with name + download */}
+                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-4">
+                  <span className="text-[10px] uppercase tracking-widest text-[#FF6B9D] mb-0.5">
                     {item.category}
                   </span>
-                  <h3 className="text-white font-serif text-lg">{item.name}</h3>
-                </div>
-
-                {/* Corner badge */}
-                <div className="absolute top-3 right-3 opacity-0 group-hover:opacity-100 transition-opacity">
-                  <div className="w-8 h-8 rounded-full bg-white/90 flex items-center justify-center shadow-lg">
-                    <Sparkles className="h-4 w-4 text-[#9B5DE5]" />
+                  <div className="flex items-end justify-between gap-2">
+                    <h3 className="text-white font-serif text-base leading-tight">{item.name}</h3>
+                    <button
+                      onClick={() => handleDownload(item)}
+                      disabled={downloadingId === item.id}
+                      title={isPremium ? "Download (no watermark)" : "Download with watermark"}
+                      className={cn(
+                        "flex-shrink-0 w-9 h-9 rounded-full flex items-center justify-center shadow-lg transition-all",
+                        isPremium
+                          ? "bg-gradient-to-br from-[#9B5DE5] to-[#7c3acd] hover:opacity-90"
+                          : "bg-white/90 hover:bg-white"
+                      )}
+                    >
+                      {downloadingId === item.id ? (
+                        <span className="w-3.5 h-3.5 border-2 border-current border-t-transparent rounded-full animate-spin inline-block" />
+                      ) : isPremium ? (
+                        <Download className="h-4 w-4 text-white" />
+                      ) : (
+                        <Download className="h-4 w-4 text-[#9B5DE5]" />
+                      )}
+                    </button>
                   </div>
                 </div>
+
+                {/* Premium no-watermark badge */}
+                {isPremium && (
+                  <div className="absolute top-2 left-2">
+                    <div className="flex items-center gap-1 px-2 py-0.5 rounded-full bg-[#9B5DE5]/90 backdrop-blur-sm">
+                      <Crown className="h-2.5 w-2.5 text-white" />
+                      <span className="text-[9px] text-white font-bold uppercase tracking-wide">Clean DL</span>
+                    </div>
+                  </div>
+                )}
               </div>
             ))}
           </div>
@@ -213,6 +286,12 @@ export default function Gallery() {
 
         </div>
       </div>
+
+      <UpgradeModal
+        isOpen={showUpgradeModal}
+        onClose={() => setShowUpgradeModal(false)}
+        onUpgrade={() => { setShowUpgradeModal(false); window.location.href = "/subscribe"; }}
+      />
     </Layout>
   );
 }

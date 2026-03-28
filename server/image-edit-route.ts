@@ -1,5 +1,6 @@
 import type { Express } from "express";
 import { GoogleGenerativeAI } from "@google/generative-ai";
+import { checkAIGenerationLimit, incrementAIGeneration } from "./subscriptions";
 
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY || "");
 
@@ -11,6 +12,22 @@ export function registerImageEditRoute(app: Express) {
       if (!image || !prompt) {
         return res.status(400).json({ error: "Image and prompt required" });
       }
+
+      // ── Subscription limit check ───────────────────────────────
+      const userId = (req.session as any)?.user?.id
+        ? String((req.session as any).user.id)
+        : null;
+
+      if (userId) {
+        const allowed = await checkAIGenerationLimit(userId);
+        if (!allowed) {
+          return res.status(403).json({
+            error: "limit_reached",
+            message: "AI generation limit reached. Upgrade to Premium for unlimited generations.",
+          });
+        }
+      }
+      // ──────────────────────────────────────────────────────────
 
       // Extract base64 data from data URL
       const base64Data = image.split(',')[1];
@@ -43,6 +60,13 @@ export function registerImageEditRoute(app: Express) {
 
       if (!imageData || !('inlineData' in imageData)) {
         throw new Error("No image generated");
+      }
+
+      // Increment AFTER successful generation
+      if (userId) {
+        incrementAIGeneration(userId).catch((err) =>
+          console.error("[subscriptions] increment failed:", err)
+        );
       }
 
       res.json({
