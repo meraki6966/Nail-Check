@@ -197,9 +197,9 @@ export default function About() {
               Become part of the technical elite. Start creating today.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <a href="https://nail-check.com/membership/" target="_blank" rel="noopener noreferrer">
+              <a href="/subscribe">
                 <Button className={cn("h-16 px-12 text-[11px] uppercase tracking-widest rounded-full", PINK_GRADIENT, "text-white hover:shadow-lg hover:shadow-[#FF6B9D]/30 transition-all")}>
-                  Become a Member
+                  Subscribe
                 </Button>
               </a>
               <a href="/">

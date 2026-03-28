@@ -204,7 +204,7 @@ export default function Gallery() {
           {/* Bottom CTA */}
           <div className="text-center mt-12">
             <p className="text-gray-500 mb-4">Want to see your work featured?</p>
-            <a href="https://nail-check.com/membership/" target="_blank" rel="noopener noreferrer">
+            <a href="/subscribe">
               <Button variant="outline" className="rounded-full border-[#9B5DE5] text-[#9B5DE5] hover:bg-[#9B5DE5] hover:text-white">
                 Join the Community
               </Button>

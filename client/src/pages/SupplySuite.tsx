@@ -298,9 +298,9 @@ export default function SupplySuite() {
                       <div className="text-center py-4">
                         <Lock className="h-8 w-8 mx-auto text-gray-300 mb-2" />
                         <p className="text-sm text-gray-500 mb-4">Members-only product link</p>
-                        <a href="https://nail-check.com/membership/" target="_blank" rel="noopener noreferrer">
+                        <a href="/subscribe">
                           <Button className={cn("w-full uppercase text-[10px] tracking-widest", GOLD_GRADIENT, "text-white")}>
-                            Become a Member
+                            Subscribe
                           </Button>
                         </a>
                       </div>

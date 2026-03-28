@@ -655,7 +655,7 @@ export default function Home() {
             <h2 className="text-3xl font-serif mb-4 bg-gradient-to-r from-[#FF6B9D] to-[#9B5DE5] bg-clip-text text-transparent">Unlock Unlimited</h2>
             <p className="text-gray-600 mb-6">You've used your complimentary generation. Unlock unlimited AI designs, Fire Vault, and exclusive features.</p>
             <div className="space-y-3">
-              <a href="https://nail-check.com/membership/" target="_blank" rel="noopener noreferrer"><Button className={cn("w-full h-12 rounded-full", PINK_GRADIENT, "text-white")}>Become a Member - $8.99/mo</Button></a>
+              <a href="/subscribe"><Button className={cn("w-full h-12 rounded-full", PINK_GRADIENT, "text-white")}>Subscribe — From $8.99/mo</Button></a>
               <Button onClick={() => setShowPaywall(false)} variant="ghost" className="w-full text-gray-500 hover:text-[#9B5DE5]">Maybe Later</Button>
             </div>
           </div>

@@ -103,11 +103,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
                   </button>
                 ) : (
                   <>
-                    <a
-                      href="https://nail-check.com/member-hub/"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                    >
+                    <Link href="/subscribe">
                       <Button
                         size="sm"
                         className="hidden sm:inline-flex bg-gradient-to-r from-[#FF6B9D] to-[#9B5DE5] hover:opacity-90 text-white text-xs font-bold px-4"
@@ -115,7 +111,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
                         <Crown className="h-3.5 w-3.5 mr-1.5" />
                         Join
                       </Button>
-                    </a>
+                    </Link>
                     <a href="/login">
                       <Button variant="outline" size="sm" className="text-xs hidden sm:inline-flex">
                         Login

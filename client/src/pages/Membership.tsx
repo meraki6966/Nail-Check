@@ -208,9 +208,9 @@ export default function Membership() {
                   ))}
                 </div>
 
-                <a href="https://nail-check.com/membership/" target="_blank" rel="noopener noreferrer">
+                <a href="/subscribe">
                   <Button className={cn("w-full h-14 uppercase text-[10px] tracking-widest", GOLD_GRADIENT, "text-white")}>
-                    Become a Founder Member
+                    Subscribe
                   </Button>
                 </a>
                 
@@ -299,9 +299,9 @@ export default function Membership() {
               Unlock the full Technical Hub experience today.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <a href="https://nail-check.com/membership/" target="_blank" rel="noopener noreferrer">
+              <a href="/subscribe">
                 <Button className={cn("h-16 px-12 text-[11px] uppercase tracking-widest", GOLD_GRADIENT, "text-white")}>
-                  Start Your Founder Membership
+                  Subscribe
                 </Button>
               </a>
               <a href="/critique">

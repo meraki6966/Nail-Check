@@ -56,7 +56,7 @@ const GUEST_SECTIONS: MenuSection[] = [
     items: [
       { href: "/about", label: "About", icon: Info },
       { href: "/contact", label: "Contact", icon: Mail },
-      { href: "https://nail-check.com/member-hub/", label: "Membership", icon: Crown, external: true },
+      { href: "/subscribe", label: "Subscribe", icon: Crown },
     ],
   },
 ];
@@ -245,16 +245,14 @@ export function HamburgerMenu({ isOpen, onClose, user, onLogout }: HamburgerMenu
             </button>
           ) : (
             <div className="flex gap-2">
-              <a
-                href="https://nail-check.com/member-hub/"
-                target="_blank"
-                rel="noopener noreferrer"
+              <Link
+                href="/subscribe"
                 onClick={onClose}
                 className="flex-1 flex items-center justify-center gap-1.5 py-2.5 rounded-xl text-sm font-bold text-white bg-gradient-to-r from-[#FF6B9D] to-[#9B5DE5] hover:opacity-90 transition-opacity"
               >
                 <Crown className="h-4 w-4" />
                 Join
-              </a>
+              </Link>
               <Link
                 href="/login"
                 onClick={onClose}

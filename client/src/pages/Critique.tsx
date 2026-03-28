@@ -619,9 +619,9 @@ export default function Critique() {
               You've used your complimentary critique. Unlock unlimited AI critiques, Fire Vault, and exclusive features.
             </p>
             <div className="space-y-3">
-              <a href="https://nail-check.com/membership/" target="_blank" rel="noopener noreferrer">
+              <a href="/subscribe">
                 <Button className={cn("w-full h-12 rounded-full", PURPLE_GRADIENT, "text-white")}>
-                  Become a Member - $8.99/mo
+                  Subscribe — From $8.99/mo
                 </Button>
               </a>
               <Button onClick={() => setShowPaywall(false)} variant="ghost" className="w-full text-gray-500 hover:text-[#9B5DE5]">

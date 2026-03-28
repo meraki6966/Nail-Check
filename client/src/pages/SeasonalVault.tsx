@@ -137,11 +137,11 @@ export default function SeasonalVault() {
                     </Button>
                   </Link>
                   
-                  <a href="https://nail-check.com/membership/" target="_blank" rel="noopener noreferrer">
+                  <Link href="/subscribe">
                     <Button variant="outline" className="w-full uppercase text-[10px] tracking-widest border-[#B08D57] text-[#B08D57]">
-                      View Membership Plans
+                      View Plans
                     </Button>
-                  </a>
+                  </Link>
                 </div>
 
                 <p className="text-[10px] text-gray-400 mt-6 uppercase tracking-wider">

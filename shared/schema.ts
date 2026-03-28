@@ -4,6 +4,7 @@ import { z } from "zod";
 
 export * from "./models/chat";
 export * from "./models/auth";
+export * from "./models/subscriptions";
 
 export const tutorials = pgTable("tutorials", {
   id: serial("id").primaryKey(),

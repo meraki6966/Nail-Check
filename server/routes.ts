@@ -1,7 +1,7 @@
 import { registerCreatorsRoutes } from "./creators-routes";
 import { registerImageEditRoute } from "./image-edit-route";
 import { registerImageCritiqueRoute } from "./image-critique-route";
-import { registerStripeWebhook } from "./stripe-webhook";
+import { registerSubscriptionRoutes } from "./routes/subscriptions";
 import { nailTechs } from "@shared/schema";
 import { desc, eq } from "drizzle-orm";
 import type { Express } from "express";
@@ -49,13 +49,13 @@ export async function registerRoutes(
 ): Promise<Server> {
   
   registerCreatorsRoutes(app);
-  
+
   // Auth Setup
   await setupAuth(app);
   registerAuthRoutes(app);
-  registerStripeWebhook(app);
   registerImageEditRoute(app);
   registerImageCritiqueRoute(app);
+  registerSubscriptionRoutes(app);
   
   // AI Routes
   registerImageRoutes(app);

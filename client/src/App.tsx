@@ -30,6 +30,7 @@ import Saved from "@/pages/Saved";
 import NotFound from "@/pages/not-found";
 import PrivacyPolicy from "@/pages/PrivacyPolicy";
 import TermsOfService from "@/pages/TermsOfService";
+import Subscribe from "@/pages/Subscribe";
 
 /**
  * Nail Check: Master Router
@@ -68,6 +69,7 @@ function Router() {
         {/* Membership & Auth */}
         <Route path="/login" component={Login} />
         <Route path="/membership" component={Membership} />
+        <Route path="/subscribe" component={Subscribe} />
         <Route path="/portal" component={Portal} />
         <Route path="/about" component={About} />
         
