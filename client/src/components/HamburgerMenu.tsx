@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { Link, useLocation } from "wouter";
 import {
-  X, Home, Image, Palette, Package, BookOpen, Calendar,
+  X, Home, Image, Package, BookOpen, Calendar,
   MapPin, Heart, Crown, User, Settings, Info, Mail,
   LogOut, Sparkles, Shield, FileText,
 } from "lucide-react";
@@ -39,7 +39,6 @@ const GUEST_SECTIONS: MenuSection[] = [
     items: [
       { href: "/", label: "Design Lab", icon: Home },
       { href: "/gallery", label: "Gallery", icon: Image },
-      { href: "/ai-critique", label: "AI Critique", icon: Palette, isNew: true },
     ],
   },
   {
@@ -68,7 +67,6 @@ const AUTH_SECTIONS: MenuSection[] = [
     items: [
       { href: "/", label: "Design Lab", icon: Home },
       { href: "/gallery", label: "Gallery", icon: Image },
-      { href: "/ai-critique", label: "AI Critique", icon: Palette, isNew: true },
     ],
   },
   {

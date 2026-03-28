@@ -2,7 +2,7 @@ import { useState, useCallback } from "react";
 import { motion } from "framer-motion";
 import { useLocation } from "wouter";
 import {
-  Sparkles, Shield, CheckCircle2, XCircle, Loader2, ArrowLeft,
+  Sparkles, Shield, CheckCircle2, XCircle, Loader2, ArrowLeft, Crown, Infinity,
 } from "lucide-react";
 import { SubscriptionPlans, type SubscriptionTier } from "@/components/SubscriptionPlans";
 import { useAuth } from "@/hooks/use-auth";
@@ -319,11 +319,79 @@ export default function Subscribe() {
 
       {/* ── Plans ── */}
       <section className="py-10 px-4">
-        <SubscriptionPlans
-          currentTier={currentTier}
-          loading={isLoading}
-          onSubscribe={handleSubscribe}
-        />
+        {currentTier === "premium" ? (
+          /* Premium users: you're all set */
+          <div className="max-w-md mx-auto text-center py-8">
+            <div className="mx-auto w-20 h-20 rounded-full bg-gradient-to-br from-[#9B5DE5] to-[#7c3acd] flex items-center justify-center shadow-xl shadow-purple-200 mb-6">
+              <Crown className="h-10 w-10 text-white" />
+            </div>
+            <h2 className="text-2xl font-serif uppercase tracking-widest bg-gradient-to-r from-[#9B5DE5] to-[#FF6B9D] bg-clip-text text-transparent mb-3">
+              You're on Premium
+            </h2>
+            <p className="text-gray-500 mb-2">
+              Unlimited AI generations ∞ — go create something stunning.
+            </p>
+            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-[#9B5DE5]/10 border border-[#9B5DE5]/20 mt-2">
+              <span className="text-sm font-bold text-[#9B5DE5] uppercase tracking-widest">Unlimited AI ∞</span>
+            </div>
+          </div>
+        ) : currentTier === "base" ? (
+          /* Base users: show single upgrade card */
+          <div className="max-w-sm mx-auto">
+            <p className="text-center text-sm text-gray-500 mb-6">
+              You're on <span className="font-semibold text-[#FF6B9D]">Base</span>. Upgrade to unlock unlimited AI generations.
+            </p>
+            <div className="relative rounded-2xl border border-[#9B5DE5]/25 bg-gradient-to-b from-[#F8F0FF] to-white shadow-lg p-6 text-center">
+              <div className="absolute -top-3 left-1/2 -translate-x-1/2">
+                <div className="flex items-center gap-1 px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-widest text-white bg-gradient-to-r from-[#9B5DE5] to-[#7c3acd] shadow-sm">
+                  <Sparkles className="h-2.5 w-2.5" />
+                  Recommended
+                </div>
+              </div>
+              <div className="flex items-center justify-center gap-2.5 mb-4 mt-2">
+                <div className="p-2 rounded-xl bg-gradient-to-br from-[#9B5DE5] to-[#7c3acd]">
+                  <Crown className="h-4 w-4 text-white" />
+                </div>
+                <h3 className="text-lg font-serif font-semibold text-gray-800">Upgrade to Premium</h3>
+              </div>
+              <div className="mb-1">
+                <span className="text-4xl font-bold text-gray-900">$19.99</span>
+                <span className="text-sm text-gray-400 font-medium">/month</span>
+              </div>
+              <p className="text-xs text-[#9B5DE5] font-semibold mb-5">Just $11/month more than your current plan</p>
+              <ul className="space-y-2.5 text-left mb-6">
+                {[
+                  "UNLIMITED AI generations",
+                  "Download without watermark",
+                  "Collaborative hub access",
+                  "Exclusive store discounts",
+                  "Priority support",
+                ].map((feat) => (
+                  <li key={feat} className="flex items-start gap-2.5">
+                    <span className="mt-0.5 flex-shrink-0 w-4 h-4 rounded-full flex items-center justify-center bg-[#9B5DE5]/15">
+                      <CheckCircle2 className="h-2.5 w-2.5 text-[#9B5DE5]" strokeWidth={3} />
+                    </span>
+                    <span className={`text-sm leading-snug ${feat.startsWith("UNLIMITED") ? "font-semibold text-gray-800" : "text-gray-600"}`}>{feat}</span>
+                  </li>
+                ))}
+              </ul>
+              <button
+                onClick={() => handleSubscribe("premium")}
+                disabled={isLoading}
+                className="w-full py-2.5 rounded-xl text-sm font-bold bg-gradient-to-r from-[#9B5DE5] to-[#7c3acd] text-white hover:opacity-90 hover:shadow-md active:scale-[0.98] transition-all disabled:opacity-50"
+              >
+                {isLoading ? "Processing..." : "Upgrade to Premium →"}
+              </button>
+            </div>
+          </div>
+        ) : (
+          /* Not logged in or free tier: show both plans */
+          <SubscriptionPlans
+            currentTier={currentTier}
+            loading={isLoading}
+            onSubscribe={handleSubscribe}
+          />
+        )}
       </section>
 
       {/* ── Trust signals ── */}

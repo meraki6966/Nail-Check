@@ -197,20 +197,6 @@ export default function Login() {
               </p>
             </div>
 
-            {/* WordPress Login Link */}
-            <div className="mt-4 pt-4 border-t border-gray-200">
-              <p className="text-center text-xs text-gray-400">
-                Membership managed via{" "}
-                <a 
-                  href="https://nail-check.com/login-2/" 
-                  target="_blank" 
-                  rel="noopener noreferrer"
-                  className="text-[#9B5DE5] hover:underline"
-                >
-                  nail-check.com
-                </a>
-              </p>
-            </div>
           </div>
 
           {/* Benefits */}

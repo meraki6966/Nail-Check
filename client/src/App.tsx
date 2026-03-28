@@ -1,4 +1,4 @@
-import { Switch, Route } from "wouter";
+import { Switch, Route, Redirect } from "wouter";
 import { queryClient } from "./lib/queryClient";
 import { QueryClientProvider } from "@tanstack/react-query";
 import { Toaster } from "@/components/ui/toaster";
@@ -9,7 +9,6 @@ import { Layout } from "@/components/Layout";
 import Home from "@/pages/Home";
 import Contact from "@/pages/Contact";
 import ContentEditing from "@/pages/ContentEditing";
-import AICritique from "@/pages/AICritique";
 import Creators from "@/pages/Creators";
 import CreatorProfile from "@/pages/CreatorProfile";
 import Admin from "./pages/Admin";
@@ -20,7 +19,6 @@ import Tutorials from "./pages/Tutorials";
 import TutorialDetail from "@/pages/TutorialDetail";
 import Embed from "./pages/Embed";
 import Portal from "./pages/Portal";
-import Membership from "./pages/Membership";
 import About from "./pages/About";
 import SeasonalVault from "./pages/SeasonalVault";
 import SupplySuite from "./pages/SupplySuite";
@@ -44,7 +42,7 @@ function Router() {
         <Route path="/" component={Home} />
         <Route path="/contact" component={Contact} />        
         {/* AI & Content Lab */}
-        <Route path="/ai-critique" component={AICritique} />
+        <Route path="/ai-critique">{() => <Redirect to="/" />}</Route>
         <Route path="/content-editing" component={ContentEditing} />
         
         {/* Community & Creators */}
@@ -68,7 +66,7 @@ function Router() {
         
         {/* Membership & Auth */}
         <Route path="/login" component={Login} />
-        <Route path="/membership" component={Membership} />
+        <Route path="/membership">{() => <Redirect to="/subscribe" />}</Route>
         <Route path="/subscribe" component={Subscribe} />
         <Route path="/portal" component={Portal} />
         <Route path="/about" component={About} />
