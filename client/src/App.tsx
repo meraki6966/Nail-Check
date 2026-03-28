@@ -28,6 +28,8 @@ import Login from "./pages/Login";
 import Upload from "@/pages/Upload";
 import Saved from "@/pages/Saved";
 import NotFound from "@/pages/not-found";
+import PrivacyPolicy from "@/pages/PrivacyPolicy";
+import TermsOfService from "@/pages/TermsOfService";
 
 /**
  * Nail Check: Master Router
@@ -69,10 +71,14 @@ function Router() {
         <Route path="/portal" component={Portal} />
         <Route path="/about" component={About} />
         
+        {/* Legal */}
+        <Route path="/privacy-policy" component={PrivacyPolicy} />
+        <Route path="/terms-of-service" component={TermsOfService} />
+
         {/* System Routes */}
         <Route path="/admin" component={Admin} />
         <Route path="/embed" component={Embed} />
-        
+
         {/* Fallback */}
         <Route component={NotFound} />
       </Switch>
