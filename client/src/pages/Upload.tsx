@@ -2,7 +2,6 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { useLocation } from "wouter";
-import { Layout } from "@/components/Layout";
 import { useCreateTutorial } from "@/hooks/use-tutorials";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -93,7 +92,7 @@ export default function Upload() {
   };
 
   return (
-    <Layout>
+    <>
       <div className="max-w-2xl mx-auto py-8">
         <motion.div
           initial={{ opacity: 0, y: 10 }}
@@ -285,7 +284,7 @@ export default function Upload() {
           </Form>
         </CardWrapper>
       </div>
-    </Layout>
+    </>
   );
 }
 

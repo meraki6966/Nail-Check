@@ -1,4 +1,3 @@
-import { Layout } from "@/components/Layout";
 import { Image, Sparkles, Lock, Bell, Filter, Download, Crown } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
@@ -107,7 +106,7 @@ export default function Gallery() {
   };
 
   return (
-    <Layout>
+    <>
       <div className="min-h-screen bg-gradient-to-b from-[#FFFBFC] to-[#FFF5F8]">
         <div className="max-w-7xl mx-auto px-4 py-12">
           
@@ -292,6 +291,6 @@ export default function Gallery() {
         onClose={() => setShowUpgradeModal(false)}
         onUpgrade={() => { setShowUpgradeModal(false); window.location.href = "/subscribe"; }}
       />
-    </Layout>
+    </>
   );
 }

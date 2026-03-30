@@ -1,6 +1,5 @@
 import { useState, useEffect } from "react";
 import { Link } from "wouter";
-import { Layout } from "@/components/Layout";
 import { Button } from "@/components/ui/button";
 import { Flame, Loader2, Trash2, Star, Download } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
@@ -89,16 +88,14 @@ export default function Saved() {
 
   if (isLoading) {
     return (
-      <Layout>
-        <div className="flex justify-center items-center h-[50vh]">
-          <Loader2 className={cn("h-8 w-8 animate-spin", GOLD_TEXT)} />
-        </div>
-      </Layout>
+      <div className="flex justify-center items-center h-[50vh]">
+        <Loader2 className={cn("h-8 w-8 animate-spin", GOLD_TEXT)} />
+      </div>
     );
   }
 
   return (
-    <Layout>
+    <>
       <div className="max-w-7xl mx-auto px-4 py-16 space-y-12">
         
         {/* Header */}
@@ -266,6 +263,6 @@ export default function Saved() {
           </div>
         )}
       </div>
-    </Layout>
+    </>
   );
 }

@@ -197,13 +197,8 @@ export default function About() {
               Become part of the technical elite. Start creating today.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <a href="/subscribe">
-                <Button className={cn("h-16 px-12 text-[11px] uppercase tracking-widest rounded-full", PINK_GRADIENT, "text-white hover:shadow-lg hover:shadow-[#FF6B9D]/30 transition-all")}>
-                  Subscribe
-                </Button>
-              </a>
               <a href="/">
-                <Button variant="outline" className="h-16 px-12 text-[11px] uppercase tracking-widest rounded-full border-[#9B5DE5] text-[#9B5DE5] hover:bg-[#9B5DE5] hover:text-white transition-all">
+                <Button className={cn("h-16 px-12 text-[11px] uppercase tracking-widest rounded-full", PINK_GRADIENT, "text-white hover:shadow-lg hover:shadow-[#FF6B9D]/30 transition-all")}>
                   Try the Design Lab
                 </Button>
               </a>

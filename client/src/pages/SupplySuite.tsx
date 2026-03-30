@@ -9,6 +9,16 @@ import { useAuth } from "@/hooks/use-auth";
 const GOLD_TEXT = "text-[#B08D57]";
 const GOLD_GRADIENT = "bg-gradient-to-r from-[#B08D57] via-[#D4AF37] to-[#B08D57]";
 
+const CATEGORY_DEFINITIONS: Record<string, string> = {
+  "Base Coat": "Applied first to the natural nail, base coats create adhesion for color polish, protect the nail plate from staining, and extend wear time.",
+  "Top Coat": "Sealed over finished color to lock in design, add shine or matte finish, prevent chipping, and extend the life of the application.",
+  "Color": "Nail polish or gel color in a full spectrum of shades and finishes. Available in regular, gel, dip, and builder formulations.",
+  "Tool": "Hand tools used for shaping, detailing, and application — including files, buffers, brushes, dotting tools, and cuticle pushers.",
+  "Equipment": "Powered or professional-grade equipment such as UV/LED lamps, e-files (electric drills), nail dust collectors, and sterilizers.",
+  "Specialty": "Advanced products including gel builders, polygels, acrylics, dip powders, nail art supplies, and enhancement systems.",
+  "Nail Care": "Products designed to strengthen, hydrate, and maintain the health of the natural nail — including cuticle oils, strengtheners, and nail serums.",
+};
+
 interface SupplyProduct {
   id: number;
   name: string;
@@ -131,6 +141,29 @@ export default function SupplySuite() {
           )}
         </header>
 
+        {/* Disclaimer */}
+        <div className="max-w-3xl mx-auto bg-amber-50 border border-amber-200 rounded-lg px-6 py-4">
+          <p className="text-xs text-amber-800 leading-relaxed text-center">
+            <strong>Disclaimer:</strong> Nail Check is not responsible for the misuse of any products or techniques shown. Always follow manufacturer instructions and consult a licensed professional if unsure. Product links are provided for informational purposes only.
+          </p>
+        </div>
+
+        {/* Category Definitions */}
+        <div className="max-w-4xl mx-auto space-y-3">
+          <h2 className="text-[10px] uppercase tracking-widest text-gray-400 text-center mb-4">Category Guide</h2>
+          <div className="grid md:grid-cols-2 gap-3">
+            {Object.entries(CATEGORY_DEFINITIONS).map(([cat, def]) => (
+              <div key={cat} className="flex gap-3 p-4 bg-gray-50 border border-gray-100">
+                <div className="flex-shrink-0 w-1 bg-gradient-to-b from-[#FF6B9D] via-[#9B5DE5] to-[#00D9FF] rounded-full" />
+                <div>
+                  <p className="text-[10px] uppercase tracking-widest font-bold text-gray-700 mb-1">{cat}</p>
+                  <p className="text-xs text-gray-500 leading-relaxed">{def}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+
         {/* Search Bar */}
         <div className="max-w-2xl mx-auto">
           <div className="relative">
@@ -190,10 +223,13 @@ export default function SupplySuite() {
             {Object.entries(groupedProducts).map(([category, categoryProducts]) => (
               <div key={category} className="space-y-8">
                 <div className="flex items-center gap-4">
-                  <h2 className="text-3xl font-serif uppercase tracking-wider">{category}</h2>
-                  <div className="flex-1 h-px bg-gray-200"></div>
+                  <h2 className="text-3xl font-serif uppercase tracking-wider bg-gradient-to-r from-[#FF6B9D] via-[#9B5DE5] to-[#00D9FF] bg-clip-text text-transparent">{category}</h2>
+                  <div className="flex-1 h-px bg-gradient-to-r from-[#FF6B9D]/30 via-[#9B5DE5]/30 to-[#00D9FF]/30"></div>
                   <span className="text-sm text-gray-400">{categoryProducts.length}</span>
                 </div>
+                {CATEGORY_DEFINITIONS[category] && (
+                  <p className="text-xs text-gray-400 italic -mt-4">{CATEGORY_DEFINITIONS[category]}</p>
+                )}
                 
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                   {categoryProducts.map((product) => (
