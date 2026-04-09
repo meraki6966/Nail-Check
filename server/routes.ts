@@ -2,7 +2,7 @@ import { registerCreatorsRoutes } from "./creators-routes";
 import { registerImageEditRoute } from "./image-edit-route";
 import { registerImageCritiqueRoute } from "./image-critique-route";
 import { registerSubscriptionRoutes } from "./routes/subscriptions";
-import { nailTechs } from "@shared/schema";
+import { nailTechs, supplyProducts } from "@shared/schema";
 import { desc, eq } from "drizzle-orm";
 import type { Express } from "express";
 import { createServer, type Server } from "http";
@@ -1087,6 +1087,28 @@ async function seedDatabase() {
 
     for (const sample of supplySamples) {
       await storage.createSupplyProduct(sample);
+    }
+  }
+
+  // Update supply product images with real URLs (runs on every startup)
+  const supplyImageUpdates = [
+    { name: "UV/LED Lamp 48W", imageUrl: "http://nail-check.com/wp-content/uploads/2026/04/lucid-origin_Professional_UV_LED_nail_lamp_on_white_background_product_photography_clean_and_-0.jpg" },
+    { name: "Electric Nail File", imageUrl: "http://nail-check.com/wp-content/uploads/2026/04/lucid-origin_Electric_nail_file_e-file_machine_for_nail_salon_product_photography_white_backg-0.jpg" },
+  ];
+  for (const update of supplyImageUpdates) {
+    await db.update(supplyProducts).set({ imageUrl: update.imageUrl }).where(eq(supplyProducts.name, update.name));
+  }
+
+  // Add new supply products if they don't already exist
+  const newSupplyProducts = [
+    { name: "Builder Gel", brand: "Nail Check", category: "Specialty", description: "Professional builder gel for nail extensions and overlays", imageUrl: "http://nail-check.com/wp-content/uploads/2026/04/lucid-origin_Builder_gel_nail_product_bottle_professional_nail_supply_white_background-0.jpg", productUrl: "#", price: "", utility: "Build nail extensions and add structure to the nail plate", tags: ["builder gel", "extensions", "gel"], featured: true, memberOnly: true },
+    { name: "Acrylic System", brand: "Nail Check", category: "Specialty", description: "Complete acrylic powder and liquid system for nail enhancements", imageUrl: "http://nail-check.com/wp-content/uploads/2026/04/lucid-origin_Acrylic_nail_system_kit_with_powder_and_liquid_product_photography-0.jpg", productUrl: "#", price: "", utility: "Create durable acrylic nail enhancements", tags: ["acrylic", "powder", "liquid", "enhancements"], featured: true, memberOnly: true },
+    { name: "Gel Polish Collection", brand: "Nail Check", category: "Color", description: "Professional gel polish in a curated range of colors", imageUrl: "http://nail-check.com/wp-content/uploads/2026/04/lucid-origin_Gel_nail_polish_collection_bottles_colorful_array_product_photography-0.jpg", productUrl: "#", price: "", utility: "Long-lasting gel color that cures under UV/LED lamp", tags: ["gel polish", "color", "gel"], featured: true, memberOnly: true },
+  ];
+  for (const newProduct of newSupplyProducts) {
+    const existing = await db.select().from(supplyProducts).where(eq(supplyProducts.name, newProduct.name));
+    if (existing.length === 0) {
+      await storage.createSupplyProduct(newProduct);
     }
   }
 }

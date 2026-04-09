@@ -32,6 +32,20 @@ const GALLERY_ITEMS = [
   // Themes
   { id: 11, image: "http://nail-check.com/wp-content/uploads/2026/02/Bridal-1.png", name: "Bridal Nails", category: "Themes" },
   { id: 12, image: "http://nail-check.com/wp-content/uploads/2026/02/Birthday.png", name: "Birthday Sets", category: "Themes" },
+
+  // AI-Generated Inspirations
+  { id: 13, image: "http://nail-check.com/wp-content/uploads/2026/04/lucid-origin_Close-up_of_dark_brown_skin_hands_with_long_coffin_nails_holographic_chrome_fini-0.jpg", name: "Holographic Chrome", category: "Effects" },
+  { id: 14, image: "http://nail-check.com/wp-content/uploads/2026/04/lucid-origin_Short_square_nails_on_pale_skin_pastel_pink_base_with_hand-sculpted_3D_white_ros-0.jpg", name: "Short Square with White Roses", category: "Design Styles" },
+  { id: 15, image: "http://nail-check.com/wp-content/uploads/2026/04/lucid-origin_Almond_nails_on_warm_brown_skin_intricate_henna-inspired_gold_designs_on_deep_re-0.jpg", name: "Henna Inspired", category: "Design Styles" },
+  { id: 16, image: "http://nail-check.com/wp-content/uploads/2026/04/lucid-origin_Square_medium_nails_on_deep_dark_brown_skin_leopard_print_in_gold_and_brown_matt-0.jpg", name: "Leopard Print", category: "Design Styles" },
+  { id: 17, image: "http://nail-check.com/wp-content/uploads/2026/04/lucid-origin_Long_almond_nails_on_caramel_skin_full_coverage_holographic_chrome_that_shifts_t-0.jpg", name: "Holographic Chrome Almond", category: "Effects" },
+  { id: 18, image: "http://nail-check.com/wp-content/uploads/2026/04/lucid-origin_Long_almond_nails_on_brown_skin_full_coverage_mother_day_theme_nails_rose_colore-0.jpg", name: "Mothers Day", category: "Themes" },
+  { id: 19, image: "http://nail-check.com/wp-content/uploads/2026/04/IMG_1958.jpg", name: "Vortex", category: "Design Styles" },
+  { id: 20, image: "http://nail-check.com/wp-content/uploads/2026/04/IMG_1957.jpg", name: "Golden Elegance", category: "Themes" },
+  { id: 21, image: "http://nail-check.com/wp-content/uploads/2026/04/IMG_1956.jpg", name: "Christmas", category: "Themes" },
+  { id: 22, image: "http://nail-check.com/wp-content/uploads/2026/04/IMG_1962.jpg", name: "Springtime", category: "Effects" },
+  { id: 23, image: "http://nail-check.com/wp-content/uploads/2026/04/IMG_1961.jpg", name: "Pierced Architecture", category: "Design Styles" },
+  { id: 24, image: "http://nail-check.com/wp-content/uploads/2026/04/IMG_1960.jpg", name: "Butterfly and Flowers", category: "Design Styles" },
 ];
 
 const CATEGORIES = ["All", "Nail Shapes", "Effects", "Design Styles", "Themes"];
