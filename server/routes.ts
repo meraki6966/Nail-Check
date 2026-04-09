@@ -3,7 +3,7 @@ import { registerImageEditRoute } from "./image-edit-route";
 import { registerImageCritiqueRoute } from "./image-critique-route";
 import { registerSubscriptionRoutes } from "./routes/subscriptions";
 import { nailTechs, supplyProducts } from "@shared/schema";
-import { desc, eq } from "drizzle-orm";
+import { desc, eq, like } from "drizzle-orm";
 import type { Express } from "express";
 import { createServer, type Server } from "http";
 import { storage } from "./storage";
@@ -1099,11 +1099,19 @@ async function seedDatabase() {
     await db.update(supplyProducts).set({ imageUrl: update.imageUrl }).where(eq(supplyProducts.name, update.name));
   }
 
+  // Remove supply products with broken/placeholder image URLs
+  await db.delete(supplyProducts).where(like(supplyProducts.imageUrl, "%placeholder%"));
+
   // Add new supply products if they don't already exist
   const newSupplyProducts = [
     { name: "Builder Gel", brand: "Nail Check", category: "Specialty", description: "Professional builder gel for nail extensions and overlays", imageUrl: "http://nail-check.com/wp-content/uploads/2026/04/lucid-origin_Builder_gel_nail_product_bottle_professional_nail_supply_white_background-0.jpg", productUrl: "#", price: "", utility: "Build nail extensions and add structure to the nail plate", tags: ["builder gel", "extensions", "gel"], featured: true, memberOnly: true },
     { name: "Acrylic System", brand: "Nail Check", category: "Specialty", description: "Complete acrylic powder and liquid system for nail enhancements", imageUrl: "http://nail-check.com/wp-content/uploads/2026/04/lucid-origin_Acrylic_nail_system_kit_with_powder_and_liquid_product_photography-0.jpg", productUrl: "#", price: "", utility: "Create durable acrylic nail enhancements", tags: ["acrylic", "powder", "liquid", "enhancements"], featured: true, memberOnly: true },
     { name: "Gel Polish Collection", brand: "Nail Check", category: "Color", description: "Professional gel polish in a curated range of colors", imageUrl: "http://nail-check.com/wp-content/uploads/2026/04/lucid-origin_Gel_nail_polish_collection_bottles_colorful_array_product_photography-0.jpg", productUrl: "#", price: "", utility: "Long-lasting gel color that cures under UV/LED lamp", tags: ["gel polish", "color", "gel"], featured: true, memberOnly: true },
+    { name: "Cuticle Oil Pen", brand: "Nail Check", category: "Nail Care", description: "Precision pen applicator with brush tip for nourishing cuticles. Portable and easy to use for on-the-go nail care.", imageUrl: "http://nail-check.com/wp-content/uploads/2026/04/lucid-origin_cuticle_oil_pen_nail_care_product_white_background_pen_applicator_with_brush_tip-0.jpg", productUrl: "#", price: "", utility: "Daily cuticle maintenance, travel, professional finishing touch", tags: ["cuticle", "oil", "pen", "nail care"], featured: true, memberOnly: true },
+    { name: "Ridge Filler Base Coat - Red Bordeaux", brand: "Nail Check", category: "Base Coat", description: "Smoothing ridge filler in deep red bordeaux tone. Creates an even surface for flawless color application.", imageUrl: "http://nail-check.com/wp-content/uploads/2026/04/lucid-origin_ridge_filler_base_coat_nail_polish_bottle_deep_red_bordeaux_color_on_white_backg-0.jpg", productUrl: "#", price: "", utility: "Uneven nails, ridges, professional base prep", tags: ["ridge filler", "base coat", "bordeaux", "red"], featured: false, memberOnly: true },
+    { name: "Ballet Slippers - Toe Separators", brand: "Nail Check", category: "Tool", description: "Soft pink foam toe separators for comfortable pedicure application. Prevents smudging during polish application.", imageUrl: "http://nail-check.com/wp-content/uploads/2026/04/lucid-origin_professional_nail_pedicure_toe_separators_pink_foam_ballet_slippers_on_white_bac-0.jpg", productUrl: "#", price: "", utility: "Pedicures, home nail care, salon use", tags: ["toe separators", "pedicure", "foam", "tools"], featured: false, memberOnly: true },
+    { name: "High Gloss Top Coat", brand: "Nail Check", category: "Top Coat", description: "Ultra-shiny clear finish top coat for maximum shine. Quick-dry formula seals and protects nail designs.", imageUrl: "http://nail-check.com/wp-content/uploads/2026/04/lucid-origin_high_gloss_top_coat_nail_polish_bottle_white_background_ultra_shiny_clear_finish-0.jpg", productUrl: "#", price: "", utility: "High-shine finish, chip protection, professional results", tags: ["top coat", "gloss", "shine", "quick-dry"], featured: true, memberOnly: true },
+    { name: "Nail Dehydrator Prep Solution", brand: "Nail Check", category: "Specialty", description: "Professional nail prep solution that removes oils and moisture for maximum adhesion. Essential first step for long-lasting enhancements.", imageUrl: "http://nail-check.com/wp-content/uploads/2026/04/lucid-origin_nail_dehydrator_prep_solution_bottle_white_background_professional_nail_supply_c-0.jpg", productUrl: "#", price: "", utility: "Prep step, gel application, acrylic application, maximum adhesion", tags: ["dehydrator", "prep", "adhesion", "gel", "acrylic"], featured: true, memberOnly: true },
   ];
   for (const newProduct of newSupplyProducts) {
     const existing = await db.select().from(supplyProducts).where(eq(supplyProducts.name, newProduct.name));
