@@ -6,7 +6,12 @@
 
 :root {
   --font-display: 'Inter', sans-serif;
-  --font-body: 'Inter', sans-serif;
+  --font-body: 'Tenor Sans', sans-serif;
+  --font-logo: 'Syne', sans-serif;
+  --font-heading: 'Syne', sans-serif;
+  --font-subheading: 'Tangerine', cursive;
+  --logo-weight: 800;
+  --heading-weight: 700;
 
   /* Gallery White Theme */
   --background: 0 0% 100%;       /* Pure White #FFFFFF */
@@ -45,7 +50,16 @@
   * {
     @apply border-border;
   }
-  h1, h2, h3, h4, h5, h6 {
+  h1, h2 {
+    font-family: var(--font-heading);
+    font-weight: var(--heading-weight);
+    @apply tracking-tight;
+  }
+  h3 {
+    font-family: var(--font-subheading);
+    font-weight: 700;
+  }
+  h4, h5, h6 {
     font-family: var(--font-display);
     @apply font-semibold tracking-tight;
   }

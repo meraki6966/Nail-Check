@@ -48,7 +48,22 @@ export default function AICritique() {
         body: JSON.stringify({ image: uploadedImage }),
       });
 
-      if (!response.ok) throw new Error("Failed to analyze");
+      if (response.status === 403) {
+        const errData = await response.json();
+        if (errData.error === "limit_reached") {
+          toast({
+            title: "Generation limit reached",
+            description: errData.message || "Upgrade to Premium for unlimited critiques.",
+            variant: "destructive"
+          });
+          return;
+        }
+      }
+
+      if (!response.ok) {
+        const errData = await response.json().catch(() => ({}));
+        throw new Error(errData.error || errData.details || "Failed to analyze");
+      }
 
       const data = await response.json();
       setCritique(data.critique);

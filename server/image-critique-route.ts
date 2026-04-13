@@ -2,7 +2,12 @@ import type { Express } from "express";
 import { GoogleGenerativeAI } from "@google/generative-ai";
 import { checkAIGenerationLimit, incrementAIGeneration } from "./subscriptions";
 
-const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY || "");
+const genAI = new GoogleGenerativeAI(
+  process.env.AI_INTEGRATIONS_GEMINI_API_KEY ||
+  process.env.GEMINI_API_KEY ||
+  process.env.GOOGLE_API_KEY ||
+  ""
+);
 
 export function registerImageCritiqueRoute(app: Express) {
   app.post("/api/image/critique", async (req, res) => {
@@ -34,8 +39,8 @@ export function registerImageCritiqueRoute(app: Express) {
       const mimeType = image.match(/data:([^;]+);/)?.[1] || 'image/png';
 
       // Use Gemini for nail analysis
-      const model = genAI.getGenerativeModel({ 
-        model: "gemini-2.0-flash-exp"
+      const model = genAI.getGenerativeModel({
+        model: "gemini-2.5-flash"
       });
 
       const prompt = `You are a professional nail technician and competition judge. Analyze this nail photo and provide a detailed critique in JSON format.

@@ -44,9 +44,16 @@ export function Layout({ children }: { children: React.ReactNode }) {
             <div className="flex h-8 w-8 items-center justify-center rounded-full bg-gradient-to-br from-[#FF6B9D] to-[#9B5DE5]">
               <Sparkles className="h-4 w-4 text-white" />
             </div>
-            <span className="font-display text-xl font-semibold tracking-tight">
-              Nail Check
-            </span>
+            <div style={{
+              fontFamily: 'var(--font-logo)',
+              fontWeight: 'var(--logo-weight)' as any,
+              textAlign: 'center',
+              lineHeight: '0.9',
+              letterSpacing: '2px',
+            }}>
+              <div style={{ fontSize: '1.2rem', color: '#FF6B9D' }}>NAIL</div>
+              <div style={{ fontSize: '1.2rem', color: '#FF6B9D' }}>CHECK</div>
+            </div>
           </Link>
 
           {/* Expanding search bar — takes up remaining space when open */}
@@ -162,9 +169,17 @@ export function Layout({ children }: { children: React.ReactNode }) {
               <div className="flex h-6 w-6 items-center justify-center rounded-full bg-gradient-to-br from-[#FF6B9D] to-[#9B5DE5]">
                 <Sparkles className="h-3 w-3 text-white" />
               </div>
-              <span className="text-sm font-semibold tracking-tight text-muted-foreground">
-                Nail Check
-              </span>
+              <div style={{
+                fontFamily: 'var(--font-logo)',
+                fontWeight: 800,
+                letterSpacing: '2px',
+                lineHeight: '0.9',
+                fontSize: '0.75rem',
+                color: '#FF6B9D',
+              }}>
+                <div>NAIL</div>
+                <div>CHECK</div>
+              </div>
             </div>
             <nav className="flex flex-wrap items-center justify-center gap-x-6 gap-y-2 text-sm text-muted-foreground">
               <Link href="/about" className="hover:text-[#FF6B9D] transition-colors">About</Link>

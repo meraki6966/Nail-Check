@@ -1,268 +1,153 @@
-import { Button } from "@/components/ui/button";
-import { Target, Lightbulb, Users, Sparkles, Star, Heart } from "lucide-react";
-import { cn } from "@/lib/utils";
-import { motion } from "framer-motion";
-
-// NEW PINTEREST COLOR PALETTE
-const PINK = "#FF6B9D";
-const PURPLE = "#9B5DE5";
-const CYAN = "#00D9FF";
-const CORAL = "#FF8A5B";
-
-const PINK_GRADIENT = "bg-gradient-to-r from-[#FF6B9D] to-[#FF8A5B]";
-const PURPLE_GRADIENT = "bg-gradient-to-r from-[#9B5DE5] to-[#FF6B9D]";
-const CYAN_GRADIENT = "bg-gradient-to-r from-[#00D9FF] to-[#9B5DE5]";
-const FULL_GRADIENT = "bg-gradient-to-r from-[#FF6B9D] via-[#9B5DE5] to-[#00D9FF]";
+import React from 'react';
+import { Layout } from '../components/Layout';
 
 export default function About() {
   return (
-    
-      <div className="bg-white">
-        
-        {/* HERO */}
-        <section className="relative min-h-[60vh] flex items-center justify-center bg-gradient-to-b from-[#FFF5F8] via-[#F8F0FF] to-white px-4 py-20 overflow-hidden">
-          {/* Decorative blobs */}
-          <div className="absolute top-20 left-10 w-64 h-64 bg-[#FF6B9D]/10 rounded-full blur-3xl"></div>
-          <div className="absolute bottom-20 right-10 w-80 h-80 bg-[#9B5DE5]/10 rounded-full blur-3xl"></div>
-          <div className="absolute top-40 right-20 w-40 h-40 bg-[#00D9FF]/10 rounded-full blur-2xl"></div>
-          
-          <div className="max-w-4xl mx-auto text-center space-y-8 relative z-10">
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-            >
-              <div className="flex items-center justify-center gap-2 mb-4">
-                <Sparkles className="h-5 w-5 text-[#FF6B9D]" />
-                <span className="text-[10px] tracking-[0.8em] text-[#9B5DE5] uppercase font-medium">
-                  About Us
-                </span>
-                <Sparkles className="h-5 w-5 text-[#FF6B9D]" />
-              </div>
-              <h1 className="text-6xl md:text-7xl font-serif uppercase tracking-widest mb-6 bg-gradient-to-r from-[#FF6B9D] via-[#9B5DE5] to-[#00D9FF] bg-clip-text text-transparent">
-                The Technical Hub
-              </h1>
-              <p className="text-xl text-gray-600 max-w-2xl mx-auto leading-relaxed">
-                Where precision engineering meets creative expression. Built for nail technicians, 
-                artists, and enthusiasts who demand excellence.
-              </p>
-            </motion.div>
-          </div>
-        </section>
+    <Layout>
+      <div className="about-page">
+        <div className="about-hero">
+          <h1>About the Founder</h1>
+        </div>
 
-        {/* MISSION */}
-        <section className="py-32 px-4">
-          <div className="max-w-6xl mx-auto">
-            <div className="grid md:grid-cols-2 gap-16 items-center">
-              <motion.div
-                initial={{ opacity: 0, x: -20 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ delay: 0.2 }}
-              >
-                <h2 className="text-5xl font-serif uppercase tracking-widest mb-8 bg-gradient-to-r from-[#FF6B9D] to-[#9B5DE5] bg-clip-text text-transparent">
-                  Our Mission
-                </h2>
-                <div className="space-y-6 text-gray-600 leading-relaxed">
-                  <p>
-                    Nail Check was born from the realization that while inspiration is everywhere, 
-                    clarity is rare. As a self-taught artist, I navigated the gap between seeing a 
-                    masterpiece and understanding the technical steps required to create it.
-                  </p>
-                  <p>
-                    This ecosystem exists to bridge that gap—bringing high-tech guidance and product 
-                    education into a single, refined sanctuary for the modern artist.
-                  </p>
-                </div>
-              </motion.div>
-
-              <motion.div
-                initial={{ opacity: 0, x: 20 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ delay: 0.3 }}
-                className="bg-gradient-to-br from-[#FFF5F8] to-[#F8F0FF] p-12 rounded-3xl border border-[#FF6B9D]/20"
-              >
-                <blockquote className="space-y-4">
-                  <p className="text-2xl font-serif italic text-gray-700 leading-relaxed">
-                    "Architecture isn't just for buildings. It's the foundation of every great design—
-                    including nails."
-                  </p>
-                  <div className="pt-4 border-t border-[#9B5DE5]/20">
-                    <p className="text-sm uppercase tracking-widest text-[#9B5DE5]">
-                      The Nail Check Philosophy
-                    </p>
-                  </div>
-                </blockquote>
-              </motion.div>
-            </div>
-          </div>
-        </section>
-
-        {/* VALUES */}
-        <section className="py-32 px-4 bg-gradient-to-b from-white via-[#F8F0FF]/30 to-white">
-          <div className="max-w-6xl mx-auto">
-            <div className="text-center mb-16">
-              <h2 className="text-5xl font-serif uppercase tracking-widest mb-4 bg-gradient-to-r from-[#9B5DE5] to-[#00D9FF] bg-clip-text text-transparent">
-                Our Values
-              </h2>
-              <p className="text-gray-500 italic">What drives the Technical Hub</p>
-            </div>
-
-            <div className="grid md:grid-cols-3 gap-12">
-              <ValueCard
-                icon={<Target className="h-12 w-12" />}
-                title="Precision"
-                description="Every pixel, every feature, every product recommendation is carefully engineered for technical excellence."
-                color="pink"
-              />
-              <ValueCard
-                icon={<Lightbulb className="h-12 w-12" />}
-                title="Innovation"
-                description="We push boundaries. AI-powered design generation was just the beginning—we're constantly evolving."
-                color="purple"
-              />
-              <ValueCard
-                icon={<Users className="h-12 w-12" />}
-                title="Community"
-                description="Built by nail enthusiasts, for nail enthusiasts. Your feedback shapes our roadmap."
-                color="cyan"
-              />
-            </div>
-          </div>
-        </section>
-
-        {/* STORY */}
-        <section className="py-32 px-4">
-          <div className="max-w-4xl mx-auto">
-            <h2 className="text-5xl font-serif uppercase tracking-widest mb-16 text-center bg-gradient-to-r from-[#FF6B9D] via-[#9B5DE5] to-[#00D9FF] bg-clip-text text-transparent">
-              Our Story
-            </h2>
-            
-            <div className="space-y-12">
-              <TimelineItem
-                year="2025"
-                title="The Technical Hub Launches"
-                description="Nail Check goes live with AI Design Lab, Fire Vault, Seasonal Vault, and Supply Suite. Over 1,000 designs generated in the first month."
-                color="pink"
-              />
-              <TimelineItem
-                year="2024"
-                title="Development Begins"
-                description="After months of research with professional nail technicians, we begin building the platform. Focus: precision, speed, and professional-grade tools."
-                color="purple"
-              />
-              <TimelineItem
-                year="2024"
-                title="The Idea"
-                description="The Founder identifies a gap in the market: nail artists need better visualization tools before committing to expensive products and time-intensive techniques."
-                color="cyan"
-              />
-            </div>
-          </div>
-        </section>
-
-        {/* TEAM */}
-        <section className="py-32 px-4 bg-gradient-to-b from-[#1a1a2e] to-black text-white">
-          <div className="max-w-4xl mx-auto text-center space-y-12">
-            <div>
-              <h2 className="text-5xl font-serif uppercase tracking-widest mb-4 bg-gradient-to-r from-[#FF6B9D] via-[#9B5DE5] to-[#00D9FF] bg-clip-text text-transparent">
-                Meet the Founder
-              </h2>
-              <p className="text-gray-400 italic">The vision behind Nail Check</p>
-            </div>
-
-            <div className="bg-white/5 border border-white/10 p-12 rounded-3xl backdrop-blur">
-              <div className="mb-6">
-                <div className="w-32 h-32 mx-auto rounded-full bg-gradient-to-br from-[#FF6B9D] via-[#9B5DE5] to-[#00D9FF] mb-6 flex items-center justify-center">
-                  <Heart className="h-12 w-12 text-white" />
-                </div>
-                <h3 className="text-3xl font-serif uppercase tracking-wider mb-2">The Founder</h3>
-                <p className="text-sm uppercase tracking-widest text-[#FF6B9D]">Visionary & Creator</p>
-              </div>
-              <p className="text-gray-300 leading-relaxed max-w-2xl mx-auto">
-                As a self-taught artist who navigated the gap between inspiration and execution, 
-                the Founder created Nail Check to bridge clarity with creativity. The Technical Hub 
-                now serves thousands of artists worldwide, providing high-tech guidance and product 
-                education in one refined sanctuary.
-              </p>
-            </div>
-          </div>
-        </section>
-
-        {/* CTA */}
-        <section className="py-32 px-4 bg-gradient-to-b from-white to-[#FFF5F8]">
-          <div className="max-w-3xl mx-auto text-center space-y-8">
-            <h2 className="text-5xl font-serif uppercase tracking-widest bg-gradient-to-r from-[#FF6B9D] to-[#9B5DE5] bg-clip-text text-transparent">
-              Join the Movement
-            </h2>
-            <p className="text-xl text-gray-600">
-              Become part of the technical elite. Start creating today.
+        <div className="about-content">
+          <div className="about-section">
+            <p>
+              Always an artist at heart, my journey into the nail world began in Queens, NY.
             </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <a href="/">
-                <Button className={cn("h-16 px-12 text-[11px] uppercase tracking-widest rounded-full", PINK_GRADIENT, "text-white hover:shadow-lg hover:shadow-[#FF6B9D]/30 transition-all")}>
-                  Try the Design Lab
-                </Button>
-              </a>
-            </div>
+            <p>
+              Growing up, I was mesmerized by my aunt's manicures, counting down the days until I turned thirteen and could finally get my own. By high school, I was hooked. I wasn't just looking for a simple polish; I was obsessed with the architecture of long acrylics and the limitless possibilities of 3D art. From hand-painted masterpieces to encapsulated dollar bills and tiny 3D bubblegum machines, I saw nails as a tiny, powerful canvas.
+            </p>
+            <p>
+              However, finding representation wasn't always easy. Growing up, there weren't many nail artists who looked like me, so I admired the craft from a distance. As I moved around, the struggle of finding a new tech became a recurring challenge. I'd find myself constantly asking: Will they get the shaping right? Will the retention hold up? Can they actually execute the vision in my head?
+            </p>
           </div>
-        </section>
 
-      </div>
-    
-  );
-}
+          <div className="about-section">
+            <h3>The Spark of Inspiration</h3>
+            <p>
+              As the industry evolved into a diverse, global artistic space, my desire for creative expression grew. Social media opened a window to techniques from all over the world. I saw mind-blowing creativity on Pinterest and booked sets via Instagram, but I realized that being a "nail girly" with high standards wasn't enough—I wanted to be part of the creation.
+            </p>
+            <p>
+              I dove headfirst into the "University of the Internet." I scoured YouTube tutorials, asked endless questions in TikTok comments, and saved thousands of pins. But I quickly hit a wall. Many of my questions went unanswered. Whether techs were too busy to respond or intentionally gatekeeping their secrets, I found myself doing deep dives alone to figure out the "devil in the details"—how to stop lifting, how to isolate chrome, and which acrylics actually performed.
+            </p>
+          </div>
 
-function ValueCard({ icon, title, description, color }: {
-  icon: React.ReactNode;
-  title: string;
-  description: string;
-  color: "pink" | "purple" | "cyan";
-}) {
-  const colorMap = {
-    pink: { text: "text-[#FF6B9D]", border: "border-[#FF6B9D]", bg: "bg-[#FF6B9D]/5" },
-    purple: { text: "text-[#9B5DE5]", border: "border-[#9B5DE5]", bg: "bg-[#9B5DE5]/5" },
-    cyan: { text: "text-[#00D9FF]", border: "border-[#00D9FF]", bg: "bg-[#00D9FF]/5" },
-  };
-  
-  const colors = colorMap[color];
-  
-  return (
-    <div className="text-center space-y-6">
-      <div className={cn("mx-auto w-fit p-4 rounded-2xl border-2", colors.border, colors.bg, colors.text)}>
-        {icon}
+          <div className="about-section">
+            <h3>A One-Stop Shop for the Nail Community</h3>
+            <p>
+              I realized I wasn't the only one with these questions. While nail school teaches you how to pass the State Board, it doesn't always teach you how to master the art.
+            </p>
+            <p>
+              That is why I created this platform. I wanted to build the resource I wish I had: a one-stop shop for nail enthusiasts. Whether you are looking for:
+            </p>
+            <ul>
+              <li>Step-by-step tutorials and techniques</li>
+              <li>Curated supply lists and product recommendations</li>
+              <li>Global inspiration and design galleries</li>
+              <li>A bridge to connect with and book talented techs</li>
+            </ul>
+            <p>
+              This is a safe space to share, ask, learn, and create. This is for the artists, the dreamers, and every nail enthusiast looking to level up their craft.
+            </p>
+            <p className="about-closing">
+              Welcome to the Nail Check community. Let's create something beautiful together.
+            </p>
+          </div>
+        </div>
       </div>
-      <h3 className="text-2xl font-serif uppercase tracking-wider">{title}</h3>
-      <p className="text-gray-600 leading-relaxed">{description}</p>
-    </div>
-  );
-}
 
-function TimelineItem({ year, title, description, color }: {
-  year: string;
-  title: string;
-  description: string;
-  color: "pink" | "purple" | "cyan";
-}) {
-  const colorMap = {
-    pink: "text-[#FF6B9D]",
-    purple: "text-[#9B5DE5]",
-    cyan: "text-[#00D9FF]",
-  };
-  
-  const borderColorMap = {
-    pink: "border-[#FF6B9D]/30",
-    purple: "border-[#9B5DE5]/30",
-    cyan: "border-[#00D9FF]/30",
-  };
-  
-  return (
-    <div className="flex gap-8 items-start">
-      <div className="flex-shrink-0 w-24 pt-1">
-        <span className={cn("text-3xl font-bold", colorMap[color])}>{year}</span>
-      </div>
-      <div className={cn("flex-1 border-l-2 pl-8 pb-8", borderColorMap[color])}>
-        <h3 className="text-2xl font-serif uppercase tracking-wide mb-3">{title}</h3>
-        <p className="text-gray-600 leading-relaxed">{description}</p>
-      </div>
-    </div>
+      <style>{`
+        .about-page {
+          max-width: 900px;
+          margin: 0 auto;
+          padding: 40px 20px;
+        }
+
+        .about-hero {
+          text-align: center;
+          padding: 60px 20px;
+          background: linear-gradient(135deg, #FFF5F8, #E8F4FF);
+          border-radius: 20px;
+          margin-bottom: 60px;
+        }
+
+        .about-hero h1 {
+          font-family: var(--font-heading);
+          font-weight: var(--heading-weight);
+          font-size: 3rem;
+          background: linear-gradient(90deg, #FF6B9D, #9B5DE5, #00D9FF);
+          -webkit-background-clip: text;
+          -webkit-text-fill-color: transparent;
+          background-clip: text;
+          margin: 0;
+        }
+
+        .about-content {
+          line-height: 1.8;
+        }
+
+        .about-section {
+          margin-bottom: 50px;
+        }
+
+        .about-section h3 {
+          font-family: var(--font-subheading);
+          font-weight: 700;
+          font-size: 2.5rem;
+          color: #9B5DE5;
+          margin: 40px 0 20px;
+        }
+
+        .about-section p {
+          font-family: var(--font-body);
+          font-size: 1.1rem;
+          color: #444;
+          margin-bottom: 20px;
+        }
+
+        .about-section ul {
+          font-family: var(--font-body);
+          font-size: 1.1rem;
+          color: #444;
+          list-style: none;
+          padding-left: 0;
+          margin-bottom: 20px;
+        }
+
+        .about-section ul li {
+          padding-left: 30px;
+          position: relative;
+          margin-bottom: 10px;
+        }
+
+        .about-section ul li:before {
+          content: "•";
+          color: #FF6B9D;
+          font-weight: bold;
+          font-size: 1.5rem;
+          position: absolute;
+          left: 0;
+          line-height: 1.4;
+        }
+
+        .about-closing {
+          font-size: 1.2rem !important;
+          font-weight: 600;
+          color: #9B5DE5 !important;
+          margin-top: 30px;
+          text-align: center;
+        }
+
+        @media (max-width: 768px) {
+          .about-hero h1 {
+            font-size: 2rem;
+          }
+
+          .about-section h3 {
+            font-size: 2rem;
+          }
+        }
+      `}</style>
+    </Layout>
   );
 }
