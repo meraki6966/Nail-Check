@@ -1,0 +1,72 @@
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Lato:wght@300;400;700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --font-display: 'Inter', sans-serif;
+  --font-body: 'Tenor Sans', sans-serif;
+  --font-logo: 'Syne', sans-serif;
+  --font-heading: 'Syne', sans-serif;
+  --font-subheading: 'Tangerine', cursive;
+  --logo-weight: 800;
+  --heading-weight: 700;
+
+  /* Gallery White Theme */
+  --background: 0 0% 100%;       /* Pure White #FFFFFF */
+  --foreground: 0 0% 10%;        /* Near Black #1A1A1A */
+  
+  --primary: 36 33% 52%;         /* Gold Accent #B08D57 */
+  --primary-foreground: 0 0% 100%;
+  
+  --secondary: 0 0% 98%;         /* Very light gray for subtle contrast */
+  --secondary-foreground: 0 0% 10%;
+  
+  --muted: 0 0% 96%;
+  --muted-foreground: 0 0% 40%;
+  
+  --accent: 36 33% 96%;           /* Subtle gold wash */
+  --accent-foreground: 36 33% 40%;
+  
+  --destructive: 0 70% 50%;
+  --destructive-foreground: 0 0% 98%;
+
+  --border: 0 0% 90%;
+  --input: 0 0% 90%;
+  --ring: 36 33% 52%;
+  
+  --radius: 0.5rem;
+}
+
+@layer base {
+  html, body {
+    overflow-x: hidden;
+  }
+  body {
+    @apply bg-background text-foreground antialiased flex flex-col min-h-screen;
+    font-family: var(--font-body);
+  }
+  * {
+    @apply border-border;
+  }
+  h1, h2 {
+    font-family: var(--font-heading);
+    font-weight: var(--heading-weight);
+    @apply tracking-tight;
+  }
+  h3 {
+    font-family: var(--font-subheading);
+    font-weight: 700;
+  }
+  h4, h5, h6 {
+    font-family: var(--font-display);
+    @apply font-semibold tracking-tight;
+  }
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+}
