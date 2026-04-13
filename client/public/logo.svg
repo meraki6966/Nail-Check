@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 110" width="200" height="110">
+  <defs>
+    <style>
+      @import url('https://fonts.googleapis.com/css2?family=Syne:wght@800&amp;display=swap');
+      .logo-text {
+        font-family: 'Syne', sans-serif;
+        font-weight: 800;
+        fill: #FF6B9D;
+        font-size: 52px;
+        letter-spacing: 3px;
+      }
+    </style>
+  </defs>
+  <text class="logo-text" x="100" y="55" text-anchor="middle">NAIL</text>
+  <text class="logo-text" x="100" y="105" text-anchor="middle">CHECK</text>
+</svg>

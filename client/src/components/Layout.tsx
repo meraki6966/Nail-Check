@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect } from "react";
-import { Sparkles, Search, Menu, X, Crown, LogOut } from "lucide-react";
+import { Search, Menu, X, Crown, LogOut } from "lucide-react";
 import { Link, useLocation } from "wouter";
 import { cn } from "@/lib/utils";
 import { useAuth } from "@/hooks/use-auth";
@@ -40,10 +40,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
         <div className="container flex h-16 items-center px-4 gap-3">
 
           {/* Logo — always left */}
-          <Link href="/" className="flex items-center gap-2 flex-shrink-0">
-            <div className="flex h-8 w-8 items-center justify-center rounded-full bg-gradient-to-br from-[#FF6B9D] to-[#9B5DE5]">
-              <Sparkles className="h-4 w-4 text-white" />
-            </div>
+          <Link href="/" className="flex items-center flex-shrink-0">
             <div style={{
               fontFamily: 'var(--font-logo)',
               fontWeight: 'var(--logo-weight)' as any,
@@ -165,21 +162,16 @@ export function Layout({ children }: { children: React.ReactNode }) {
       <footer className="border-t border-border/40 bg-background/80 mt-8">
         <div className="container mx-auto px-4 py-8 max-w-7xl">
           <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
-            <div className="flex items-center gap-2">
-              <div className="flex h-6 w-6 items-center justify-center rounded-full bg-gradient-to-br from-[#FF6B9D] to-[#9B5DE5]">
-                <Sparkles className="h-3 w-3 text-white" />
-              </div>
-              <div style={{
-                fontFamily: 'var(--font-logo)',
-                fontWeight: 800,
-                letterSpacing: '2px',
-                lineHeight: '0.9',
-                fontSize: '0.75rem',
-                color: '#FF6B9D',
-              }}>
-                <div>NAIL</div>
-                <div>CHECK</div>
-              </div>
+            <div style={{
+              fontFamily: 'var(--font-logo)',
+              fontWeight: 800,
+              letterSpacing: '2px',
+              lineHeight: '0.9',
+              fontSize: '0.75rem',
+              color: '#FF6B9D',
+            }}>
+              <div>NAIL</div>
+              <div>CHECK</div>
             </div>
             <nav className="flex flex-wrap items-center justify-center gap-x-6 gap-y-2 text-sm text-muted-foreground">
               <Link href="/about" className="hover:text-[#FF6B9D] transition-colors">About</Link>
