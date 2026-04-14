@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { MapPin, Search, Sparkles, Star, Instagram, Globe, Calendar, Filter, ChevronDown, UserPlus, Phone, ExternalLink, Loader2 } from "lucide-react";
+import { MapPin, Search, Star, Instagram, Globe, Calendar, Filter, ChevronDown, UserPlus, Phone, ExternalLink, Loader2 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 const PINK_GRADIENT = "bg-gradient-to-r from-[#FF6B9D] to-[#FF8A5B]";
@@ -59,7 +59,7 @@ function TechCard({ tech, type }: { tech: any; type: string }) {
         <div className="w-2/3 p-5">
           <div className="flex items-start justify-between mb-2">
             <div>
-              <h3 className="font-serif text-lg text-gray-800 group-hover:text-[#FF6B9D] transition-colors">
+              <h3 className="text-lg uppercase bg-gradient-to-r from-[#FF6B9D] via-[#9B5DE5] to-[#00D9FF] bg-clip-text text-transparent">
                 {tech.name}
               </h3>
               {tech.businessName && (
@@ -149,7 +149,7 @@ function GooglePlaceCard({ place }: { place: any }) {
         <div className="w-2/3 p-5">
           <div className="flex items-start justify-between mb-2">
             <div>
-              <h3 className="font-serif text-lg text-gray-800 group-hover:text-[#00D9FF] transition-colors">
+              <h3 className="text-lg uppercase bg-gradient-to-r from-[#FF6B9D] via-[#9B5DE5] to-[#00D9FF] bg-clip-text text-transparent">
                 {place.name}
               </h3>
             </div>
@@ -306,7 +306,7 @@ export default function FindTech() {
           <div className="text-center mb-10">
             <div className="flex items-center justify-center gap-3 mb-4">
               <MapPin className="h-10 w-10 text-[#FF6B9D]" />
-              <h1 className="text-4xl md:text-5xl font-serif uppercase tracking-wider bg-gradient-to-r from-[#FF6B9D] via-[#9B5DE5] to-[#00D9FF] bg-clip-text text-transparent">
+              <h1 className="text-4xl md:text-5xl uppercase tracking-wider bg-gradient-to-r from-[#FF6B9D] via-[#9B5DE5] to-[#00D9FF] bg-clip-text text-transparent">
                 Find a Tech
               </h1>
             </div>
@@ -408,8 +408,8 @@ export default function FindTech() {
           {/* Instagram Search Results */}
           {searchByIG && techsByInstagram.length > 0 && (
             <div className="mb-8">
-              <h3 className="text-lg font-serif mb-4 text-[#9B5DE5]">
-                <Instagram className="h-5 w-5 inline mr-2" />
+              <h3 className="text-lg mb-4 uppercase bg-gradient-to-r from-[#FF6B9D] via-[#9B5DE5] to-[#00D9FF] bg-clip-text text-transparent">
+                <Instagram className="h-5 w-5 inline mr-2 text-[#9B5DE5]" />
                 Instagram Results
               </h3>
               <div className="grid md:grid-cols-2 gap-6">
@@ -431,9 +431,8 @@ export default function FindTech() {
           {/* Registered Techs (Featured) */}
           {!isLoading && filteredRegisteredTechs.length > 0 && (
             <div className="mb-10">
-              <h3 className="text-lg font-serif mb-4 flex items-center gap-2">
-                <Sparkles className="h-5 w-5 text-[#FF6B9D]" />
-                <span className="bg-gradient-to-r from-[#FF6B9D] to-[#9B5DE5] bg-clip-text text-transparent">Featured Nail Techs</span>
+              <h3 className="text-lg mb-4 uppercase bg-gradient-to-r from-[#FF6B9D] via-[#9B5DE5] to-[#00D9FF] bg-clip-text text-transparent">
+                Featured Nail Techs
               </h3>
               <div className="grid md:grid-cols-2 gap-6">
                 {filteredRegisteredTechs.map((tech) => (
@@ -446,9 +445,9 @@ export default function FindTech() {
           {/* Google Places Results */}
           {!isLoading && googlePlaces.length > 0 && (
             <div className="mb-10">
-              <h3 className="text-lg font-serif mb-4 flex items-center gap-2">
-                <MapPin className="h-5 w-5 text-[#00D9FF]" />
-                <span className="text-gray-600">More Nail Salons Near You</span>
+              <h3 className="text-lg mb-4 flex items-center gap-2 uppercase bg-gradient-to-r from-[#FF6B9D] via-[#9B5DE5] to-[#00D9FF] bg-clip-text text-transparent">
+                <MapPin className="h-5 w-5 text-[#00D9FF] flex-shrink-0" />
+                More Nail Salons Near You
               </h3>
               <div className="grid md:grid-cols-2 gap-6">
                 {googlePlaces.map((place, idx) => (
@@ -462,7 +461,7 @@ export default function FindTech() {
           {!isLoading && hasSearched && filteredRegisteredTechs.length === 0 && googlePlaces.length === 0 && (
             <div className="text-center py-20 bg-white rounded-3xl">
               <MapPin className="h-12 w-12 mx-auto mb-4 text-gray-300" />
-              <h3 className="text-xl font-serif mb-2 text-gray-600">No Techs Found Yet</h3>
+              <h3 className="text-xl mb-2 uppercase bg-gradient-to-r from-[#FF6B9D] via-[#9B5DE5] to-[#00D9FF] bg-clip-text text-transparent">No Techs Found Yet</h3>
               <p className="text-gray-400 mb-6">Be the first nail tech in your area to join!</p>
               <a href="/tech-register">
                 <Button className={cn("rounded-full", PURPLE_GRADIENT, "text-white")}>
@@ -476,15 +475,14 @@ export default function FindTech() {
           {!isLoading && !hasSearched && !searchByIG && (
             <div className="text-center py-16 bg-white rounded-3xl">
               <Search className="h-12 w-12 mx-auto mb-4 text-gray-300" />
-              <h3 className="text-xl font-serif mb-2 text-gray-600">Search for Nail Techs</h3>
+              <h3 className="text-xl mb-2 uppercase bg-gradient-to-r from-[#FF6B9D] via-[#9B5DE5] to-[#00D9FF] bg-clip-text text-transparent">Search for Nail Techs</h3>
               <p className="text-gray-400">Enter your zip code above to find talented nail artists near you</p>
             </div>
           )}
 
           {/* CTA for Techs */}
           <div className="mt-16 text-center bg-gradient-to-r from-[#FFF5F8] to-[#F8F0FF] rounded-3xl p-10">
-            <Sparkles className="h-10 w-10 mx-auto mb-4 text-[#9B5DE5]" />
-            <h2 className="text-2xl font-serif mb-3 bg-gradient-to-r from-[#FF6B9D] to-[#9B5DE5] bg-clip-text text-transparent">
+            <h2 className="text-2xl mb-3 uppercase bg-gradient-to-r from-[#FF6B9D] via-[#9B5DE5] to-[#00D9FF] bg-clip-text text-transparent">
               Are You a Nail Tech?
             </h2>
             <p className="text-gray-500 mb-6 max-w-md mx-auto">

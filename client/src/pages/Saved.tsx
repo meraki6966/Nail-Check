@@ -102,7 +102,7 @@ export default function Saved() {
         <header className="text-center space-y-4">
           <div className="flex items-center justify-center gap-3">
             <Flame className={cn("h-10 w-10", GOLD_TEXT)} />
-            <h1 className="text-5xl font-serif tracking-widest uppercase text-black">Fire Vault</h1>
+            <h1 className="text-5xl tracking-widest uppercase bg-gradient-to-r from-[#FF6B9D] via-[#9B5DE5] to-[#00D9FF] bg-clip-text text-transparent">Fire Vault</h1>
           </div>
           <p className="text-[10px] tracking-[0.5em] uppercase text-gray-400">Your Saved AI Creations</p>
         </header>

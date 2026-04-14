@@ -128,7 +128,7 @@ export default function Gallery() {
           <div className="text-center mb-12">
             <div className="flex items-center justify-center gap-3 mb-4">
               <Image className="h-10 w-10 text-[#FF6B9D]" />
-              <h1 className="text-5xl font-serif uppercase tracking-wider bg-gradient-to-r from-[#FF6B9D] via-[#9B5DE5] to-[#00D9FF] bg-clip-text text-transparent">
+              <h1 className="text-5xl uppercase tracking-wider bg-gradient-to-r from-[#FF6B9D] via-[#9B5DE5] to-[#00D9FF] bg-clip-text text-transparent">
                 Gallery
               </h1>
             </div>
@@ -228,11 +228,8 @@ export default function Gallery() {
                   </div>
                 </div>
 
-                <h2 className="text-3xl font-serif mb-4">
-                  <span className="bg-gradient-to-r from-[#FF6B9D] to-[#9B5DE5] bg-clip-text text-transparent">
-                    More Designs
-                  </span>
-                  {" "}Coming Soon
+                <h2 className="text-3xl mb-4 uppercase bg-gradient-to-r from-[#FF6B9D] via-[#9B5DE5] to-[#00D9FF] bg-clip-text text-transparent">
+                  More Designs Coming Soon
                 </h2>
                 
                 <p className="text-gray-500 mb-8 leading-relaxed">

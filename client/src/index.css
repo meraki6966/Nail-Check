@@ -53,11 +53,12 @@
   h1, h2 {
     font-family: var(--font-heading);
     font-weight: var(--heading-weight);
+    text-transform: uppercase;
     @apply tracking-tight;
   }
   h3 {
-    font-family: var(--font-subheading);
-    font-weight: 700;
+    font-family: var(--font-heading);
+    font-weight: var(--heading-weight);
   }
   h4, h5, h6 {
     font-family: var(--font-display);

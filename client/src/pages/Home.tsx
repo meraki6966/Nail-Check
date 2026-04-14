@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
-import { Upload, Wand2, Download, Heart, Loader2, Crown, ChevronDown, ChevronUp, X, ShoppingBag, BookOpen, Play, Image, MapPin, CheckCircle2, AlertCircle, Calendar } from "lucide-react";
+import { Upload, Wand2, Download, Heart, Loader2, ChevronDown, ChevronUp, X, ShoppingBag, BookOpen, Play, Image, MapPin, CheckCircle2, AlertCircle, Calendar } from "lucide-react";
 import { useAuth } from "@/hooks/use-auth";
 import { useToast } from "@/hooks/use-toast";
 import { cn } from "@/lib/utils";
@@ -493,7 +493,7 @@ export default function Home() {
             {/* Left: Upload */}
             <div className="space-y-6">
               <div>
-                <h3 className="text-2xl font-serif mb-4 bg-gradient-to-r from-[#9B5DE5] to-[#FF6B9D] bg-clip-text text-transparent">
+                <h3 className="text-2xl mb-4 uppercase bg-gradient-to-r from-[#FF6B9D] via-[#9B5DE5] to-[#00D9FF] bg-clip-text text-transparent">
                   Upload Your Nails
                 </h3>
                 <div className={cn(
@@ -529,7 +529,7 @@ export default function Home() {
 
             {/* Right: Results */}
             <div>
-              <h3 className="text-2xl font-serif mb-4 bg-gradient-to-r from-[#FF6B9D] to-[#9B5DE5] bg-clip-text text-transparent">
+              <h3 className="text-2xl mb-4 uppercase bg-gradient-to-r from-[#FF6B9D] via-[#9B5DE5] to-[#00D9FF] bg-clip-text text-transparent">
                 Professional Analysis
               </h3>
               <div className="bg-gradient-to-br from-[#FFF5F8] to-[#F8F0FF] rounded-2xl min-h-[500px] flex items-center justify-center p-8">
@@ -622,7 +622,7 @@ export default function Home() {
         <section className="relative">
           <div className="flex items-center justify-between cursor-pointer py-4 border-b-2 border-[#FF6B9D]" onClick={() => setShowStylesMenu(!showStylesMenu)}>
             <div className="flex items-center gap-4">
-              <h2 className="text-3xl font-serif tracking-wider uppercase bg-gradient-to-r from-[#FF6B9D] to-[#9B5DE5] bg-clip-text text-transparent">Style Builder</h2>
+              <h2 className="text-3xl tracking-wider uppercase bg-gradient-to-r from-[#FF6B9D] via-[#9B5DE5] to-[#00D9FF] bg-clip-text text-transparent">Style Builder</h2>
               {getSelectedCount() > 0 && <span className={cn("px-3 py-1 rounded-full text-sm font-medium text-white", PINK_GRADIENT)}>{getSelectedCount()} selected</span>}
             </div>
             <div className="flex items-center gap-3">
@@ -690,7 +690,7 @@ export default function Home() {
                 <div className="mt-8 p-6 bg-gradient-to-r from-[#FFF5F8] via-[#F8F0FF] to-[#F0FFFF] rounded-2xl border-2 border-dashed border-[#FF6B9D]/30">
                   <div className="flex flex-col md:flex-row items-center justify-between gap-4">
                     <div>
-                      <h3 className="text-xl font-serif bg-gradient-to-r from-[#FF6B9D] to-[#9B5DE5] bg-clip-text text-transparent">
+                      <h3 className="text-xl uppercase bg-gradient-to-r from-[#FF6B9D] via-[#9B5DE5] to-[#00D9FF] bg-clip-text text-transparent">
                         Ready to Generate?
                       </h3>
                       <p className="text-sm text-gray-500 mt-1">
@@ -714,7 +714,7 @@ export default function Home() {
         <div id="ai-generator" className="grid md:grid-cols-2 gap-12 scroll-mt-8">
           <div className="space-y-6">
             <div>
-              <h3 className="text-2xl font-serif mb-4 bg-gradient-to-r from-[#FF6B9D] to-[#9B5DE5] bg-clip-text text-transparent">1. Upload Canvas</h3>
+              <h3 className="text-2xl mb-4 uppercase bg-gradient-to-r from-[#FF6B9D] via-[#9B5DE5] to-[#00D9FF] bg-clip-text text-transparent">1. Upload Canvas</h3>
               <div className={cn("border-2 border-dashed rounded-2xl p-8 text-center cursor-pointer transition-all", canvasImage ? "border-[#FF6B9D] bg-[#FFF5F8]" : "border-gray-300 hover:border-[#9B5DE5] hover:bg-[#F8F0FF]")}>
                 <input type="file" accept="image/*" onChange={handleImageUpload} className="hidden" id="canvas-upload" />
                 <label htmlFor="canvas-upload" className="cursor-pointer">
@@ -724,7 +724,7 @@ export default function Home() {
             </div>
 
             <div>
-              <h3 className="text-2xl font-serif mb-4 bg-gradient-to-r from-[#9B5DE5] to-[#00D9FF] bg-clip-text text-transparent">2. Your Vision</h3>
+              <h3 className="text-2xl mb-4 uppercase bg-gradient-to-r from-[#FF6B9D] via-[#9B5DE5] to-[#00D9FF] bg-clip-text text-transparent">2. Your Vision</h3>
               {/* ✨ Andrea's AI_IDLE placeholder */}
               <Textarea 
                 value={prompt} 
@@ -742,7 +742,7 @@ export default function Home() {
           </div>
 
           <div>
-            <h3 className="text-2xl font-serif mb-4 bg-gradient-to-r from-[#00D9FF] to-[#9B5DE5] bg-clip-text text-transparent">3. Your Design</h3>
+            <h3 className="text-2xl mb-4 uppercase bg-gradient-to-r from-[#FF6B9D] via-[#9B5DE5] to-[#00D9FF] bg-clip-text text-transparent">3. Your Design</h3>
             <div className="bg-gradient-to-br from-[#FFF5F8] to-[#F8F0FF] rounded-2xl min-h-[500px] flex items-center justify-center p-8">
               {generatedImage ? (
                 <div className="space-y-4 w-full">
@@ -794,7 +794,7 @@ export default function Home() {
         {/* GALLERY */}
         <section>
           <div className="flex items-center justify-between mb-8">
-            <div className="flex items-center gap-3"><Image className="h-8 w-8 text-[#FF6B9D]" /><h2 className="text-4xl font-serif uppercase tracking-wider bg-gradient-to-r from-[#FF6B9D] to-[#9B5DE5] bg-clip-text text-transparent">Gallery</h2></div>
+            <div className="flex items-center gap-3"><Image className="h-8 w-8 text-[#FF6B9D]" /><h2 className="text-4xl uppercase tracking-wider bg-gradient-to-r from-[#FF6B9D] via-[#9B5DE5] to-[#00D9FF] bg-clip-text text-transparent">Gallery</h2></div>
             <a href="/gallery" className="text-sm text-[#9B5DE5] hover:text-[#FF6B9D] transition-colors font-medium">View All →</a>
           </div>
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
@@ -812,7 +812,7 @@ export default function Home() {
         {/* TUTORIALS */}
         <section className="bg-gradient-to-r from-[#FFF5F8] to-[#F8F0FF] rounded-3xl p-8">
           <div className="flex items-center justify-between mb-8">
-            <div className="flex items-center gap-3"><BookOpen className="h-8 w-8 text-[#9B5DE5]" /><h2 className="text-4xl font-serif uppercase tracking-wider bg-gradient-to-r from-[#9B5DE5] to-[#00D9FF] bg-clip-text text-transparent">The Learning Lab</h2></div>
+            <div className="flex items-center gap-3"><BookOpen className="h-8 w-8 text-[#9B5DE5]" /><h2 className="text-4xl uppercase tracking-wider bg-gradient-to-r from-[#FF6B9D] via-[#9B5DE5] to-[#00D9FF] bg-clip-text text-transparent">The Learning Lab</h2></div>
             <a href="/the-learning-lab" className="text-sm text-[#9B5DE5] hover:text-[#FF6B9D] transition-colors font-medium">All Tutorials →</a>
           </div>
           <p className="text-gray-500 mb-8 max-w-2xl">Level up your skills with step-by-step video tutorials from beginner basics to competition-level techniques.</p>
@@ -824,7 +824,7 @@ export default function Home() {
                   <div className="absolute inset-0 bg-black/30 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity"><div className="w-14 h-14 bg-white rounded-full flex items-center justify-center shadow-lg"><Play className="h-6 w-6 text-[#FF6B9D] ml-1" /></div></div>
                   <span className={cn("absolute top-3 right-3 px-3 py-1 rounded-full text-xs font-bold text-white", tutorial.level === "Beginner" && "bg-gradient-to-r from-[#10B981] to-[#34D399]", tutorial.level === "Intermediate" && "bg-gradient-to-r from-[#F59E0B] to-[#FBBF24]", tutorial.level === "Advanced" && "bg-gradient-to-r from-[#EF4444] to-[#F87171]", tutorial.level === "Competition" && "bg-gradient-to-r from-[#8B5CF6] to-[#A78BFA]")}>{tutorial.level}</span>
                 </div>
-                <div className="p-4"><h3 className="font-medium text-gray-800 group-hover:text-[#9B5DE5] transition-colors">{tutorial.title}</h3><p className="text-sm text-gray-400 mt-1">{tutorial.duration}</p></div>
+                <div className="p-4"><h3 className="font-medium uppercase bg-gradient-to-r from-[#FF6B9D] via-[#9B5DE5] to-[#00D9FF] bg-clip-text text-transparent">{tutorial.title}</h3><p className="text-sm text-gray-400 mt-1">{tutorial.duration}</p></div>
               </div>
             ))}
           </div>
@@ -833,22 +833,22 @@ export default function Home() {
         {/* Flavor of the Month */}
         <section>
           <div className="flex items-center justify-between mb-8">
-            <div><h2 className="text-4xl font-serif uppercase tracking-wider bg-gradient-to-r from-[#B08D57] to-[#D4AF37] bg-clip-text text-transparent">Flavor of the Month</h2><p className="text-sm text-gray-500 italic mt-2">Current focus from the Technical Hub</p></div>
+            <div><h2 className="text-4xl uppercase tracking-wider bg-gradient-to-r from-[#FF6B9D] via-[#9B5DE5] to-[#00D9FF] bg-clip-text text-transparent">Flavor of the Month</h2><p className="text-sm text-gray-500 italic mt-2">Current focus from the Technical Hub</p></div>
           </div>
           <div className="relative h-[500px] overflow-hidden group rounded-3xl">
             <img src={flavorOfMonth.image} alt={flavorOfMonth.title} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" />
             <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent flex items-end">
-              <div className="p-8 text-white"><span className="text-[10px] uppercase tracking-[0.3em] text-[#D4AF37] block mb-2">Flavor of the Month</span><h3 className="text-3xl font-serif mb-2">{flavorOfMonth.title}</h3><p className="text-sm text-gray-300 italic max-w-md">{flavorOfMonth.description}</p></div>
+              <div className="p-8 text-white"><span className="text-[10px] uppercase tracking-[0.3em] text-[#D4AF37] block mb-2">Flavor of the Month</span><h3 className="text-3xl mb-2 uppercase bg-gradient-to-r from-[#FF6B9D] via-[#9B5DE5] to-[#00D9FF] bg-clip-text text-transparent">{flavorOfMonth.title}</h3><p className="text-sm text-gray-300 italic max-w-md">{flavorOfMonth.description}</p></div>
             </div>
           </div>
         </section>
 
         {/* Quick Links */}
         <section className="grid md:grid-cols-4 gap-6">
-          <a href="/find-tech" className="group"><div className="border border-[#FF6B9D]/20 p-6 rounded-2xl bg-gradient-to-br from-white to-[#FFF5F8] hover:shadow-lg hover:shadow-[#FF6B9D]/10 transition-all"><MapPin className="h-8 w-8 mb-4 text-[#FF6B9D]" /><h3 className="text-xl font-serif mb-2 group-hover:text-[#FF6B9D] transition-colors">Find a Tech</h3><p className="text-sm text-gray-600">Nail techs near you</p></div></a>
-          <a href="/saved" className="group"><div className="border border-[#9B5DE5]/20 p-6 rounded-2xl bg-gradient-to-br from-white to-[#F8F0FF] hover:shadow-lg hover:shadow-[#9B5DE5]/10 transition-all"><Heart className="h-8 w-8 mb-4 text-[#9B5DE5]" /><h3 className="text-xl font-serif mb-2 group-hover:text-[#9B5DE5] transition-colors">Fire Vault</h3><p className="text-sm text-gray-600">Your saved AI designs</p></div></a>
-          <a href="/seasonal" className="group"><div className="border border-[#00D9FF]/20 p-6 rounded-2xl bg-gradient-to-br from-white to-[#F0FFFF] hover:shadow-lg hover:shadow-[#00D9FF]/10 transition-all"><Calendar className="h-8 w-8 mb-4 text-[#00D9FF]" /><h3 className="text-xl font-serif mb-2 group-hover:text-[#00D9FF] transition-colors">Seasonal Vault</h3><p className="text-sm text-gray-600">Curated collections</p></div></a>
-          <a href="/supplies" className="group"><div className="border border-[#D4AF37]/20 p-6 rounded-2xl bg-gradient-to-br from-white to-[#FFFBF0] hover:shadow-lg hover:shadow-[#D4AF37]/10 transition-all"><Crown className="h-8 w-8 mb-4 text-[#D4AF37]" /><h3 className="text-xl font-serif mb-2 group-hover:text-[#D4AF37] transition-colors">Supply Suite</h3><p className="text-sm text-gray-600">Professional products</p></div></a>
+          <a href="/find-tech" className="group"><div className="border border-[#FF6B9D]/20 p-6 rounded-2xl bg-gradient-to-br from-white to-[#FFF5F8] hover:shadow-lg hover:shadow-[#FF6B9D]/10 transition-all"><MapPin className="h-8 w-8 mb-4 text-[#FF6B9D]" /><h3 className="text-xl mb-2 uppercase bg-gradient-to-r from-[#FF6B9D] via-[#9B5DE5] to-[#00D9FF] bg-clip-text text-transparent">Find a Tech</h3><p className="text-sm text-gray-600">Nail techs near you</p></div></a>
+          <a href="/saved" className="group"><div className="border border-[#9B5DE5]/20 p-6 rounded-2xl bg-gradient-to-br from-white to-[#F8F0FF] hover:shadow-lg hover:shadow-[#9B5DE5]/10 transition-all"><Heart className="h-8 w-8 mb-4 text-[#9B5DE5]" /><h3 className="text-xl mb-2 uppercase bg-gradient-to-r from-[#FF6B9D] via-[#9B5DE5] to-[#00D9FF] bg-clip-text text-transparent">Fire Vault</h3><p className="text-sm text-gray-600">Your saved AI designs</p></div></a>
+          <a href="/seasonal" className="group"><div className="border border-[#00D9FF]/20 p-6 rounded-2xl bg-gradient-to-br from-white to-[#F0FFFF] hover:shadow-lg hover:shadow-[#00D9FF]/10 transition-all"><Calendar className="h-8 w-8 mb-4 text-[#00D9FF]" /><h3 className="text-xl mb-2 uppercase bg-gradient-to-r from-[#FF6B9D] via-[#9B5DE5] to-[#00D9FF] bg-clip-text text-transparent">Seasonal Vault</h3><p className="text-sm text-gray-600">Curated collections</p></div></a>
+          <a href="/supplies" className="group"><div className="border border-[#D4AF37]/20 p-6 rounded-2xl bg-gradient-to-br from-white to-[#FFFBF0] hover:shadow-lg hover:shadow-[#D4AF37]/10 transition-all"><ShoppingBag className="h-8 w-8 mb-4 text-[#D4AF37]" /><h3 className="text-xl mb-2 uppercase bg-gradient-to-r from-[#FF6B9D] via-[#9B5DE5] to-[#00D9FF] bg-clip-text text-transparent">Supply Suite</h3><p className="text-sm text-gray-600">Professional products</p></div></a>
         </section>
         </>
         )}

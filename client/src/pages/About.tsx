@@ -104,7 +104,10 @@ export default function About() {
           font-weight: var(--heading-weight);
           text-transform: uppercase;
           font-size: 2rem;
-          color: #9B5DE5;
+          background: linear-gradient(90deg, #FF6B9D, #9B5DE5, #00D9FF);
+          -webkit-background-clip: text;
+          -webkit-text-fill-color: transparent;
+          background-clip: text;
           margin: 40px 0 20px;
         }
         .about-section p {

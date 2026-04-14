@@ -129,7 +129,7 @@ export default function SupplySuite() {
         <header className="text-center space-y-4">
           <div className="flex items-center justify-center gap-3">
             <Package className={cn("h-10 w-10", GOLD_TEXT)} />
-            <h1 className="text-6xl font-serif tracking-widest uppercase text-black">Supply Suite</h1>
+            <h1 className="text-6xl tracking-widest bg-gradient-to-r from-[#FF6B9D] via-[#9B5DE5] to-[#00D9FF] bg-clip-text text-transparent">Supply Suite</h1>
           </div>
           <p className="text-sm text-gray-500 italic max-w-2xl mx-auto">
             Curated professional-grade products, tools, and equipment for the Technical Hub
@@ -150,7 +150,7 @@ export default function SupplySuite() {
 
         {/* Category Definitions */}
         <div className="max-w-4xl mx-auto space-y-3">
-          <h2 className="text-[10px] uppercase tracking-widest text-gray-400 text-center mb-4">Category Guide</h2>
+          <h2 className="text-[10px] uppercase tracking-widest text-center mb-4 bg-gradient-to-r from-[#FF6B9D] via-[#9B5DE5] to-[#00D9FF] bg-clip-text text-transparent">Category Guide</h2>
           <div className="grid md:grid-cols-2 gap-3">
             {Object.entries(CATEGORY_DEFINITIONS).map(([cat, def]) => (
               <div key={cat} className="flex gap-3 p-4 bg-gray-50 border border-gray-100">
@@ -296,7 +296,7 @@ export default function SupplySuite() {
                     <span className="text-[9px] uppercase tracking-widest text-gray-400 block mb-2">
                       {selectedProduct.category}
                     </span>
-                    <h2 className="text-2xl font-serif uppercase tracking-wider mb-2">
+                    <h2 className="text-2xl uppercase tracking-wider mb-2 bg-gradient-to-r from-[#FF6B9D] via-[#9B5DE5] to-[#00D9FF] bg-clip-text text-transparent">
                       {selectedProduct.name}
                     </h2>
                     <p className="text-sm text-gray-500 font-medium">{selectedProduct.brand}</p>

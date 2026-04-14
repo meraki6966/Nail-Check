@@ -95,7 +95,7 @@ export default function SeasonalVault() {
           {/* Header */}
           <header className="text-center space-y-4">
             <span className="text-[10px] tracking-[0.8em] text-gray-400 uppercase">The Curated Collections</span>
-            <h1 className="text-6xl font-serif tracking-widest uppercase text-black">Seasonal Vault</h1>
+            <h1 className="text-6xl tracking-widest bg-gradient-to-r from-[#FF6B9D] via-[#9B5DE5] to-[#00D9FF] bg-clip-text text-transparent">Seasonal Vault</h1>
             <p className="text-sm text-gray-500 italic max-w-2xl mx-auto">
               Explore our expertly curated nail designs organized by season and special occasions
             </p>
@@ -121,7 +121,7 @@ export default function SeasonalVault() {
                   Members Only
                 </span>
                 
-                <h2 className="text-3xl font-serif tracking-wider uppercase mb-4">
+                <h2 className="text-3xl tracking-wider uppercase mb-4 bg-gradient-to-r from-[#FF6B9D] via-[#9B5DE5] to-[#00D9FF] bg-clip-text text-transparent">
                   Unlock the Vault
                 </h2>
                 
@@ -187,7 +187,7 @@ export default function SeasonalVault() {
         {/* Header */}
         <header className="text-center space-y-4">
           <span className="text-[10px] tracking-[0.8em] text-gray-400 uppercase">The Curated Collections</span>
-          <h1 className="text-6xl font-serif tracking-widest uppercase text-black">Seasonal Vault</h1>
+          <h1 className="text-6xl tracking-widest bg-gradient-to-r from-[#FF6B9D] via-[#9B5DE5] to-[#00D9FF] bg-clip-text text-transparent">Seasonal Vault</h1>
           <p className="text-sm text-gray-500 italic max-w-2xl mx-auto">
             Explore our expertly curated nail designs organized by season and special occasions
           </p>
@@ -248,7 +248,7 @@ export default function SeasonalVault() {
                 <div key={season} className="space-y-8">
                   <div className="flex items-center gap-4">
                     <Icon className={cn("h-6 w-6", color)} />
-                    <h2 className="text-3xl font-serif uppercase tracking-wider">{season}</h2>
+                    <h2 className="text-3xl uppercase tracking-wider bg-gradient-to-r from-[#FF6B9D] via-[#9B5DE5] to-[#00D9FF] bg-clip-text text-transparent">{season}</h2>
                     <div className="flex-1 h-px bg-gray-200"></div>
                   </div>
                   
@@ -305,7 +305,7 @@ export default function SeasonalVault() {
                     <span className={cn("text-[9px] uppercase tracking-widest mb-2 block", GOLD_TEXT)}>
                       {selectedDesign.season} {selectedDesign.category && `• ${selectedDesign.category}`}
                     </span>
-                    <h2 className="text-3xl font-serif uppercase tracking-wider mb-4">
+                    <h2 className="text-3xl uppercase tracking-wider mb-4 bg-gradient-to-r from-[#FF6B9D] via-[#9B5DE5] to-[#00D9FF] bg-clip-text text-transparent">
                       {selectedDesign.title}
                     </h2>
                     {selectedDesign.description && (
