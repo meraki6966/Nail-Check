@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
-import { Snowflake, Flower2, Sun, Leaf, Calendar, Loader2, Lock, Crown } from "lucide-react";
+import { Snowflake, Flower, Sun, Leaf, Calendar, Loader2, Lock, Crown } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { cn } from "@/lib/utils";
 import { useAuth } from "@/hooks/use-auth";
@@ -24,10 +24,53 @@ interface SeasonalDesign {
 const SEASONS = [
   { name: "All", value: "", icon: Calendar, color: "text-gray-600" },
   { name: "Winter", value: "Winter", icon: Snowflake, color: "text-blue-400" },
-  { name: "Spring", value: "Spring", icon: Flower2, color: "text-pink-400" },
+  { name: "Spring", value: "Spring", icon: Flower, color: "text-pink-400" },
   { name: "Summer", value: "Summer", icon: Sun, color: "text-yellow-400" },
   { name: "Fall", value: "Fall", icon: Leaf, color: "text-orange-400" },
   { name: "Holidays", value: "Holiday", icon: Calendar, color: "text-red-400" },
+];
+
+const SEASON_CARDS = [
+  {
+    name: "Fall",
+    value: "Fall",
+    Icon: Leaf,
+    tagline: "Warm & cozy tones",
+    iconColor: "text-orange-400",
+    activeBg: "from-[#FF8A5B] to-[#D4AF37]",
+    idleBg: "from-orange-50 to-amber-50",
+    border: "border-orange-100",
+  },
+  {
+    name: "Winter",
+    value: "Winter",
+    Icon: Snowflake,
+    tagline: "Holiday glam & frost",
+    iconColor: "text-blue-400",
+    activeBg: "from-[#00D9FF] to-[#9B5DE5]",
+    idleBg: "from-blue-50 to-cyan-50",
+    border: "border-blue-100",
+  },
+  {
+    name: "Spring",
+    value: "Spring",
+    Icon: Flower,
+    tagline: "Florals & pastels",
+    iconColor: "text-pink-400",
+    activeBg: "from-[#FF6B9D] to-[#FF8A5B]",
+    idleBg: "from-pink-50 to-rose-50",
+    border: "border-pink-100",
+  },
+  {
+    name: "Summer",
+    value: "Summer",
+    Icon: Sun,
+    tagline: "Bright & bold vibes",
+    iconColor: "text-yellow-400",
+    activeBg: "from-[#FFC857] to-[#FF8A5B]",
+    idleBg: "from-yellow-50 to-orange-50",
+    border: "border-yellow-100",
+  },
 ];
 
 export default function SeasonalVault() {
@@ -152,27 +195,16 @@ export default function SeasonalVault() {
           </div>
 
           {/* Benefits Preview */}
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-6 pt-8">
-            <div className="text-center p-6 border border-gray-200">
-              <Snowflake className="h-8 w-8 mx-auto mb-3 text-blue-400" />
-              <p className="text-[10px] uppercase tracking-widest text-gray-600">Winter</p>
-              <p className="text-[9px] text-gray-400 mt-1">Holiday glam & frost</p>
-            </div>
-            <div className="text-center p-6 border border-gray-200">
-              <Flower2 className="h-8 w-8 mx-auto mb-3 text-pink-400" />
-              <p className="text-[10px] uppercase tracking-widest text-gray-600">Spring</p>
-              <p className="text-[9px] text-gray-400 mt-1">Florals & pastels</p>
-            </div>
-            <div className="text-center p-6 border border-gray-200">
-              <Sun className="h-8 w-8 mx-auto mb-3 text-yellow-400" />
-              <p className="text-[10px] uppercase tracking-widest text-gray-600">Summer</p>
-              <p className="text-[9px] text-gray-400 mt-1">Bright & bold</p>
-            </div>
-            <div className="text-center p-6 border border-gray-200">
-              <Leaf className="h-8 w-8 mx-auto mb-3 text-orange-400" />
-              <p className="text-[10px] uppercase tracking-widest text-gray-600">Fall</p>
-              <p className="text-[9px] text-gray-400 mt-1">Warm & cozy</p>
-            </div>
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-5 pt-8">
+            {SEASON_CARDS.map(({ name, Icon, tagline, iconColor, idleBg, border }) => (
+              <div key={name} className={cn("text-center p-8 rounded-2xl border-2 bg-gradient-to-br", border, idleBg)}>
+                <Icon className={cn("h-12 w-12 mx-auto mb-4", iconColor)} />
+                <h3 className="text-xl tracking-widest uppercase bg-gradient-to-r from-[#FF6B9D] via-[#9B5DE5] to-[#00D9FF] bg-clip-text text-transparent">
+                  {name}
+                </h3>
+                <p className="text-[10px] uppercase tracking-wider text-gray-400 mt-2">{tagline}</p>
+              </div>
+            ))}
           </div>
         </div>
       
@@ -192,6 +224,49 @@ export default function SeasonalVault() {
             Explore our expertly curated nail designs organized by season and special occasions
           </p>
         </header>
+
+        {/* Season Category Cards */}
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-5">
+          {SEASON_CARDS.map(({ name, value, Icon, tagline, iconColor, activeBg, idleBg, border }) => {
+            const isActive = selectedSeason === value;
+            return (
+              <button
+                key={value}
+                onClick={() => setSelectedSeason(isActive ? "" : value)}
+                className={cn(
+                  "group relative p-8 rounded-2xl border-2 transition-all duration-300 text-center cursor-pointer",
+                  isActive
+                    ? `border-transparent bg-gradient-to-br ${activeBg} shadow-xl scale-[1.02]`
+                    : `${border} bg-gradient-to-br ${idleBg} hover:shadow-lg hover:scale-[1.01]`
+                )}
+              >
+                <Icon className={cn(
+                  "h-12 w-12 mx-auto mb-4 transition-transform duration-300 group-hover:scale-110",
+                  isActive ? "text-white" : iconColor
+                )} />
+                <h3 className={cn(
+                  "text-xl tracking-widest uppercase",
+                  isActive
+                    ? "text-white"
+                    : "bg-gradient-to-r from-[#FF6B9D] via-[#9B5DE5] to-[#00D9FF] bg-clip-text text-transparent"
+                )}>
+                  {name}
+                </h3>
+                <p className={cn(
+                  "text-[10px] tracking-wider uppercase mt-2",
+                  isActive ? "text-white/80" : "text-gray-400"
+                )}>
+                  {tagline}
+                </p>
+                {isActive && (
+                  <div className="absolute top-3 right-3 w-5 h-5 bg-white/30 rounded-full flex items-center justify-center">
+                    <span className="text-white text-[10px] font-bold">✕</span>
+                  </div>
+                )}
+              </button>
+            );
+          })}
+        </div>
 
         {/* Season Filter */}
         <div className="flex flex-wrap justify-center gap-3">
