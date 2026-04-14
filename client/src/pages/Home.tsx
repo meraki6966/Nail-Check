@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
-import { Sparkles, Upload, Wand2, Download, Heart, Loader2, Crown, ChevronDown, ChevronUp, X, ShoppingBag, BookOpen, Play, Image, MapPin, CheckCircle2, AlertCircle } from "lucide-react";
+import { Upload, Wand2, Download, Heart, Loader2, Crown, ChevronDown, ChevronUp, X, ShoppingBag, BookOpen, Play, Image, MapPin, CheckCircle2, AlertCircle, Calendar } from "lucide-react";
 import { useAuth } from "@/hooks/use-auth";
 import { useToast } from "@/hooks/use-toast";
 import { cn } from "@/lib/utils";
@@ -451,7 +451,6 @@ export default function Home() {
         {/* HEADER */}
         <header className="text-center space-y-4">
           <div className="flex items-center justify-center gap-3">
-            <Sparkles className="h-10 w-10 text-[#FF6B9D]" />
             <h1 className="text-5xl font-serif tracking-widest uppercase bg-gradient-to-r from-[#FF6B9D] via-[#9B5DE5] to-[#00D9FF] bg-clip-text text-transparent">
               The Design Lab
             </h1>
@@ -483,7 +482,6 @@ export default function Home() {
                   : "text-gray-500 hover:text-gray-700"
               )}
             >
-              <Sparkles className="inline h-4 w-4 mr-1.5 -mt-0.5" />
               AI Critique
             </button>
           </div>
@@ -524,7 +522,7 @@ export default function Home() {
                 {isAnalyzing ? (
                   <><Loader2 className="mr-2 h-5 w-5 animate-spin" /> Analyzing Your Nails...</>
                 ) : (
-                  <><Sparkles className="mr-2 h-5 w-5" /> Get AI Critique</>
+                  <>Get AI Critique</>
                 )}
               </Button>
             </div>
@@ -580,7 +578,6 @@ export default function Home() {
                   </div>
                 ) : (
                   <div className="text-center text-gray-400">
-                    <Sparkles className="h-16 w-16 mx-auto mb-4 text-[#9B5DE5]/30" />
                     <p>Upload a photo to get your professional nail critique</p>
                   </div>
                 )}
@@ -788,7 +785,7 @@ export default function Home() {
                   )}
                 </div>
               ) : (
-                <div className="text-center text-gray-400"><Sparkles className="h-16 w-16 mx-auto mb-4 text-[#9B5DE5]/30" /><p>Your generated design will appear here</p></div>
+                <div className="text-center text-gray-400"><p>Your generated design will appear here</p></div>
               )}
             </div>
           </div>
@@ -850,7 +847,7 @@ export default function Home() {
         <section className="grid md:grid-cols-4 gap-6">
           <a href="/find-tech" className="group"><div className="border border-[#FF6B9D]/20 p-6 rounded-2xl bg-gradient-to-br from-white to-[#FFF5F8] hover:shadow-lg hover:shadow-[#FF6B9D]/10 transition-all"><MapPin className="h-8 w-8 mb-4 text-[#FF6B9D]" /><h3 className="text-xl font-serif mb-2 group-hover:text-[#FF6B9D] transition-colors">Find a Tech</h3><p className="text-sm text-gray-600">Nail techs near you</p></div></a>
           <a href="/saved" className="group"><div className="border border-[#9B5DE5]/20 p-6 rounded-2xl bg-gradient-to-br from-white to-[#F8F0FF] hover:shadow-lg hover:shadow-[#9B5DE5]/10 transition-all"><Heart className="h-8 w-8 mb-4 text-[#9B5DE5]" /><h3 className="text-xl font-serif mb-2 group-hover:text-[#9B5DE5] transition-colors">Fire Vault</h3><p className="text-sm text-gray-600">Your saved AI designs</p></div></a>
-          <a href="/seasonal" className="group"><div className="border border-[#00D9FF]/20 p-6 rounded-2xl bg-gradient-to-br from-white to-[#F0FFFF] hover:shadow-lg hover:shadow-[#00D9FF]/10 transition-all"><Sparkles className="h-8 w-8 mb-4 text-[#00D9FF]" /><h3 className="text-xl font-serif mb-2 group-hover:text-[#00D9FF] transition-colors">Seasonal Vault</h3><p className="text-sm text-gray-600">Curated collections</p></div></a>
+          <a href="/seasonal" className="group"><div className="border border-[#00D9FF]/20 p-6 rounded-2xl bg-gradient-to-br from-white to-[#F0FFFF] hover:shadow-lg hover:shadow-[#00D9FF]/10 transition-all"><Calendar className="h-8 w-8 mb-4 text-[#00D9FF]" /><h3 className="text-xl font-serif mb-2 group-hover:text-[#00D9FF] transition-colors">Seasonal Vault</h3><p className="text-sm text-gray-600">Curated collections</p></div></a>
           <a href="/supplies" className="group"><div className="border border-[#D4AF37]/20 p-6 rounded-2xl bg-gradient-to-br from-white to-[#FFFBF0] hover:shadow-lg hover:shadow-[#D4AF37]/10 transition-all"><Crown className="h-8 w-8 mb-4 text-[#D4AF37]" /><h3 className="text-xl font-serif mb-2 group-hover:text-[#D4AF37] transition-colors">Supply Suite</h3><p className="text-sm text-gray-600">Professional products</p></div></a>
         </section>
         </>

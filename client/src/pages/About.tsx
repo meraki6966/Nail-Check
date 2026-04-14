@@ -29,7 +29,7 @@ export default function About() {
           </div>
 
           <div className="about-section">
-            <h3>The Spark of Inspiration</h3>
+            <h3>THE SPARK OF INSPIRATION</h3>
             <p>
               As the industry evolved into a diverse, global artistic space, my desire for creative
               expression grew. Social media opened a window to techniques from all over the world. I
@@ -48,7 +48,7 @@ export default function About() {
           </div>
 
           <div className="about-section">
-            <h3>A One-Stop Shop for the Nail Community</h3>
+            <h3>A ONE-STOP SHOP FOR THE NAIL COMMUNITY</h3>
             <p>
               I realized I wasn't the only one with these questions. While nail school teaches you how
               to pass the State Board, it doesn't always teach you how to master the art.
