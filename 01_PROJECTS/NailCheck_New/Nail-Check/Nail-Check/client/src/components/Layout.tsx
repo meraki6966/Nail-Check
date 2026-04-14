@@ -46,10 +46,9 @@ export function Layout({ children }: { children: React.ReactNode }) {
               fontWeight: 'var(--logo-weight)' as any,
               textAlign: 'center',
               lineHeight: '0.9',
-              letterSpacing: '2px',
             }}>
-              <div style={{ fontSize: '1.2rem', color: '#FF6B9D' }}>NAIL</div>
-              <div style={{ fontSize: '1.2rem', color: '#FF6B9D' }}>CHECK</div>
+              <div style={{ fontSize: '1.2rem', color: '#FF6B9D', letterSpacing: '0.35em' }}>NAIL</div>
+              <div style={{ fontSize: '1.2rem', color: '#FF6B9D', letterSpacing: '0.1em' }}>CHECK</div>
             </div>
           </Link>
 
