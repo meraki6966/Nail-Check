@@ -100,9 +100,10 @@ export default function About() {
         .about-content { line-height: 1.8; }
         .about-section { margin-bottom: 50px; }
         .about-section h3 {
-          font-family: var(--font-subheading);
-          font-weight: 700;
-          font-size: 2.5rem;
+          font-family: var(--font-heading);
+          font-weight: var(--heading-weight);
+          text-transform: uppercase;
+          font-size: 2rem;
           color: #9B5DE5;
           margin: 40px 0 20px;
         }
