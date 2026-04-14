@@ -46,10 +46,9 @@ export function Layout({ children }: { children: React.ReactNode }) {
               fontWeight: 'var(--logo-weight)' as any,
               textAlign: 'center',
               lineHeight: '0.9',
-              letterSpacing: '2px',
             }}>
-              <div style={{ fontSize: '1.2rem', color: '#FF6B9D' }}>NAIL</div>
-              <div style={{ fontSize: '1.2rem', color: '#FF6B9D' }}>CHECK</div>
+              <div style={{ fontSize: '1.2rem', color: '#FF6B9D', letterSpacing: '0.25em' }}>NAIL</div>
+              <div style={{ fontSize: '1.2rem', color: '#FF6B9D', letterSpacing: '0.2em' }}>CHECK</div>
             </div>
           </Link>
 
@@ -165,13 +164,11 @@ export function Layout({ children }: { children: React.ReactNode }) {
             <div style={{
               fontFamily: 'var(--font-logo)',
               fontWeight: 800,
-              letterSpacing: '2px',
               lineHeight: '0.9',
-              fontSize: '0.75rem',
-              color: '#FF6B9D',
+              textAlign: 'center',
             }}>
-              <div>NAIL</div>
-              <div>CHECK</div>
+              <div style={{ fontSize: '0.75rem', color: '#FF6B9D', letterSpacing: '0.25em' }}>NAIL</div>
+              <div style={{ fontSize: '0.75rem', color: '#FF6B9D', letterSpacing: '0.2em' }}>CHECK</div>
             </div>
             <nav className="flex flex-wrap items-center justify-center gap-x-6 gap-y-2 text-sm text-muted-foreground">
               <Link href="/about" className="hover:text-[#FF6B9D] transition-colors">About</Link>
