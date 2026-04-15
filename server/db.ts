@@ -174,6 +174,40 @@ export async function initializeDatabase() {
       CREATE INDEX IF NOT EXISTS idx_subscription_history_user_id    ON subscription_history(user_id);
       CREATE INDEX IF NOT EXISTS idx_subscription_history_created_at ON subscription_history(created_at);
     `);
+
+    // Fix broken Unsplash image URLs in seasonal_designs table
+    await pool.query(`
+      UPDATE seasonal_designs SET image_url = 'http://nail-check.com/wp-content/uploads/2026/02/Chrome.png'
+        WHERE title = 'Icy Blue Glitter' AND image_url LIKE '%unsplash%';
+      UPDATE seasonal_designs SET image_url = 'http://nail-check.com/wp-content/uploads/2026/02/Cat-eye.png'
+        WHERE title = 'Snowflake Chrome' AND image_url LIKE '%unsplash%';
+      UPDATE seasonal_designs SET image_url = 'http://nail-check.com/wp-content/uploads/2026/02/Matte-Sugar.png'
+        WHERE title = 'Burgundy Velvet' AND image_url LIKE '%unsplash%';
+      UPDATE seasonal_designs SET image_url = 'http://nail-check.com/wp-content/uploads/2026/02/Bridal-1.png'
+        WHERE title = 'Pastel Garden' AND image_url LIKE '%unsplash%';
+      UPDATE seasonal_designs SET image_url = 'http://nail-check.com/wp-content/uploads/2026/02/Editorial.png'
+        WHERE title = 'Cherry Blossom' AND image_url LIKE '%unsplash%';
+      UPDATE seasonal_designs SET image_url = 'http://nail-check.com/wp-content/uploads/2026/02/Glass-Nails.png'
+        WHERE title = 'Mint Fresh' AND image_url LIKE '%unsplash%';
+      UPDATE seasonal_designs SET image_url = 'http://nail-check.com/wp-content/uploads/2026/02/Vacation.jpg'
+        WHERE title = 'Tropical Sunset' AND image_url LIKE '%unsplash%';
+      UPDATE seasonal_designs SET image_url = 'http://nail-check.com/wp-content/uploads/2026/02/Cat-eye.png'
+        WHERE title = 'Ocean Wave' AND image_url LIKE '%unsplash%';
+      UPDATE seasonal_designs SET image_url = 'http://nail-check.com/wp-content/uploads/2026/02/Birthday.png'
+        WHERE title = 'Neon Coral' AND image_url LIKE '%unsplash%';
+      UPDATE seasonal_designs SET image_url = 'http://nail-check.com/wp-content/uploads/2026/02/Junk.png'
+        WHERE title = 'Pumpkin Spice' AND image_url LIKE '%unsplash%';
+      UPDATE seasonal_designs SET image_url = 'http://nail-check.com/wp-content/uploads/2026/02/Editorial.png'
+        WHERE title = 'Maple Leaf Gold' AND image_url LIKE '%unsplash%';
+      UPDATE seasonal_designs SET image_url = 'http://nail-check.com/wp-content/uploads/2026/02/Matte-Sugar.png'
+        WHERE title = 'Mocha Matte' AND image_url LIKE '%unsplash%';
+      UPDATE seasonal_designs SET image_url = 'http://nail-check.com/wp-content/uploads/2026/02/Bridal-1.png'
+        WHERE title = 'Valentine Hearts' AND image_url LIKE '%unsplash%';
+      UPDATE seasonal_designs SET image_url = 'http://nail-check.com/wp-content/uploads/2026/02/3D-Character.png'
+        WHERE title = 'Halloween Spooky' AND image_url LIKE '%unsplash%';
+      UPDATE seasonal_designs SET image_url = 'http://nail-check.com/wp-content/uploads/2026/02/Chrome.png'
+        WHERE title = 'New Year Sparkle' AND image_url LIKE '%unsplash%';
+    `);
     
     console.log("✅ Database tables initialized successfully!");
   } catch (error) {

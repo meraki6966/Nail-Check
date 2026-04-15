@@ -1019,29 +1019,29 @@ async function seedDatabase() {
   if (existingSeasonal.length === 0) {
     const seasonalSamples = [
       // WINTER
-      { title: "Icy Blue Glitter", imageUrl: "https://images.unsplash.com/photo-1632345031435-8727f6897d53?auto=format&fit=crop&q=80&w=800", season: "Winter", category: "Festive", description: "Frozen elegance with shimmer", tags: ["glitter", "blue", "festive"], featured: true },
-      { title: "Snowflake Chrome", imageUrl: "https://images.unsplash.com/photo-1604654894610-df63bc536371?auto=format&fit=crop&q=80&w=800", season: "Winter", category: "Holiday", description: "Delicate winter patterns", tags: ["chrome", "white", "snowflake"], featured: true },
-      { title: "Burgundy Velvet", imageUrl: "https://images.unsplash.com/photo-1610992015877-47b84e5e8b39?auto=format&fit=crop&q=80&w=800", season: "Winter", category: "Elegant", description: "Deep winter tones", tags: ["burgundy", "matte", "elegant"], featured: false },
-      
+      { title: "Icy Blue Glitter", imageUrl: "http://nail-check.com/wp-content/uploads/2026/02/Chrome.png", season: "Winter", category: "Festive", description: "Frozen elegance with shimmer", tags: ["glitter", "blue", "festive"], featured: true },
+      { title: "Snowflake Chrome", imageUrl: "http://nail-check.com/wp-content/uploads/2026/02/Cat-eye.png", season: "Winter", category: "Holiday", description: "Delicate winter patterns", tags: ["chrome", "white", "snowflake"], featured: true },
+      { title: "Burgundy Velvet", imageUrl: "http://nail-check.com/wp-content/uploads/2026/02/Matte-Sugar.png", season: "Winter", category: "Elegant", description: "Deep winter tones", tags: ["burgundy", "matte", "elegant"], featured: false },
+
       // SPRING
-      { title: "Pastel Garden", imageUrl: "https://images.unsplash.com/photo-1599692613955-32cb7c64eb07?auto=format&fit=crop&q=80&w=800", season: "Spring", category: "Floral", description: "Soft spring blooms", tags: ["pastel", "floral", "pink"], featured: true },
-      { title: "Cherry Blossom", imageUrl: "https://images.unsplash.com/photo-1604654894526-a5d7c622b90f?auto=format&fit=crop&q=80&w=800", season: "Spring", category: "Nature", description: "Delicate pink petals", tags: ["pink", "floral", "spring"], featured: true },
-      { title: "Mint Fresh", imageUrl: "https://images.unsplash.com/photo-1610992015732-2449b76344bc?auto=format&fit=crop&q=80&w=800", season: "Spring", category: "Fresh", description: "Cool mint tones", tags: ["mint", "green", "fresh"], featured: false },
-      
+      { title: "Pastel Garden", imageUrl: "http://nail-check.com/wp-content/uploads/2026/02/Bridal-1.png", season: "Spring", category: "Floral", description: "Soft spring blooms", tags: ["pastel", "floral", "pink"], featured: true },
+      { title: "Cherry Blossom", imageUrl: "http://nail-check.com/wp-content/uploads/2026/02/Editorial.png", season: "Spring", category: "Nature", description: "Delicate pink petals", tags: ["pink", "floral", "spring"], featured: true },
+      { title: "Mint Fresh", imageUrl: "http://nail-check.com/wp-content/uploads/2026/02/Glass-Nails.png", season: "Spring", category: "Fresh", description: "Cool mint tones", tags: ["mint", "green", "fresh"], featured: false },
+
       // SUMMER
-      { title: "Tropical Sunset", imageUrl: "https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?auto=format&fit=crop&q=80&w=800", season: "Summer", category: "Beach", description: "Vibrant summer vibes", tags: ["orange", "yellow", "tropical"], featured: true },
-      { title: "Ocean Wave", imageUrl: "https://images.unsplash.com/photo-1516975080664-ed2fc6a32937?auto=format&fit=crop&q=80&w=800", season: "Summer", category: "Beach", description: "Blue wave patterns", tags: ["blue", "wave", "ocean"], featured: true },
-      { title: "Neon Coral", imageUrl: "https://images.unsplash.com/photo-1604654894610-df63bc536371?auto=format&fit=crop&q=80&w=800", season: "Summer", category: "Bold", description: "Bright summer pop", tags: ["coral", "neon", "bold"], featured: false },
-      
+      { title: "Tropical Sunset", imageUrl: "http://nail-check.com/wp-content/uploads/2026/02/Vacation.jpg", season: "Summer", category: "Beach", description: "Vibrant summer vibes", tags: ["orange", "yellow", "tropical"], featured: true },
+      { title: "Ocean Wave", imageUrl: "http://nail-check.com/wp-content/uploads/2026/02/Cat-eye.png", season: "Summer", category: "Beach", description: "Blue wave patterns", tags: ["blue", "wave", "ocean"], featured: true },
+      { title: "Neon Coral", imageUrl: "http://nail-check.com/wp-content/uploads/2026/02/Birthday.png", season: "Summer", category: "Bold", description: "Bright summer pop", tags: ["coral", "neon", "bold"], featured: false },
+
       // FALL
-      { title: "Pumpkin Spice", imageUrl: "https://images.unsplash.com/photo-1599692613955-32cb7c64eb07?auto=format&fit=crop&q=80&w=800", season: "Fall", category: "Cozy", description: "Warm autumn tones", tags: ["orange", "brown", "fall"], featured: true },
-      { title: "Maple Leaf Gold", imageUrl: "https://images.unsplash.com/photo-1632345031435-8727f6897d53?auto=format&fit=crop&q=80&w=800", season: "Fall", category: "Nature", description: "Golden autumn leaves", tags: ["gold", "metallic", "fall"], featured: true },
-      { title: "Mocha Matte", imageUrl: "https://images.unsplash.com/photo-1610992015877-47b84e5e8b39?auto=format&fit=crop&q=80&w=800", season: "Fall", category: "Cozy", description: "Deep coffee tones", tags: ["brown", "matte", "cozy"], featured: false },
-      
+      { title: "Pumpkin Spice", imageUrl: "http://nail-check.com/wp-content/uploads/2026/02/Junk.png", season: "Fall", category: "Cozy", description: "Warm autumn tones", tags: ["orange", "brown", "fall"], featured: true },
+      { title: "Maple Leaf Gold", imageUrl: "http://nail-check.com/wp-content/uploads/2026/02/Editorial.png", season: "Fall", category: "Nature", description: "Golden autumn leaves", tags: ["gold", "metallic", "fall"], featured: true },
+      { title: "Mocha Matte", imageUrl: "http://nail-check.com/wp-content/uploads/2026/02/Matte-Sugar.png", season: "Fall", category: "Cozy", description: "Deep coffee tones", tags: ["brown", "matte", "cozy"], featured: false },
+
       // HOLIDAYS/EVENTS
-      { title: "Valentine Hearts", imageUrl: "https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?auto=format&fit=crop&q=80&w=800", season: "Holiday", category: "Valentine's Day", description: "Love-themed designs", tags: ["red", "hearts", "love"], featured: true },
-      { title: "Halloween Spooky", imageUrl: "https://images.unsplash.com/photo-1604654894610-df63bc536371?auto=format&fit=crop&q=80&w=800", season: "Holiday", category: "Halloween", description: "Dark and mysterious", tags: ["black", "orange", "spooky"], featured: true },
-      { title: "New Year Sparkle", imageUrl: "https://images.unsplash.com/photo-1632345031435-8727f6897d53?auto=format&fit=crop&q=80&w=800", season: "Holiday", category: "New Year", description: "Glittery celebration", tags: ["glitter", "gold", "party"], featured: false },
+      { title: "Valentine Hearts", imageUrl: "http://nail-check.com/wp-content/uploads/2026/02/Bridal-1.png", season: "Holiday", category: "Valentine's Day", description: "Love-themed designs", tags: ["red", "hearts", "love"], featured: true },
+      { title: "Halloween Spooky", imageUrl: "http://nail-check.com/wp-content/uploads/2026/02/3D-Character.png", season: "Holiday", category: "Halloween", description: "Dark and mysterious", tags: ["black", "orange", "spooky"], featured: true },
+      { title: "New Year Sparkle", imageUrl: "http://nail-check.com/wp-content/uploads/2026/02/Chrome.png", season: "Holiday", category: "New Year", description: "Glittery celebration", tags: ["glitter", "gold", "party"], featured: false },
     ];
 
     for (const sample of seasonalSamples) {
