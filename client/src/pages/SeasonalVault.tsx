@@ -6,6 +6,7 @@ import { cn } from "@/lib/utils";
 import { useAuth } from "@/hooks/use-auth";
 import { Link } from "wouter";
 import { BrandSpinnerFull } from "@/components/BrandSpinner";
+import { SafeImage } from "@/components/SafeImage";
 
 const GOLD_TEXT = "text-[#B08D57]";
 const GOLD_GRADIENT = "bg-gradient-to-r from-[#B08D57] via-[#D4AF37] to-[#B08D57]";
@@ -363,9 +364,10 @@ export default function SeasonalVault() {
               <div className="grid md:grid-cols-2">
                 {/* Image */}
                 <div className="aspect-square">
-                  <img 
-                    src={selectedDesign.imageUrl} 
+                  <SafeImage
+                    src={selectedDesign.imageUrl}
                     alt={selectedDesign.title}
+                    fallbackLabel={selectedDesign.title}
                     className="w-full h-full object-cover"
                   />
                 </div>
@@ -426,9 +428,10 @@ function DesignCard({ design, onClick }: { design: SeasonalDesign; onClick: () =
       className="group relative aspect-square cursor-pointer overflow-hidden rounded-xl border border-gray-200 hover-glow-purple"
       onClick={onClick}
     >
-      <img
+      <SafeImage
         src={design.imageUrl}
         alt={design.title}
+        fallbackLabel={design.title}
         className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
       />
 

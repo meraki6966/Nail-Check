@@ -5,6 +5,7 @@ import { Flame, Loader2, Trash2, Star, Download } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { cn } from "@/lib/utils";
 import { BrandSpinnerFull } from "@/components/BrandSpinner";
+import { SafeImage } from "@/components/SafeImage";
 
 const GOLD_TEXT = "text-[#B08D57]";
 const GOLD_GRADIENT = "bg-gradient-to-r from-[#B08D57] via-[#D4AF37] to-[#B08D57]";
@@ -161,9 +162,10 @@ export default function Saved() {
                       )}
                       onClick={() => setSelectedDesign(design)}
                     >
-                      <img 
-                        src={design.imageUrl} 
-                        alt={design.prompt} 
+                      <SafeImage
+                        src={design.imageUrl}
+                        alt={design.prompt}
+                        fallbackLabel="Saved design"
                         className="w-full h-full object-cover"
                       />
                       {design.isFavorite && (
@@ -193,9 +195,10 @@ export default function Saved() {
                 >
                   {/* Image */}
                   <div className="relative aspect-square border border-gray-100">
-                    <img 
-                      src={selectedDesign.imageUrl} 
+                    <SafeImage
+                      src={selectedDesign.imageUrl}
                       alt={selectedDesign.prompt}
+                      fallbackLabel="Saved design"
                       className="w-full h-full object-cover"
                     />
                   </div>

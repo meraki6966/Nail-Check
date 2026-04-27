@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
-import { Upload, Wand2, Download, Heart, Loader2, ChevronDown, ChevronUp, X, ShoppingBag, BookOpen, Play, Image, MapPin, CheckCircle2, AlertCircle, Calendar } from "lucide-react";
+import { Upload, Wand2, Download, Heart, Loader2, ChevronDown, ChevronUp, X, ShoppingBag, BookOpen, Play, Image, MapPin, CheckCircle2, AlertCircle, Calendar, Palette, Sparkles } from "lucide-react";
 import { BrandSpinner } from "@/components/BrandSpinner";
 import { useAuth } from "@/hooks/use-auth";
 import { useToast } from "@/hooks/use-toast";
@@ -10,6 +10,11 @@ import { cn } from "@/lib/utils";
 import { getRandomMessage } from "@/lib/microcopy";
 import { downloadWithWatermark } from "@/lib/watermark";
 import { UpgradeModal } from "@/components/UpgradeModal";
+import { ColorWheelPicker } from "@/components/ColorWheelPicker";
+import { TextureSelector } from "@/components/TextureSelector";
+import { KawaiiPolish, SpeechBubble } from "@/components/Kawaii";
+import type { NamedColor } from "@/lib/colorPalette";
+import type { Texture } from "@/lib/colorFromProduct";
 
 // ============================================
 // NEW PINTEREST COLOR PALETTE
@@ -184,6 +189,12 @@ export default function Home() {
   const [showUpgradeModal, setShowUpgradeModal] = useState(false);
   const [hoveredStyle, setHoveredStyle] = useState<{ categoryKey: string; optionId: string } | null>(null);
 
+  // ── Color & finish picker state ──────────────────────────────────────────
+  const [selectedColor, setSelectedColor] = useState<NamedColor | null>(null);
+  const [selectedTexture, setSelectedTexture] = useState<Texture>("glossy");
+  const [colorPickerOpen, setColorPickerOpen] = useState(false);
+  const [texturePickerOpen, setTexturePickerOpen] = useState(false);
+
   // ── AI Critique tab state ─────────────────────────────────────────────────
   const [activeTab, setActiveTab] = useState<"design" | "critique">("design");
   const [critiqueImage, setCritiqueImage] = useState<string | null>(null);
@@ -241,9 +252,15 @@ export default function Home() {
         if (labels.length > 0) parts.push(labels.join(" + "));
       }
     });
+    if (selectedColor) {
+      parts.push(`color: ${selectedColor.name} (${selectedColor.hex})`);
+    }
+    if (selectedTexture && (selectedColor || parts.length > 0)) {
+      parts.push(`${selectedTexture} finish`);
+    }
     if (parts.length > 0) setPrompt(`Create a nail design featuring: ${parts.join(", ")}. Professional studio lighting, photorealistic quality.`);
     updateSupplyRecommendations();
-  }, [selectedStyles]);
+  }, [selectedStyles, selectedColor, selectedTexture]);
 
   const updateSupplyRecommendations = () => {
     const recommendations: { name: string; category: string; link: string }[] = [];
@@ -451,10 +468,19 @@ export default function Home() {
         
         {/* HEADER */}
         <header className="text-center space-y-4 animate-fade-up">
-          <div className="flex items-center justify-center gap-3">
+          <div className="flex items-center justify-center gap-4 flex-wrap">
+            <KawaiiPolish pose="wave" color="#FF6B9D" size={110} className="hover-tilt" />
             <h1 className="text-5xl font-serif tracking-widest uppercase text-brand-gradient-animated">
               The Design Lab
             </h1>
+            <SpeechBubble variant="pink" side="left" className="animate-fade-up hidden md:inline-block">
+              <p className="text-xs font-bold text-[#FF6B9D] uppercase tracking-wider">
+                Hi! I'm Polly ✦
+              </p>
+              <p className="text-[11px] text-gray-600">
+                Let's build something fab.
+              </p>
+            </SpeechBubble>
           </div>
           <p className="text-sm text-gray-500 italic">Select styles below or describe your vision. Watch precision engineering create your perfect set.</p>
         </header>
@@ -636,6 +662,83 @@ export default function Home() {
 
           {showStylesMenu && (
             <div className="mt-6 space-y-4">
+              {/* Choose Color — full color wheel + 100+ named shades */}
+              <div className="border border-gray-100 rounded-2xl overflow-hidden bg-white shadow-sm hover:shadow-md transition-shadow">
+                <div
+                  className={cn(
+                    "flex items-center justify-between px-5 py-4 cursor-pointer transition-all",
+                    colorPickerOpen
+                      ? "bg-gradient-to-r from-[#FF6B9D] via-[#9B5DE5] to-[#00D9FF] text-white"
+                      : "bg-gradient-to-r from-[#FFF5F8] to-[#F8F0FF]"
+                  )}
+                  onClick={() => setColorPickerOpen((v) => !v)}
+                >
+                  <div className="flex items-center gap-3">
+                    <Palette className="h-5 w-5" />
+                    <span className="text-lg font-medium">Choose Color</span>
+                    {selectedColor && (
+                      <span
+                        className={cn(
+                          "px-2 py-0.5 rounded-full text-xs font-bold flex items-center gap-1.5",
+                          colorPickerOpen ? "bg-white/25" : "bg-white text-gray-700"
+                        )}
+                      >
+                        <span
+                          className="inline-block w-3 h-3 rounded-full"
+                          style={{ background: selectedColor.hex }}
+                        />
+                        {selectedColor.name}
+                      </span>
+                    )}
+                  </div>
+                  {colorPickerOpen ? <ChevronUp className="h-5 w-5" /> : <ChevronDown className="h-5 w-5 text-[#9B5DE5]" />}
+                </div>
+                {colorPickerOpen && (
+                  <div className="p-5 bg-gradient-to-b from-white to-[#FFFBFC]">
+                    <ColorWheelPicker
+                      value={selectedColor?.hex}
+                      onChange={(c) => setSelectedColor(c)}
+                    />
+                  </div>
+                )}
+              </div>
+
+              {/* Pick Finish — 7 textures with live preview */}
+              <div className="border border-gray-100 rounded-2xl overflow-hidden bg-white shadow-sm hover:shadow-md transition-shadow">
+                <div
+                  className={cn(
+                    "flex items-center justify-between px-5 py-4 cursor-pointer transition-all",
+                    texturePickerOpen
+                      ? "bg-gradient-to-r from-[#9B5DE5] to-[#00D9FF] text-white"
+                      : "bg-gradient-to-r from-[#F8F0FF] to-[#F0FBFF]"
+                  )}
+                  onClick={() => setTexturePickerOpen((v) => !v)}
+                >
+                  <div className="flex items-center gap-3">
+                    <Sparkles className="h-5 w-5" />
+                    <span className="text-lg font-medium">Pick Finish</span>
+                    <span
+                      className={cn(
+                        "px-2 py-0.5 rounded-full text-xs font-bold uppercase",
+                        texturePickerOpen ? "bg-white/25" : "bg-white text-gray-700"
+                      )}
+                    >
+                      {selectedTexture}
+                    </span>
+                  </div>
+                  {texturePickerOpen ? <ChevronUp className="h-5 w-5" /> : <ChevronDown className="h-5 w-5 text-[#9B5DE5]" />}
+                </div>
+                {texturePickerOpen && (
+                  <div className="p-5 bg-gradient-to-b from-white to-[#FAFAFF]">
+                    <TextureSelector
+                      value={selectedTexture}
+                      onChange={setSelectedTexture}
+                      previewHex={selectedColor?.hex || "#FF6B9D"}
+                    />
+                  </div>
+                )}
+              </div>
+
               {(Object.entries(STYLE_CATEGORIES) as [CategoryKey, typeof STYLE_CATEGORIES[CategoryKey]][]).map(([key, category]) => (
                 <div key={key} className="border border-gray-100 rounded-2xl overflow-hidden bg-white shadow-sm hover:shadow-md transition-shadow">
                   <div className={cn("flex items-center justify-between px-5 py-4 cursor-pointer transition-all", expandedCategories.has(key) ? `bg-gradient-to-r ${category.color} text-white` : "bg-gradient-to-r from-[#FFF5F8] to-[#F8F0FF]")} onClick={() => toggleCategory(key)}>
@@ -761,12 +864,22 @@ export default function Home() {
             <h3 className="text-2xl mb-4 uppercase bg-gradient-to-r from-[#FF6B9D] via-[#9B5DE5] to-[#00D9FF] bg-clip-text text-transparent">3. Your Design</h3>
             <div className="bg-gradient-to-br from-[#FFF5F8] to-[#F8F0FF] rounded-2xl min-h-[500px] flex items-center justify-center p-8">
               {isGenerating ? (
-                <div className="flex flex-col items-center justify-center w-full py-12">
+                <div className="flex flex-col items-center justify-center w-full py-12 gap-4">
+                  <KawaiiPolish pose="polish" color={selectedColor?.hex || "#9B5DE5"} size={120} className="animate-bounce-soft" />
                   <BrandSpinner size="xl" label={generatingText} />
+                  <p className="text-xs uppercase tracking-widest text-[#9B5DE5] font-bold">Polly is painting...</p>
                 </div>
               ) : generatedImage ? (
                 <div className="space-y-4 w-full animate-fade-up">
-                  <img src={generatedImage} alt="Generated design" className="w-full rounded-2xl shadow-xl animate-pop-in" />
+                  <div className="relative">
+                    <img src={generatedImage} alt="Generated design" className="w-full rounded-2xl shadow-xl animate-pop-in" />
+                    <KawaiiPolish
+                      pose="celebrate"
+                      color={selectedColor?.hex || "#FF6B9D"}
+                      size={90}
+                      className="absolute -top-4 -right-4 anime-image-pop"
+                    />
+                  </div>
                   <div className="flex gap-3">
                     <Button onClick={handleSaveToVault} disabled={isSaving} variant="outline" className="flex-1 rounded-full border-[#FF6B9D] text-[#FF6B9D] hover:bg-[#FF6B9D] hover:text-white">
                       {isSaving ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <Heart className="mr-2 h-4 w-4" />} Save to Vault

@@ -9,6 +9,7 @@ import { BrandSpinnerFull } from "@/components/BrandSpinner";
 import { SupplyDetailModal } from "@/components/SupplyDetailModal";
 import { ColorSwatch } from "@/components/ColorSwatch";
 import { swatchFromProduct } from "@/lib/colorFromProduct";
+import { KawaiiPolish, SpeechBubble } from "@/components/Kawaii";
 
 const GOLD_TEXT = "text-[#B08D57]";
 const GOLD_GRADIENT = "bg-gradient-to-r from-[#B08D57] via-[#D4AF37] to-[#B08D57]";
@@ -140,9 +141,17 @@ export default function SupplySuite() {
         
         {/* Header */}
         <header className="text-center space-y-4 animate-fade-up">
-          <div className="flex items-center justify-center gap-3">
-            <Package className={cn("h-10 w-10 animate-float", GOLD_TEXT)} />
+          <div className="flex items-end justify-center gap-4 flex-wrap">
+            <KawaiiPolish pose="sparkle" color="#00D9FF" size={110} className="hover-tilt" />
             <h1 className="text-6xl tracking-widest text-brand-gradient-animated">Supply Suite</h1>
+            <SpeechBubble variant="cyan" side="left" className="hidden md:inline-block">
+              <p className="text-xs font-bold text-[#00B8DC] uppercase tracking-wider">
+                Curated picks!
+              </p>
+              <p className="text-[11px] text-gray-600">
+                Tap a product for details.
+              </p>
+            </SpeechBubble>
           </div>
           <p className="text-sm text-gray-500 italic max-w-2xl mx-auto">
             Curated professional-grade products, tools, and equipment for the Technical Hub

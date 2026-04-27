@@ -7,6 +7,7 @@ import { useFavorites } from "@/hooks/use-favorites";
 import { cn } from "@/lib/utils";
 import type { Tutorial } from "@shared/schema";
 import { motion } from "framer-motion";
+import { SafeImage } from "@/components/SafeImage";
 
 interface TutorialCardProps {
   tutorial: Tutorial;
@@ -33,9 +34,10 @@ export function TutorialCard({ tutorial }: TutorialCardProps) {
         <div className="relative aspect-[4/5] overflow-hidden group">
           <Link href={`/tutorial/${tutorial.id}`}>
             <div className="w-full h-full cursor-pointer">
-              <img
+              <SafeImage
                 src={tutorial.imageSource}
                 alt={tutorial.title}
+                fallbackLabel={tutorial.title}
                 className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110"
                 loading="lazy"
               />

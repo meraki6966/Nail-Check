@@ -8,6 +8,7 @@ import { downloadWithWatermark } from "@/lib/watermark";
 import { addNailCheckWatermark } from "@/lib/watermark";
 import { UpgradeModal } from "@/components/UpgradeModal";
 import { GalleryDetailModal } from "@/components/GalleryDetailModal";
+import { KawaiiHand, SpeechBubble } from "@/components/Kawaii";
 
 const PINK_GRADIENT = "bg-gradient-to-r from-[#FF6B9D] to-[#FF8A5B]";
 const PURPLE_GRADIENT = "bg-gradient-to-r from-[#9B5DE5] to-[#FF6B9D]";
@@ -128,11 +129,19 @@ export default function Gallery() {
           
           {/* Header */}
           <div className="text-center mb-12 animate-fade-up">
-            <div className="flex items-center justify-center gap-3 mb-4">
-              <Image className="h-10 w-10 text-[#FF6B9D] animate-float" />
+            <div className="flex items-end justify-center gap-4 mb-4 flex-wrap">
+              <KawaiiHand nailColor="#9B5DE5" size={110} className="hover-tilt" />
               <h1 className="text-5xl uppercase tracking-wider text-brand-gradient-animated">
                 Gallery
               </h1>
+              <SpeechBubble variant="purple" side="left" className="hidden md:inline-block">
+                <p className="text-xs font-bold text-[#9B5DE5] uppercase tracking-wider">
+                  Tap any look ✦
+                </p>
+                <p className="text-[11px] text-gray-600">
+                  Swipe to browse styles!
+                </p>
+              </SpeechBubble>
             </div>
             <p className="text-gray-500 italic">
               Inspiration from the official Nail Check style library

@@ -2,7 +2,24 @@
 // name / description / tags. Used by the Supply Suite to render real color
 // swatches for the "Color" category instead of stock photos.
 
-export type Texture = "glossy" | "matte" | "shimmer" | "chrome";
+export type Texture =
+  | "glossy"
+  | "matte"
+  | "shimmer"
+  | "chrome"
+  | "glitter"
+  | "pearl"
+  | "satin";
+
+export const ALL_TEXTURES: Texture[] = [
+  "glossy",
+  "matte",
+  "shimmer",
+  "chrome",
+  "glitter",
+  "pearl",
+  "satin",
+];
 
 interface ColorMatch {
   match: RegExp;
@@ -67,7 +84,10 @@ export function colorFromText(text: string): string {
 
 export function textureFromText(text: string): Texture {
   if (/\bchrome|mirror|metallic|holographic|holo\b/i.test(text)) return "chrome";
-  if (/\bshimmer|glitter|sparkle|sugar|stardust\b/i.test(text)) return "shimmer";
+  if (/\bglitter|sparkle dust|crystal\b/i.test(text)) return "glitter";
+  if (/\bpearl|iridescent|opal\b/i.test(text)) return "pearl";
+  if (/\bsatin|silk\b/i.test(text)) return "satin";
+  if (/\bshimmer|sugar|stardust\b/i.test(text)) return "shimmer";
   if (/\bmatte|velvet|sueded?\b/i.test(text)) return "matte";
   return "glossy";
 }
