@@ -5,6 +5,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { cn } from "@/lib/utils";
 import { useAuth } from "@/hooks/use-auth";
 import { Link } from "wouter";
+import { BrandSpinnerFull } from "@/components/BrandSpinner";
 
 const GOLD_TEXT = "text-[#B08D57]";
 const GOLD_GRADIENT = "bg-gradient-to-r from-[#B08D57] via-[#D4AF37] to-[#B08D57]";
@@ -121,13 +122,7 @@ export default function SeasonalVault() {
   }, {} as Record<string, SeasonalDesign[]>);
 
   if (isLoading || authLoading) {
-    return (
-      
-        <div className="flex justify-center items-center h-[50vh]">
-          <Loader2 className={cn("h-8 w-8 animate-spin", GOLD_TEXT)} />
-        </div>
-      
-    );
+    return <BrandSpinnerFull label="Loading the vault…" />;
   }
 
   // If not a member, show locked state
@@ -138,7 +133,7 @@ export default function SeasonalVault() {
           {/* Header */}
           <header className="text-center space-y-4">
             <span className="text-[10px] tracking-[0.8em] text-gray-400 uppercase">The Curated Collections</span>
-            <h1 className="text-6xl tracking-widest bg-gradient-to-r from-[#FF6B9D] via-[#9B5DE5] to-[#00D9FF] bg-clip-text text-transparent">Seasonal Vault</h1>
+            <h1 className="text-6xl tracking-widest text-brand-gradient-animated">Seasonal Vault</h1>
             <p className="text-sm text-gray-500 italic max-w-2xl mx-auto">
               Explore our expertly curated nail designs organized by season and special occasions
             </p>
@@ -227,22 +222,23 @@ export default function SeasonalVault() {
 
         {/* Season Category Cards */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-5">
-          {SEASON_CARDS.map(({ name, value, Icon, tagline, iconColor, activeBg, idleBg, border }) => {
+          {SEASON_CARDS.map(({ name, value, Icon, tagline, iconColor, activeBg, idleBg, border }, idx) => {
             const isActive = selectedSeason === value;
             return (
               <button
                 key={value}
                 onClick={() => setSelectedSeason(isActive ? "" : value)}
+                style={{ animationDelay: `${idx * 100}ms` }}
                 className={cn(
-                  "group relative p-8 rounded-2xl border-2 transition-all duration-300 text-center cursor-pointer",
+                  "group relative p-8 rounded-2xl border-2 text-center cursor-pointer animate-pop-in press-shrink",
                   isActive
-                    ? `border-transparent bg-gradient-to-br ${activeBg} shadow-xl scale-[1.02]`
-                    : `${border} bg-gradient-to-br ${idleBg} hover:shadow-lg hover:scale-[1.01]`
+                    ? `border-transparent bg-gradient-to-br ${activeBg} shadow-xl scale-[1.02] animate-glow-pulse-pink`
+                    : `${border} bg-gradient-to-br ${idleBg} hover-lift hover:shadow-lg`
                 )}
               >
                 <Icon className={cn(
                   "h-12 w-12 mx-auto mb-4 transition-transform duration-300 group-hover:scale-110",
-                  isActive ? "text-white" : iconColor
+                  isActive ? "text-white drop-shadow-md" : `${iconColor} animate-float`
                 )} />
                 <h3 className={cn(
                   "text-xl tracking-widest uppercase",
@@ -425,17 +421,19 @@ function DesignCard({ design, onClick }: { design: SeasonalDesign; onClick: () =
     <motion.div
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
-      className="group relative aspect-square cursor-pointer overflow-hidden border border-gray-200"
+      whileHover={{ y: -6 }}
+      transition={{ type: "spring", stiffness: 280, damping: 22 }}
+      className="group relative aspect-square cursor-pointer overflow-hidden rounded-xl border border-gray-200 hover-glow-purple"
       onClick={onClick}
     >
-      <img 
-        src={design.imageUrl} 
+      <img
+        src={design.imageUrl}
         alt={design.title}
         className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
       />
-      
+
       {design.featured && (
-        <div className="absolute top-2 right-2 bg-[#B08D57] text-white px-2 py-1 text-[8px] uppercase tracking-widest">
+        <div className="absolute top-2 right-2 bg-gradient-to-r from-[#FF6B9D] to-[#9B5DE5] text-white px-2 py-1 text-[8px] uppercase tracking-widest rounded-full shadow-md animate-glow-pulse-pink">
           Featured
         </div>
       )}

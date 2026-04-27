@@ -14,29 +14,37 @@
   --heading-weight: 700;
 
   /* Gallery White Theme */
-  --background: 0 0% 100%;       /* Pure White #FFFFFF */
-  --foreground: 0 0% 10%;        /* Near Black #1A1A1A */
-  
-  --primary: 36 33% 52%;         /* Gold Accent #B08D57 */
+  --background: 0 0% 100%;
+  --foreground: 0 0% 10%;
+
+  --primary: 36 33% 52%;
   --primary-foreground: 0 0% 100%;
-  
-  --secondary: 0 0% 98%;         /* Very light gray for subtle contrast */
+
+  --secondary: 0 0% 98%;
   --secondary-foreground: 0 0% 10%;
-  
+
   --muted: 0 0% 96%;
   --muted-foreground: 0 0% 40%;
-  
-  --accent: 36 33% 96%;           /* Subtle gold wash */
+
+  --accent: 36 33% 96%;
   --accent-foreground: 36 33% 40%;
-  
+
   --destructive: 0 70% 50%;
   --destructive-foreground: 0 0% 98%;
 
   --border: 0 0% 90%;
   --input: 0 0% 90%;
   --ring: 36 33% 52%;
-  
+
   --radius: 0.5rem;
+
+  /* Brand palette ─ centralized */
+  --brand-pink: #FF6B9D;
+  --brand-purple: #9B5DE5;
+  --brand-cyan: #00D9FF;
+  --brand-coral: #FF8A5B;
+  --brand-gold: #D4AF37;
+  --brand-gold-dark: #B08D57;
 }
 
 @layer base {
@@ -64,10 +72,234 @@
     font-family: var(--font-display);
     @apply font-semibold tracking-tight;
   }
+
+  /* Branded focus ring on every text-like input */
+  input:not([type="checkbox"]):not([type="radio"]):not([type="file"]):focus,
+  textarea:focus,
+  select:focus {
+    outline: none;
+    border-color: var(--brand-purple);
+    box-shadow:
+      0 0 0 3px rgba(155, 93, 229, 0.18),
+      0 0 18px rgba(255, 107, 157, 0.12);
+    transition: box-shadow 0.25s ease, border-color 0.25s ease;
+  }
 }
 
 @layer utilities {
   .text-balance {
     text-wrap: balance;
+  }
+
+  /* ── Brand gradient text ─────────────────────────────── */
+  .text-brand-gradient {
+    background-image: linear-gradient(
+      to right,
+      var(--brand-pink),
+      var(--brand-purple),
+      var(--brand-cyan)
+    );
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    background-size: 200% auto;
+  }
+  .text-brand-gradient-animated {
+    background-image: linear-gradient(
+      to right,
+      var(--brand-pink),
+      var(--brand-purple),
+      var(--brand-cyan),
+      var(--brand-pink)
+    );
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    background-size: 200% auto;
+    animation: brand-shimmer 6s linear infinite;
+  }
+
+  .bg-brand-gradient {
+    background-image: linear-gradient(
+      to right,
+      var(--brand-pink),
+      var(--brand-purple),
+      var(--brand-cyan)
+    );
+  }
+
+  /* ── Hover micro-interactions ───────────────────────── */
+  .hover-lift {
+    transition: transform 0.35s cubic-bezier(0.2, 0.8, 0.2, 1),
+                box-shadow 0.35s ease;
+  }
+  .hover-lift:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 18px 36px -12px rgba(155, 93, 229, 0.28);
+  }
+
+  .hover-pop {
+    transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1),
+                box-shadow 0.3s ease;
+  }
+  .hover-pop:hover {
+    transform: scale(1.04);
+    box-shadow: 0 12px 30px -8px rgba(255, 107, 157, 0.35);
+  }
+
+  .hover-glow-pink:hover {
+    box-shadow: 0 0 24px -2px rgba(255, 107, 157, 0.55);
+  }
+  .hover-glow-purple:hover {
+    box-shadow: 0 0 24px -2px rgba(155, 93, 229, 0.55);
+  }
+  .hover-glow-cyan:hover {
+    box-shadow: 0 0 24px -2px rgba(0, 217, 255, 0.55);
+  }
+
+  .press-shrink {
+    transition: transform 0.12s ease-out;
+  }
+  .press-shrink:active {
+    transform: scale(0.96);
+  }
+
+  /* ── Entrance / continuous animations ───────────────── */
+  .animate-fade-up {
+    animation: fade-up 0.7s cubic-bezier(0.2, 0.8, 0.2, 1) both;
+  }
+  .animate-pop-in {
+    animation: pop-in 0.55s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+  }
+  .animate-float {
+    animation: float 4s ease-in-out infinite;
+  }
+  .animate-glow-pulse-pink {
+    animation: glow-pulse-pink 2.4s ease-in-out infinite;
+  }
+  .animate-glow-pulse-purple {
+    animation: glow-pulse-purple 2.4s ease-in-out infinite;
+  }
+  .animate-glow-pulse-cyan {
+    animation: glow-pulse-cyan 2.4s ease-in-out infinite;
+  }
+  .animate-shimmer {
+    background: linear-gradient(
+      90deg,
+      transparent 0%,
+      rgba(255, 255, 255, 0.45) 50%,
+      transparent 100%
+    );
+    background-size: 200% 100%;
+    animation: shimmer-sweep 2.2s linear infinite;
+  }
+  .animate-success-pop {
+    animation: success-pop 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+  }
+}
+
+/* ── Keyframes ─────────────────────────────────────────── */
+@keyframes fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(18px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes pop-in {
+  0% {
+    opacity: 0;
+    transform: scale(0.85);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-6px);
+  }
+}
+
+@keyframes glow-pulse-pink {
+  0%, 100% {
+    box-shadow: 0 0 0 0 rgba(255, 107, 157, 0.35);
+  }
+  50% {
+    box-shadow: 0 0 22px 4px rgba(255, 107, 157, 0.55);
+  }
+}
+
+@keyframes glow-pulse-purple {
+  0%, 100% {
+    box-shadow: 0 0 0 0 rgba(155, 93, 229, 0.35);
+  }
+  50% {
+    box-shadow: 0 0 22px 4px rgba(155, 93, 229, 0.55);
+  }
+}
+
+@keyframes glow-pulse-cyan {
+  0%, 100% {
+    box-shadow: 0 0 0 0 rgba(0, 217, 255, 0.35);
+  }
+  50% {
+    box-shadow: 0 0 22px 4px rgba(0, 217, 255, 0.55);
+  }
+}
+
+@keyframes brand-shimmer {
+  0% {
+    background-position: 0% center;
+  }
+  100% {
+    background-position: 200% center;
+  }
+}
+
+@keyframes shimmer-sweep {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}
+
+@keyframes success-pop {
+  0% {
+    opacity: 0;
+    transform: scale(0.4) rotate(-12deg);
+  }
+  60% {
+    opacity: 1;
+    transform: scale(1.12) rotate(4deg);
+  }
+  100% {
+    transform: scale(1) rotate(0);
+  }
+}
+
+/* Respect reduced motion preference */
+@media (prefers-reduced-motion: reduce) {
+  .animate-fade-up,
+  .animate-pop-in,
+  .animate-float,
+  .animate-glow-pulse-pink,
+  .animate-glow-pulse-purple,
+  .animate-glow-pulse-cyan,
+  .animate-shimmer,
+  .animate-success-pop,
+  .text-brand-gradient-animated {
+    animation: none !important;
   }
 }

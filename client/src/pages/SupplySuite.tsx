@@ -5,9 +5,25 @@ import { Package, Search, Loader2, Lock, ExternalLink, Star } from "lucide-react
 import { motion, AnimatePresence } from "framer-motion";
 import { cn } from "@/lib/utils";
 import { useAuth } from "@/hooks/use-auth";
+import { BrandSpinnerFull } from "@/components/BrandSpinner";
 
 const GOLD_TEXT = "text-[#B08D57]";
 const GOLD_GRADIENT = "bg-gradient-to-r from-[#B08D57] via-[#D4AF37] to-[#B08D57]";
+
+// Per-category color coding (accent stripe + chip color + dot)
+const CATEGORY_COLORS: Record<string, { from: string; to: string; chip: string; ring: string }> = {
+  "Base Coat":  { from: "#FF6B9D", to: "#FF8A5B", chip: "bg-pink-50 text-[#FF6B9D]",   ring: "ring-[#FF6B9D]/40" },
+  "Top Coat":   { from: "#9B5DE5", to: "#FF6B9D", chip: "bg-purple-50 text-[#9B5DE5]", ring: "ring-[#9B5DE5]/40" },
+  "Color":      { from: "#FF6B9D", to: "#9B5DE5", chip: "bg-pink-50 text-[#FF6B9D]",   ring: "ring-[#FF6B9D]/40" },
+  "Tool":       { from: "#00D9FF", to: "#9B5DE5", chip: "bg-cyan-50 text-[#00B8DC]",   ring: "ring-[#00D9FF]/40" },
+  "Equipment":  { from: "#9B5DE5", to: "#00D9FF", chip: "bg-purple-50 text-[#9B5DE5]", ring: "ring-[#9B5DE5]/40" },
+  "Specialty":  { from: "#D4AF37", to: "#FF8A5B", chip: "bg-amber-50 text-[#B08D57]",  ring: "ring-[#D4AF37]/40" },
+  "Nail Care":  { from: "#10B981", to: "#00D9FF", chip: "bg-emerald-50 text-[#10B981]", ring: "ring-[#10B981]/40" },
+};
+const FALLBACK_COLOR = { from: "#B08D57", to: "#D4AF37", chip: "bg-amber-50 text-[#B08D57]", ring: "ring-[#B08D57]/40" };
+function categoryColor(cat: string) {
+  return CATEGORY_COLORS[cat] || FALLBACK_COLOR;
+}
 
 const CATEGORY_DEFINITIONS: Record<string, string> = {
   "Base Coat": "Applied first to the natural nail, base coats create adhesion for color polish, protect the nail plate from staining, and extend wear time.",
@@ -112,13 +128,7 @@ export default function SupplySuite() {
   }, {} as Record<string, SupplyProduct[]>);
 
   if (isLoading) {
-    return (
-      
-        <div className="flex justify-center items-center h-[50vh]">
-          <Loader2 className={cn("h-8 w-8 animate-spin", GOLD_TEXT)} />
-        </div>
-      
-    );
+    return <BrandSpinnerFull label="Loading the suite…" />;
   }
 
   return (
@@ -126,10 +136,10 @@ export default function SupplySuite() {
       <div className="max-w-7xl mx-auto px-4 py-16 space-y-16">
         
         {/* Header */}
-        <header className="text-center space-y-4">
+        <header className="text-center space-y-4 animate-fade-up">
           <div className="flex items-center justify-center gap-3">
-            <Package className={cn("h-10 w-10", GOLD_TEXT)} />
-            <h1 className="text-6xl tracking-widest bg-gradient-to-r from-[#FF6B9D] via-[#9B5DE5] to-[#00D9FF] bg-clip-text text-transparent">Supply Suite</h1>
+            <Package className={cn("h-10 w-10 animate-float", GOLD_TEXT)} />
+            <h1 className="text-6xl tracking-widest text-brand-gradient-animated">Supply Suite</h1>
           </div>
           <p className="text-sm text-gray-500 italic max-w-2xl mx-auto">
             Curated professional-grade products, tools, and equipment for the Technical Hub
@@ -152,15 +162,30 @@ export default function SupplySuite() {
         <div className="max-w-4xl mx-auto space-y-3">
           <h2 className="text-[10px] uppercase tracking-widest text-center mb-4 bg-gradient-to-r from-[#FF6B9D] via-[#9B5DE5] to-[#00D9FF] bg-clip-text text-transparent">Category Guide</h2>
           <div className="grid md:grid-cols-2 gap-3">
-            {Object.entries(CATEGORY_DEFINITIONS).map(([cat, def]) => (
-              <div key={cat} className="flex gap-3 p-4 bg-gray-50 border border-gray-100">
-                <div className="flex-shrink-0 w-1 bg-gradient-to-b from-[#FF6B9D] via-[#9B5DE5] to-[#00D9FF] rounded-full" />
-                <div>
-                  <p className="text-[10px] uppercase tracking-widest font-bold text-gray-700 mb-1">{cat}</p>
-                  <p className="text-xs text-gray-500 leading-relaxed">{def}</p>
+            {Object.entries(CATEGORY_DEFINITIONS).map(([cat, def], idx) => {
+              const c = categoryColor(cat);
+              return (
+                <div
+                  key={cat}
+                  style={{ animationDelay: `${idx * 60}ms`, background: `linear-gradient(135deg, ${c.from}08, ${c.to}10)` }}
+                  className="flex gap-3 p-4 rounded-xl border border-gray-100 hover-lift animate-fade-up"
+                >
+                  <div
+                    className="flex-shrink-0 w-1.5 rounded-full"
+                    style={{ background: `linear-gradient(to bottom, ${c.from}, ${c.to})` }}
+                  />
+                  <div>
+                    <p
+                      className="text-[10px] uppercase tracking-widest font-bold mb-1"
+                      style={{ color: c.from }}
+                    >
+                      {cat}
+                    </p>
+                    <p className="text-xs text-gray-600 leading-relaxed">{def}</p>
+                  </div>
                 </div>
-              </div>
-            ))}
+              );
+            })}
           </div>
         </div>
 
@@ -367,29 +392,38 @@ export default function SupplySuite() {
   );
 }
 
-function ProductCard({ 
-  product, 
-  isAuthenticated, 
-  onClick 
-}: { 
-  product: SupplyProduct; 
+function ProductCard({
+  product,
+  isAuthenticated,
+  onClick
+}: {
+  product: SupplyProduct;
   isAuthenticated: boolean;
   onClick: () => void;
 }) {
   const isLocked = product.memberOnly && !isAuthenticated;
+  const c = categoryColor(product.category);
 
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
-      className="group relative bg-white border border-gray-200 overflow-hidden cursor-pointer hover:border-[#B08D57] transition-all"
+      whileHover={{ y: -4 }}
+      transition={{ type: "spring", stiffness: 280, damping: 22 }}
+      className="group relative bg-white border border-gray-200 rounded-xl overflow-hidden cursor-pointer hover-glow-purple transition-all"
       onClick={onClick}
     >
+      {/* Top color bar — category coding */}
+      <div
+        className="h-1.5 w-full"
+        style={{ background: `linear-gradient(to right, ${c.from}, ${c.to})` }}
+      />
+
       {/* Image */}
       <div className="aspect-square bg-gray-100 relative overflow-hidden">
         {product.imageUrl ? (
-          <img 
-            src={product.imageUrl} 
+          <img
+            src={product.imageUrl}
             alt={product.name}
             className={cn(
               "w-full h-full object-cover transition-transform duration-500 group-hover:scale-110",
@@ -401,13 +435,26 @@ function ProductCard({
             <Package className="h-16 w-16 text-gray-300" />
           </div>
         )}
-        
+
         {product.featured && (
-          <div className="absolute top-2 right-2 bg-[#B08D57] text-white px-2 py-1 text-[8px] uppercase tracking-widest flex items-center gap-1">
+          <div
+            className="absolute top-2 right-2 text-white px-2 py-1 text-[8px] uppercase tracking-widest flex items-center gap-1 rounded-full shadow-md animate-glow-pulse-pink"
+            style={{ background: `linear-gradient(to right, ${c.from}, ${c.to})` }}
+          >
             <Star className="h-3 w-3 fill-white" />
             Featured
           </div>
         )}
+
+        {/* Category chip on image */}
+        <div
+          className={cn(
+            "absolute bottom-2 left-2 px-2 py-0.5 text-[8px] font-bold uppercase tracking-widest rounded-full shadow-sm",
+            c.chip,
+          )}
+        >
+          {product.category}
+        </div>
 
         {isLocked && (
           <div className="absolute inset-0 flex items-center justify-center">
@@ -428,7 +475,10 @@ function ProductCard({
             </h3>
           </div>
           {product.price && (
-            <span className={cn("text-sm font-bold whitespace-nowrap", GOLD_TEXT)}>
+            <span
+              className="text-sm font-bold whitespace-nowrap"
+              style={{ color: c.from }}
+            >
               {product.price}
             </span>
           )}
@@ -447,7 +497,10 @@ function ProductCard({
               Members Only
             </div>
           ) : (
-            <span className="text-[9px] uppercase tracking-widest text-[#B08D57]">
+            <span
+              className="text-[9px] uppercase tracking-widest font-bold"
+              style={{ color: c.from }}
+            >
               View Details →
             </span>
           )}

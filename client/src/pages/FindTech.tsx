@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { MapPin, Search, Star, Instagram, Globe, Calendar, Filter, ChevronDown, UserPlus, Phone, ExternalLink, Loader2 } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { BrandSpinner } from "@/components/BrandSpinner";
 
 const PINK_GRADIENT = "bg-gradient-to-r from-[#FF6B9D] to-[#FF8A5B]";
 const PURPLE_GRADIENT = "bg-gradient-to-r from-[#9B5DE5] to-[#FF6B9D]";
@@ -27,7 +28,7 @@ const REGISTERED_TECHS: any[] = [];
 // Tech Card Component for Registered Techs
 function TechCard({ tech, type }: { tech: any; type: string }) {
   return (
-    <div className="bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-xl hover:shadow-[#FF6B9D]/10 transition-all duration-300 group border-2 border-[#FF6B9D]/20">
+    <div className="bg-white rounded-2xl overflow-hidden shadow-sm hover-lift hover-glow-pink transition-all duration-300 group border-2 border-[#FF6B9D]/20">
       <div className="flex">
         {/* Image */}
         <div className="w-1/3 relative">
@@ -134,7 +135,7 @@ function GooglePlaceCard({ place }: { place: any }) {
     : "http://nail-check.com/wp-content/uploads/2026/02/Chrome.png";
 
   return (
-    <div className="bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-xl hover:shadow-[#00D9FF]/10 transition-all duration-300 group">
+    <div className="bg-white rounded-2xl overflow-hidden shadow-sm hover-lift hover-glow-cyan transition-all duration-300 group">
       <div className="flex">
         {/* Image */}
         <div className="w-1/3 relative">
@@ -143,6 +144,10 @@ function GooglePlaceCard({ place }: { place: any }) {
             alt={place.name}
             className="w-full h-full object-cover min-h-[180px]"
           />
+          {/* Colorful map pin overlay */}
+          <div className="absolute -bottom-3 -right-3 w-10 h-10 rounded-full bg-gradient-to-br from-[#00D9FF] to-[#9B5DE5] flex items-center justify-center shadow-lg ring-2 ring-white">
+            <MapPin className="h-5 w-5 text-white" />
+          </div>
         </div>
 
         {/* Content */}
@@ -303,10 +308,16 @@ export default function FindTech() {
         <div className="max-w-6xl mx-auto px-4 py-12">
           
           {/* Header */}
-          <div className="text-center mb-10">
+          <div className="text-center mb-10 animate-fade-up">
             <div className="flex items-center justify-center gap-3 mb-4">
-              <MapPin className="h-10 w-10 text-[#FF6B9D]" />
-              <h1 className="text-4xl md:text-5xl uppercase tracking-wider bg-gradient-to-r from-[#FF6B9D] via-[#9B5DE5] to-[#00D9FF] bg-clip-text text-transparent">
+              {/* Animated colorful map pin */}
+              <div className="relative">
+                <div className="absolute inset-0 rounded-full bg-gradient-to-br from-[#FF6B9D] to-[#9B5DE5] blur-md opacity-50 animate-glow-pulse-pink" />
+                <div className="relative w-12 h-12 rounded-full bg-gradient-to-br from-[#FF6B9D] to-[#9B5DE5] flex items-center justify-center shadow-lg animate-float">
+                  <MapPin className="h-6 w-6 text-white" />
+                </div>
+              </div>
+              <h1 className="text-4xl md:text-5xl uppercase tracking-wider text-brand-gradient-animated">
                 Find a Tech
               </h1>
             </div>
@@ -422,9 +433,8 @@ export default function FindTech() {
 
           {/* Loading State */}
           {isLoading && (
-            <div className="text-center py-20">
-              <Loader2 className="h-12 w-12 mx-auto mb-4 text-[#9B5DE5] animate-spin" />
-              <p className="text-gray-500">Searching for nail techs...</p>
+            <div className="flex flex-col items-center py-20">
+              <BrandSpinner size="xl" label="Searching for nail techs…" />
             </div>
           )}
 

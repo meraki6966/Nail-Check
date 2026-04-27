@@ -81,6 +81,14 @@ export default {
           busy: "rgb(239 68 68)",
           offline: "rgb(156 163 175)",
         },
+        brand: {
+          pink: "var(--brand-pink)",
+          purple: "var(--brand-purple)",
+          cyan: "var(--brand-cyan)",
+          coral: "var(--brand-coral)",
+          gold: "var(--brand-gold)",
+          "gold-dark": "var(--brand-gold-dark)",
+        },
       },
       fontFamily: {
         sans: ["var(--font-sans)"],
@@ -98,10 +106,15 @@ export default {
           from: { height: "var(--radix-accordion-content-height)" },
           to: { height: "0" },
         },
+        "spin-slow": {
+          from: { transform: "rotate(0deg)" },
+          to: { transform: "rotate(360deg)" },
+        },
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
+        "spin-slow": "spin-slow 1.6s linear infinite",
       },
     },
   },

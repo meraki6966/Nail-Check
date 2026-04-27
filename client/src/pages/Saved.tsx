@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Flame, Loader2, Trash2, Star, Download } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { cn } from "@/lib/utils";
+import { BrandSpinnerFull } from "@/components/BrandSpinner";
 
 const GOLD_TEXT = "text-[#B08D57]";
 const GOLD_GRADIENT = "bg-gradient-to-r from-[#B08D57] via-[#D4AF37] to-[#B08D57]";
@@ -87,11 +88,7 @@ export default function Saved() {
   };
 
   if (isLoading) {
-    return (
-      <div className="flex justify-center items-center h-[50vh]">
-        <Loader2 className={cn("h-8 w-8 animate-spin", GOLD_TEXT)} />
-      </div>
-    );
+    return <BrandSpinnerFull label="Loading your vault…" />;
   }
 
   return (

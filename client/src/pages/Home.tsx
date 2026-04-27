@@ -3,6 +3,7 @@ import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Upload, Wand2, Download, Heart, Loader2, ChevronDown, ChevronUp, X, ShoppingBag, BookOpen, Play, Image, MapPin, CheckCircle2, AlertCircle, Calendar } from "lucide-react";
+import { BrandSpinner } from "@/components/BrandSpinner";
 import { useAuth } from "@/hooks/use-auth";
 import { useToast } from "@/hooks/use-toast";
 import { cn } from "@/lib/utils";
@@ -449,9 +450,9 @@ export default function Home() {
       <div className="max-w-7xl mx-auto px-4 py-8 space-y-16">
         
         {/* HEADER */}
-        <header className="text-center space-y-4">
+        <header className="text-center space-y-4 animate-fade-up">
           <div className="flex items-center justify-center gap-3">
-            <h1 className="text-5xl font-serif tracking-widest uppercase bg-gradient-to-r from-[#FF6B9D] via-[#9B5DE5] to-[#00D9FF] bg-clip-text text-transparent">
+            <h1 className="text-5xl font-serif tracking-widest uppercase text-brand-gradient-animated">
               The Design Lab
             </h1>
           </div>
@@ -533,7 +534,9 @@ export default function Home() {
                 Professional Analysis
               </h3>
               <div className="bg-gradient-to-br from-[#FFF5F8] to-[#F8F0FF] rounded-2xl min-h-[500px] flex items-center justify-center p-8">
-                {critique ? (
+                {isAnalyzing ? (
+                  <BrandSpinner size="xl" label="Analyzing your nails…" />
+                ) : critique ? (
                   <div className="space-y-6 w-full">
                     <div className="bg-white rounded-xl p-6 text-center">
                       <div className="text-4xl font-bold bg-gradient-to-r from-[#9B5DE5] to-[#FF6B9D] bg-clip-text text-transparent mb-2">
@@ -744,9 +747,13 @@ export default function Home() {
           <div>
             <h3 className="text-2xl mb-4 uppercase bg-gradient-to-r from-[#FF6B9D] via-[#9B5DE5] to-[#00D9FF] bg-clip-text text-transparent">3. Your Design</h3>
             <div className="bg-gradient-to-br from-[#FFF5F8] to-[#F8F0FF] rounded-2xl min-h-[500px] flex items-center justify-center p-8">
-              {generatedImage ? (
-                <div className="space-y-4 w-full">
-                  <img src={generatedImage} alt="Generated design" className="w-full rounded-2xl shadow-xl" />
+              {isGenerating ? (
+                <div className="flex flex-col items-center justify-center w-full py-12">
+                  <BrandSpinner size="xl" label={generatingText} />
+                </div>
+              ) : generatedImage ? (
+                <div className="space-y-4 w-full animate-fade-up">
+                  <img src={generatedImage} alt="Generated design" className="w-full rounded-2xl shadow-xl animate-pop-in" />
                   <div className="flex gap-3">
                     <Button onClick={handleSaveToVault} disabled={isSaving} variant="outline" className="flex-1 rounded-full border-[#FF6B9D] text-[#FF6B9D] hover:bg-[#FF6B9D] hover:text-white">
                       {isSaving ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <Heart className="mr-2 h-4 w-4" />} Save to Vault
@@ -798,8 +805,12 @@ export default function Home() {
             <a href="/gallery" className="text-sm text-[#9B5DE5] hover:text-[#FF6B9D] transition-colors font-medium">View All →</a>
           </div>
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
-            {GALLERY_ITEMS.map((item) => (
-              <div key={item.id} className="group relative aspect-square rounded-2xl overflow-hidden cursor-pointer hover:shadow-xl hover:shadow-[#FF6B9D]/20 transition-all duration-300">
+            {GALLERY_ITEMS.map((item, idx) => (
+              <div
+                key={item.id}
+                style={{ animationDelay: `${idx * 60}ms` }}
+                className="group relative aspect-square rounded-2xl overflow-hidden cursor-pointer hover-pop animate-pop-in hover:shadow-xl hover:shadow-[#FF6B9D]/30 transition-all duration-300"
+              >
                 <img src={item.image} alt={item.title} className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-4">
                   <div><p className="text-white font-medium text-sm">{item.title}</p><div className="flex gap-1 mt-1">{item.tags.map((tag, idx) => <span key={idx} className="text-[10px] bg-white/20 text-white px-2 py-0.5 rounded-full">{tag}</span>)}</div></div>
@@ -817,8 +828,12 @@ export default function Home() {
           </div>
           <p className="text-gray-500 mb-8 max-w-2xl">Level up your skills with step-by-step video tutorials from beginner basics to competition-level techniques.</p>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            {TUTORIALS.map((tutorial) => (
-              <div key={tutorial.id} className="bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-xl hover:shadow-[#9B5DE5]/10 transition-all duration-300 group cursor-pointer">
+            {TUTORIALS.map((tutorial, idx) => (
+              <div
+                key={tutorial.id}
+                style={{ animationDelay: `${idx * 90}ms` }}
+                className="bg-white rounded-2xl overflow-hidden shadow-sm hover-lift hover-glow-purple transition-all duration-300 group cursor-pointer animate-fade-up"
+              >
                 <div className="relative aspect-video">
                   <img src={tutorial.image} alt={tutorial.title} className="w-full h-full object-cover" />
                   <div className="absolute inset-0 bg-black/30 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity"><div className="w-14 h-14 bg-white rounded-full flex items-center justify-center shadow-lg"><Play className="h-6 w-6 text-[#FF6B9D] ml-1" /></div></div>
@@ -845,10 +860,54 @@ export default function Home() {
 
         {/* Quick Links */}
         <section className="grid md:grid-cols-4 gap-6">
-          <a href="/find-tech" className="group"><div className="border border-[#FF6B9D]/20 p-6 rounded-2xl bg-gradient-to-br from-white to-[#FFF5F8] hover:shadow-lg hover:shadow-[#FF6B9D]/10 transition-all"><MapPin className="h-8 w-8 mb-4 text-[#FF6B9D]" /><h3 className="text-xl mb-2 uppercase bg-gradient-to-r from-[#FF6B9D] via-[#9B5DE5] to-[#00D9FF] bg-clip-text text-transparent">Find a Tech</h3><p className="text-sm text-gray-600">Nail techs near you</p></div></a>
-          <a href="/saved" className="group"><div className="border border-[#9B5DE5]/20 p-6 rounded-2xl bg-gradient-to-br from-white to-[#F8F0FF] hover:shadow-lg hover:shadow-[#9B5DE5]/10 transition-all"><Heart className="h-8 w-8 mb-4 text-[#9B5DE5]" /><h3 className="text-xl mb-2 uppercase bg-gradient-to-r from-[#FF6B9D] via-[#9B5DE5] to-[#00D9FF] bg-clip-text text-transparent">Fire Vault</h3><p className="text-sm text-gray-600">Your saved AI designs</p></div></a>
-          <a href="/seasonal" className="group"><div className="border border-[#00D9FF]/20 p-6 rounded-2xl bg-gradient-to-br from-white to-[#F0FFFF] hover:shadow-lg hover:shadow-[#00D9FF]/10 transition-all"><Calendar className="h-8 w-8 mb-4 text-[#00D9FF]" /><h3 className="text-xl mb-2 uppercase bg-gradient-to-r from-[#FF6B9D] via-[#9B5DE5] to-[#00D9FF] bg-clip-text text-transparent">Seasonal Vault</h3><p className="text-sm text-gray-600">Curated collections</p></div></a>
-          <a href="/supplies" className="group"><div className="border border-[#D4AF37]/20 p-6 rounded-2xl bg-gradient-to-br from-white to-[#FFFBF0] hover:shadow-lg hover:shadow-[#D4AF37]/10 transition-all"><ShoppingBag className="h-8 w-8 mb-4 text-[#D4AF37]" /><h3 className="text-xl mb-2 uppercase bg-gradient-to-r from-[#FF6B9D] via-[#9B5DE5] to-[#00D9FF] bg-clip-text text-transparent">Supply Suite</h3><p className="text-sm text-gray-600">Professional products</p></div></a>
+          <a href="/find-tech" className="group">
+            <div className="hover-lift hover-glow-pink relative border border-[#FF6B9D]/20 p-6 rounded-2xl bg-gradient-to-br from-white to-[#FFF5F8] overflow-hidden">
+              <div className="absolute inset-0 bg-gradient-to-br from-[#FF6B9D]/0 to-[#9B5DE5]/0 group-hover:from-[#FF6B9D]/5 group-hover:to-[#9B5DE5]/10 transition-all duration-500" />
+              <div className="relative">
+                <div className="w-12 h-12 mb-4 rounded-2xl bg-gradient-to-br from-[#FF6B9D] to-[#FF8A5B] flex items-center justify-center shadow-md shadow-[#FF6B9D]/30 group-hover:scale-110 group-hover:rotate-[-6deg] transition-transform duration-300">
+                  <MapPin className="h-6 w-6 text-white" />
+                </div>
+                <h3 className="text-xl mb-2 uppercase text-brand-gradient">Find a Tech</h3>
+                <p className="text-sm text-gray-600">Nail techs near you</p>
+              </div>
+            </div>
+          </a>
+          <a href="/saved" className="group">
+            <div className="hover-lift hover-glow-purple relative border border-[#9B5DE5]/20 p-6 rounded-2xl bg-gradient-to-br from-white to-[#F8F0FF] overflow-hidden">
+              <div className="absolute inset-0 bg-gradient-to-br from-[#9B5DE5]/0 to-[#FF6B9D]/0 group-hover:from-[#9B5DE5]/5 group-hover:to-[#FF6B9D]/10 transition-all duration-500" />
+              <div className="relative">
+                <div className="w-12 h-12 mb-4 rounded-2xl bg-gradient-to-br from-[#9B5DE5] to-[#FF6B9D] flex items-center justify-center shadow-md shadow-[#9B5DE5]/30 group-hover:scale-110 group-hover:rotate-[6deg] transition-transform duration-300">
+                  <Heart className="h-6 w-6 text-white" />
+                </div>
+                <h3 className="text-xl mb-2 uppercase text-brand-gradient">Fire Vault</h3>
+                <p className="text-sm text-gray-600">Your saved AI designs</p>
+              </div>
+            </div>
+          </a>
+          <a href="/seasonal" className="group">
+            <div className="hover-lift hover-glow-cyan relative border border-[#00D9FF]/20 p-6 rounded-2xl bg-gradient-to-br from-white to-[#F0FFFF] overflow-hidden">
+              <div className="absolute inset-0 bg-gradient-to-br from-[#00D9FF]/0 to-[#9B5DE5]/0 group-hover:from-[#00D9FF]/5 group-hover:to-[#9B5DE5]/10 transition-all duration-500" />
+              <div className="relative">
+                <div className="w-12 h-12 mb-4 rounded-2xl bg-gradient-to-br from-[#00D9FF] to-[#9B5DE5] flex items-center justify-center shadow-md shadow-[#00D9FF]/30 group-hover:scale-110 group-hover:rotate-[-6deg] transition-transform duration-300">
+                  <Calendar className="h-6 w-6 text-white" />
+                </div>
+                <h3 className="text-xl mb-2 uppercase text-brand-gradient">Seasonal Vault</h3>
+                <p className="text-sm text-gray-600">Curated collections</p>
+              </div>
+            </div>
+          </a>
+          <a href="/supplies" className="group">
+            <div className="hover-lift relative border border-[#D4AF37]/20 p-6 rounded-2xl bg-gradient-to-br from-white to-[#FFFBF0] overflow-hidden hover:shadow-[0_0_24px_-2px_rgba(212,175,55,0.45)]">
+              <div className="absolute inset-0 bg-gradient-to-br from-[#D4AF37]/0 to-[#FF8A5B]/0 group-hover:from-[#D4AF37]/5 group-hover:to-[#FF8A5B]/10 transition-all duration-500" />
+              <div className="relative">
+                <div className="w-12 h-12 mb-4 rounded-2xl bg-gradient-to-br from-[#D4AF37] to-[#FF8A5B] flex items-center justify-center shadow-md shadow-[#D4AF37]/30 group-hover:scale-110 group-hover:rotate-[6deg] transition-transform duration-300">
+                  <ShoppingBag className="h-6 w-6 text-white" />
+                </div>
+                <h3 className="text-xl mb-2 uppercase text-brand-gradient">Supply Suite</h3>
+                <p className="text-sm text-gray-600">Professional products</p>
+              </div>
+            </div>
+          </a>
         </section>
         </>
         )}

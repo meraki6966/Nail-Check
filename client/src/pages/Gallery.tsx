@@ -125,10 +125,10 @@ export default function Gallery() {
         <div className="max-w-7xl mx-auto px-4 py-12">
           
           {/* Header */}
-          <div className="text-center mb-12">
+          <div className="text-center mb-12 animate-fade-up">
             <div className="flex items-center justify-center gap-3 mb-4">
-              <Image className="h-10 w-10 text-[#FF6B9D]" />
-              <h1 className="text-5xl uppercase tracking-wider bg-gradient-to-r from-[#FF6B9D] via-[#9B5DE5] to-[#00D9FF] bg-clip-text text-transparent">
+              <Image className="h-10 w-10 text-[#FF6B9D] animate-float" />
+              <h1 className="text-5xl uppercase tracking-wider text-brand-gradient-animated">
                 Gallery
               </h1>
             </div>
@@ -157,10 +157,11 @@ export default function Gallery() {
 
           {/* Gallery Grid */}
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5 mb-16">
-            {filteredItems.map((item) => (
+            {filteredItems.map((item, idx) => (
               <div
                 key={item.id}
-                className="group relative aspect-square rounded-2xl overflow-hidden bg-white shadow-sm hover:shadow-xl hover:shadow-[#FF6B9D]/15 transition-all duration-500"
+                style={{ animationDelay: `${idx * 50}ms` }}
+                className="group relative aspect-square rounded-2xl overflow-hidden bg-white shadow-sm hover-pop hover-glow-pink animate-pop-in transition-all duration-500"
               >
                 <img
                   src={item.image}
@@ -275,9 +276,9 @@ export default function Gallery() {
                     </div>
                   </div>
                 ) : (
-                  <div className="p-4 rounded-xl bg-gradient-to-r from-[#10B981]/10 to-[#00D9FF]/10 border border-[#10B981]/20">
-                    <span className="text-2xl block mb-2">🎉</span>
-                    <p className="text-[#10B981] font-medium">You're on the list!</p>
+                  <div className="p-6 rounded-xl bg-gradient-to-r from-[#10B981]/10 via-[#00D9FF]/10 to-[#9B5DE5]/10 border border-[#10B981]/20 animate-success-pop">
+                    <span className="text-4xl block mb-2 animate-float">🎉</span>
+                    <p className="text-[#10B981] font-bold uppercase tracking-wider">You're on the list!</p>
                   </div>
                 )}
               </div>
