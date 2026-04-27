@@ -33,8 +33,31 @@ export function Layout({ children }: { children: React.ReactNode }) {
     return () => window.removeEventListener("keydown", handler);
   }, []);
 
+  // Per-page tinted gradient backgrounds — soft 90-95% white with brand hint
+  const pageBg: Record<string, string> = {
+    "/":          "linear-gradient(180deg, #FFF5F8 0%, #FFFAFC 60%, #FFFFFF 100%)",
+    "/gallery":   "linear-gradient(180deg, #F8F0FF 0%, #FCFAFF 60%, #FFFFFF 100%)",
+    "/supplies":  "linear-gradient(180deg, #F0FBFF 0%, #FAFEFF 60%, #FFFFFF 100%)",
+    "/seasonal":  "linear-gradient(180deg, #FFF5F0 0%, #FFFAF7 60%, #FFFFFF 100%)",
+    "/find-tech": "linear-gradient(180deg, #F0FFF5 0%, #F8FFFB 60%, #FFFFFF 100%)",
+    "/tutorials": "linear-gradient(180deg, #FAF0FF 0%, #FDFAFF 60%, #FFFFFF 100%)",
+  };
+  const bgGradient = pageBg[location] || "var(--background)";
+  const isHome = location === "/";
+
   return (
-    <div className="min-h-screen bg-background font-body text-foreground pb-safe">
+    <div
+      className="min-h-screen font-body text-foreground pb-safe relative"
+      style={{ background: bgGradient }}
+    >
+      {/* Logo collage — Home only */}
+      {isHome && (
+        <div
+          aria-hidden
+          className="bg-logo-collage fixed inset-0 pointer-events-none z-0"
+          style={{ opacity: 0.5 }}
+        />
+      )}
       {/* ── Header ─────────────────────────────────────────────── */}
       <header className="sticky top-0 z-40 w-full border-b border-border/40 bg-background/90 backdrop-blur-md">
         <div className="container flex h-16 items-center px-4 gap-3">
@@ -153,12 +176,12 @@ export function Layout({ children }: { children: React.ReactNode }) {
       />
 
       {/* ── Page Content ────────────────────────────────────────── */}
-      <main className="container px-4 py-8 mx-auto max-w-7xl animate-in fade-in slide-in-from-bottom-4 duration-500">
+      <main className="container px-4 py-8 mx-auto max-w-7xl animate-in fade-in slide-in-from-bottom-4 duration-500 relative z-10">
         {children}
       </main>
 
       {/* ── Footer ──────────────────────────────────────────────── */}
-      <footer className="border-t border-border/40 bg-background/80 mt-8">
+      <footer className="border-t border-border/40 bg-white/70 backdrop-blur-sm mt-8 relative z-10">
         <div className="container mx-auto px-4 py-8 max-w-7xl">
           <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
             <div style={{

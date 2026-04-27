@@ -123,7 +123,7 @@ export default function Gallery() {
 
   return (
     <>
-      <div className="min-h-screen bg-gradient-to-b from-[#FFFBFC] to-[#FFF5F8]">
+      <div className="min-h-screen">
         <div className="max-w-7xl mx-auto px-4 py-12">
           
           {/* Header */}

@@ -263,7 +263,7 @@ export default function Tutorials() {
   const [activeGuide, setActiveGuide] = useState<"prep" | "gelx" | "acrylic">("prep");
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-[#FFFBFC] to-[#FFF5F8]">
+    <div className="min-h-screen">
       {/* Hero */}
       <div className="bg-gradient-to-r from-[#9B5DE5] to-[#FF6B9D] text-white py-12 px-4">
         <div className="max-w-4xl mx-auto">

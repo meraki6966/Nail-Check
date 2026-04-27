@@ -7,6 +7,8 @@ import { cn } from "@/lib/utils";
 import { useAuth } from "@/hooks/use-auth";
 import { BrandSpinnerFull } from "@/components/BrandSpinner";
 import { SupplyDetailModal } from "@/components/SupplyDetailModal";
+import { ColorSwatch } from "@/components/ColorSwatch";
+import { swatchFromProduct } from "@/lib/colorFromProduct";
 
 const GOLD_TEXT = "text-[#B08D57]";
 const GOLD_GRADIENT = "bg-gradient-to-r from-[#B08D57] via-[#D4AF37] to-[#B08D57]";
@@ -318,9 +320,18 @@ function ProductCard({
         style={{ background: `linear-gradient(to right, ${c.from}, ${c.to})` }}
       />
 
-      {/* Image */}
+      {/* Image / Color Swatch */}
       <div className="aspect-square bg-gray-100 relative overflow-hidden">
-        {hasImage ? (
+        {product.category === "Color" ? (
+          (() => {
+            const s = swatchFromProduct(product);
+            return (
+              <div className={cn("w-full h-full", isLocked && "blur-sm opacity-50")}>
+                <ColorSwatch hex={s.hex} texture={s.texture} label={s.label} size="card" />
+              </div>
+            );
+          })()
+        ) : hasImage ? (
           <img
             src={product.imageUrl}
             alt={product.name}

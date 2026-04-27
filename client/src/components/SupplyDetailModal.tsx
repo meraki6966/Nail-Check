@@ -3,6 +3,8 @@ import { motion, AnimatePresence, PanInfo } from "framer-motion";
 import { X, ExternalLink, Lock, Share2, Star, Sparkles, Check } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
+import { ColorSwatch } from "@/components/ColorSwatch";
+import { swatchFromProduct, tonalShades } from "@/lib/colorFromProduct";
 
 interface SupplyProduct {
   id: number;
@@ -48,15 +50,20 @@ export function SupplyDetailModal({
   const [shared, setShared] = useState(false);
   const [imgFailed, setImgFailed] = useState(false);
 
-  const palette = useMemo(() => (product ? paletteFor(product.category) : []), [product]);
   const isColor = product?.category === "Color";
+  const swatch = useMemo(() => (product && isColor ? swatchFromProduct(product) : null), [product, isColor]);
+  const palette = useMemo(() => {
+    if (swatch) return tonalShades(swatch.hex, 5);
+    if (product) return paletteFor(product.category);
+    return [];
+  }, [swatch, product]);
   const showImage = !!product?.imageUrl && !imgFailed && !isColor;
 
   useEffect(() => {
-    setShadeIdx(0);
+    setShadeIdx(isColor ? 2 : 0);
     setShared(false);
     setImgFailed(false);
-  }, [product?.id]);
+  }, [product?.id, isColor]);
 
   useEffect(() => {
     if (!product) return;
@@ -144,35 +151,26 @@ export function SupplyDetailModal({
             <div className="grid md:grid-cols-2">
               {/* Visual side */}
               <div className="relative bg-gradient-to-br from-[#FFF5F8] via-[#F8F0FF] to-[#E0F7FF] aspect-square flex items-center justify-center overflow-hidden">
-                {isColor ? (
+                {isColor && swatch ? (
                   <motion.div
-                    key={shadeIdx}
-                    initial={{ scale: 0.5, rotate: -10, opacity: 0 }}
-                    animate={{ scale: 1, rotate: 0, opacity: 1 }}
-                    transition={{ type: "spring", stiffness: 260, damping: 18 }}
-                    className="relative anime-image-pop"
+                    initial={{ scale: 0.6, opacity: 0 }}
+                    animate={{ scale: 1, opacity: 1 }}
+                    transition={{ type: "spring", stiffness: 260, damping: 20 }}
+                    className="relative w-full h-full anime-image-pop"
                   >
-                    <div
-                      className="w-56 h-56 md:w-64 md:h-64 rounded-full shadow-2xl ring-8 ring-white/60 animate-rainbow-glow"
-                      style={{
-                        background: `radial-gradient(circle at 35% 30%, ${palette[shadeIdx]}, ${palette[shadeIdx]}cc 60%, ${palette[shadeIdx]}88)`,
-                        boxShadow: `0 24px 60px -12px ${palette[shadeIdx]}aa, inset -8px -12px 30px rgba(0,0,0,0.18), inset 8px 8px 18px rgba(255,255,255,0.4)`,
-                      }}
+                    <ColorSwatch
+                      hex={palette[shadeIdx] || swatch.hex}
+                      texture={swatch.texture}
+                      label={swatch.label}
+                      size="modal"
                     />
-                    {/* Sparkles bursting around the swatch */}
+                    {/* Sparkles around the swatch */}
                     <Sparkles
-                      className="absolute -top-3 -right-3 h-7 w-7 text-white drop-shadow-md animate-sparkle"
-                      style={{ filter: `drop-shadow(0 0 10px ${palette[shadeIdx]})` }}
+                      className="absolute top-4 left-4 h-6 w-6 text-white drop-shadow-lg animate-sparkle pointer-events-none"
                     />
                     <Sparkles
-                      className="absolute -bottom-2 -left-2 h-5 w-5 text-[#FFD700] animate-sparkle-slow"
+                      className="absolute bottom-24 right-4 h-5 w-5 text-[#FFD700] drop-shadow-lg animate-sparkle-slow pointer-events-none"
                     />
-                    <span
-                      className="absolute top-2 left-1/2 text-2xl animate-bounce-soft"
-                      style={{ color: "#FF6B9D", textShadow: "0 0 10px rgba(255,107,157,0.7)" }}
-                    >
-                      ♡
-                    </span>
                   </motion.div>
                 ) : showImage ? (
                   <motion.img
@@ -274,18 +272,45 @@ export function SupplyDetailModal({
                 )}
 
                 <div className="pt-4 border-t border-gray-100 space-y-2">
-                  {isColor && (
-                    <a href="/design-lab">
-                      <Button
-                        className={cn(
-                          "w-full uppercase text-[10px] tracking-widest text-white shadow-md hover:shadow-lg hover:scale-[1.04] active:scale-[0.96] transition-all",
-                          "bg-gradient-to-r from-[#FF6B9D] via-[#9B5DE5] to-[#00D9FF] animate-cta-bounce hover-sparkle"
-                        )}
+                  {isColor && swatch && (
+                    <>
+                      {/* Color name + hex callout */}
+                      <div
+                        className="rounded-xl p-4 flex items-center gap-3 mb-2"
+                        style={{
+                          background: `linear-gradient(135deg, ${palette[shadeIdx] || swatch.hex}18, ${palette[shadeIdx] || swatch.hex}08)`,
+                          border: `1px solid ${palette[shadeIdx] || swatch.hex}55`,
+                        }}
                       >
-                        <Sparkles className="h-4 w-4 mr-2" />
-                        Generate with this color
-                      </Button>
-                    </a>
+                        <div
+                          className="w-12 h-12 rounded-full flex-shrink-0 ring-2 ring-white shadow-md"
+                          style={{ background: palette[shadeIdx] || swatch.hex }}
+                        />
+                        <div className="min-w-0">
+                          <p className="text-[9px] uppercase tracking-widest text-gray-400">
+                            Color Name
+                          </p>
+                          <p className="text-base font-bold truncate" style={{ color: palette[shadeIdx] || swatch.hex }}>
+                            {swatch.label}
+                          </p>
+                          <p className="text-[10px] uppercase tracking-widest text-gray-500 font-mono">
+                            {(palette[shadeIdx] || swatch.hex).toUpperCase()} · {swatch.texture}
+                          </p>
+                        </div>
+                      </div>
+
+                      <a href="/design-lab">
+                        <Button
+                          className={cn(
+                            "w-full uppercase text-[10px] tracking-widest text-white shadow-md hover:shadow-lg hover:scale-[1.04] active:scale-[0.96] transition-all",
+                            "bg-gradient-to-r from-[#FF6B9D] via-[#9B5DE5] to-[#00D9FF] animate-cta-bounce hover-sparkle"
+                          )}
+                        >
+                          <Sparkles className="h-4 w-4 mr-2" />
+                          Generate with {swatch.label}
+                        </Button>
+                      </a>
+                    </>
                   )}
 
                   {product.memberOnly && !isAuthenticated ? (
