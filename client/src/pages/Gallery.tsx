@@ -7,6 +7,7 @@ import { useAuth } from "@/hooks/use-auth";
 import { downloadWithWatermark } from "@/lib/watermark";
 import { addNailCheckWatermark } from "@/lib/watermark";
 import { UpgradeModal } from "@/components/UpgradeModal";
+import { GalleryDetailModal } from "@/components/GalleryDetailModal";
 
 const PINK_GRADIENT = "bg-gradient-to-r from-[#FF6B9D] to-[#FF8A5B]";
 const PURPLE_GRADIENT = "bg-gradient-to-r from-[#9B5DE5] to-[#FF6B9D]";
@@ -57,6 +58,7 @@ export default function Gallery() {
   const [subscribed, setSubscribed] = useState(false);
   const [showUpgradeModal, setShowUpgradeModal] = useState(false);
   const [downloadingId, setDownloadingId] = useState<number | null>(null);
+  const [selectedItem, setSelectedItem] = useState<typeof GALLERY_ITEMS[0] | null>(null);
 
   const filteredItems = selectedCategory === "All"
     ? GALLERY_ITEMS
@@ -161,7 +163,8 @@ export default function Gallery() {
               <div
                 key={item.id}
                 style={{ animationDelay: `${idx * 50}ms` }}
-                className="group relative aspect-square rounded-2xl overflow-hidden bg-white shadow-sm hover-pop hover-glow-pink animate-pop-in transition-all duration-500"
+                onClick={() => setSelectedItem(item)}
+                className="group relative aspect-square rounded-2xl overflow-hidden bg-white shadow-sm hover-pop hover-glow-pink animate-pop-in transition-all duration-500 cursor-pointer"
               >
                 <img
                   src={item.image}
@@ -177,7 +180,7 @@ export default function Gallery() {
                   <div className="flex items-end justify-between gap-2">
                     <h3 className="text-white font-serif text-base leading-tight">{item.name}</h3>
                     <button
-                      onClick={() => handleDownload(item)}
+                      onClick={(e) => { e.stopPropagation(); handleDownload(item); }}
                       disabled={downloadingId === item.id}
                       title={isPremium ? "Download (no watermark)" : "Download with watermark"}
                       className={cn(
@@ -303,6 +306,17 @@ export default function Gallery() {
         onClose={() => setShowUpgradeModal(false)}
         onUpgrade={() => { setShowUpgradeModal(false); window.location.href = "/subscribe"; }}
       />
+
+      {selectedItem && (
+        <GalleryDetailModal
+          item={selectedItem}
+          allItems={filteredItems}
+          onClose={() => setSelectedItem(null)}
+          onSelect={(it) => setSelectedItem(it)}
+          onDownload={(it) => handleDownload(it)}
+          isPremium={isPremium}
+        />
+      )}
     </>
   );
 }

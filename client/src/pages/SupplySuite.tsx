@@ -1,11 +1,12 @@
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Package, Search, Loader2, Lock, ExternalLink, Star } from "lucide-react";
-import { motion, AnimatePresence } from "framer-motion";
+import { Package, Search, Lock, Star } from "lucide-react";
+import { motion } from "framer-motion";
 import { cn } from "@/lib/utils";
 import { useAuth } from "@/hooks/use-auth";
 import { BrandSpinnerFull } from "@/components/BrandSpinner";
+import { SupplyDetailModal } from "@/components/SupplyDetailModal";
 
 const GOLD_TEXT = "text-[#B08D57]";
 const GOLD_GRADIENT = "bg-gradient-to-r from-[#B08D57] via-[#D4AF37] to-[#B08D57]";
@@ -279,115 +280,11 @@ export default function SupplySuite() {
         )}
       </div>
 
-      {/* Product Detail Modal */}
-      <AnimatePresence>
-        {selectedProduct && (
-          <div 
-            className="fixed inset-0 bg-black/80 flex items-center justify-center z-50 p-4"
-            onClick={() => setSelectedProduct(null)}
-          >
-            <motion.div
-              initial={{ scale: 0.9, opacity: 0 }}
-              animate={{ scale: 1, opacity: 1 }}
-              exit={{ scale: 0.9, opacity: 0 }}
-              className="bg-white max-w-2xl w-full max-h-[90vh] overflow-y-auto"
-              onClick={(e) => e.stopPropagation()}
-            >
-              <div className="grid md:grid-cols-2">
-                {/* Image */}
-                <div className="aspect-square bg-gray-100">
-                  {selectedProduct.imageUrl ? (
-                    <img 
-                      src={selectedProduct.imageUrl} 
-                      alt={selectedProduct.name}
-                      className="w-full h-full object-cover"
-                    />
-                  ) : (
-                    <div className="w-full h-full flex items-center justify-center">
-                      <Package className="h-20 w-20 text-gray-300" />
-                    </div>
-                  )}
-                </div>
-
-                {/* Details */}
-                <div className="p-8 space-y-6">
-                  <div>
-                    {selectedProduct.featured && (
-                      <div className="flex items-center gap-2 mb-2">
-                        <Star className="h-4 w-4 fill-[#B08D57] text-[#B08D57]" />
-                        <span className="text-[9px] uppercase tracking-widest text-[#B08D57]">Featured</span>
-                      </div>
-                    )}
-                    <span className="text-[9px] uppercase tracking-widest text-gray-400 block mb-2">
-                      {selectedProduct.category}
-                    </span>
-                    <h2 className="text-2xl uppercase tracking-wider mb-2 bg-gradient-to-r from-[#FF6B9D] via-[#9B5DE5] to-[#00D9FF] bg-clip-text text-transparent">
-                      {selectedProduct.name}
-                    </h2>
-                    <p className="text-sm text-gray-500 font-medium">{selectedProduct.brand}</p>
-                    {selectedProduct.price && (
-                      <p className={cn("text-xl font-bold mt-2", GOLD_TEXT)}>{selectedProduct.price}</p>
-                    )}
-                  </div>
-
-                  {selectedProduct.description && (
-                    <p className="text-sm text-gray-600 italic">{selectedProduct.description}</p>
-                  )}
-
-                  {selectedProduct.utility && (
-                    <div className="bg-gray-50 p-4 border-l-2 border-[#B08D57]">
-                      <p className="text-[9px] uppercase tracking-widest text-gray-400 mb-1">Utility</p>
-                      <p className="text-sm text-gray-700">{selectedProduct.utility}</p>
-                    </div>
-                  )}
-
-                  {selectedProduct.tags && selectedProduct.tags.length > 0 && (
-                    <div className="flex flex-wrap gap-2">
-                      {selectedProduct.tags.map((tag, idx) => (
-                        <span 
-                          key={idx}
-                          className="bg-gray-100 px-3 py-1 text-[9px] uppercase tracking-wider"
-                        >
-                          {tag}
-                        </span>
-                      ))}
-                    </div>
-                  )}
-
-                  <div className="pt-6 border-t border-gray-100 space-y-3">
-                    {selectedProduct.memberOnly && !isAuthenticated ? (
-                      <div className="text-center py-4">
-                        <Lock className="h-8 w-8 mx-auto text-gray-300 mb-2" />
-                        <p className="text-sm text-gray-500 mb-4">Members-only product link</p>
-                        <a href="/subscribe">
-                          <Button className={cn("w-full uppercase text-[10px] tracking-widest", GOLD_GRADIENT, "text-white")}>
-                            Subscribe
-                          </Button>
-                        </a>
-                      </div>
-                    ) : selectedProduct.productUrl && selectedProduct.productUrl !== "#" ? (
-                      <a href={selectedProduct.productUrl} target="_blank" rel="noopener noreferrer">
-                        <Button className={cn("w-full uppercase text-[10px] tracking-widest", GOLD_GRADIENT, "text-white")}>
-                          <ExternalLink className="h-4 w-4 mr-2" />
-                          Get Product Link
-                        </Button>
-                      </a>
-                    ) : null}
-                    
-                    <Button
-                      onClick={() => setSelectedProduct(null)}
-                      variant="outline"
-                      className="w-full uppercase text-[10px] tracking-widest"
-                    >
-                      Close
-                    </Button>
-                  </div>
-                </div>
-              </div>
-            </motion.div>
-          </div>
-        )}
-      </AnimatePresence>
+      <SupplyDetailModal
+        product={selectedProduct}
+        isAuthenticated={isAuthenticated}
+        onClose={() => setSelectedProduct(null)}
+      />
     </>
   );
 }
