@@ -150,20 +150,29 @@ export function SupplyDetailModal({
                     initial={{ scale: 0.5, rotate: -10, opacity: 0 }}
                     animate={{ scale: 1, rotate: 0, opacity: 1 }}
                     transition={{ type: "spring", stiffness: 260, damping: 18 }}
-                    className="relative"
+                    className="relative anime-image-pop"
                   >
                     <div
-                      className="w-56 h-56 md:w-64 md:h-64 rounded-full shadow-2xl ring-8 ring-white/60"
+                      className="w-56 h-56 md:w-64 md:h-64 rounded-full shadow-2xl ring-8 ring-white/60 animate-rainbow-glow"
                       style={{
                         background: `radial-gradient(circle at 35% 30%, ${palette[shadeIdx]}, ${palette[shadeIdx]}cc 60%, ${palette[shadeIdx]}88)`,
                         boxShadow: `0 24px 60px -12px ${palette[shadeIdx]}aa, inset -8px -12px 30px rgba(0,0,0,0.18), inset 8px 8px 18px rgba(255,255,255,0.4)`,
                       }}
                     />
-                    {/* Sparkle */}
+                    {/* Sparkles bursting around the swatch */}
                     <Sparkles
-                      className="absolute -top-3 -right-3 h-7 w-7 text-white drop-shadow-md animate-float"
+                      className="absolute -top-3 -right-3 h-7 w-7 text-white drop-shadow-md animate-sparkle"
                       style={{ filter: `drop-shadow(0 0 10px ${palette[shadeIdx]})` }}
                     />
+                    <Sparkles
+                      className="absolute -bottom-2 -left-2 h-5 w-5 text-[#FFD700] animate-sparkle-slow"
+                    />
+                    <span
+                      className="absolute top-2 left-1/2 text-2xl animate-bounce-soft"
+                      style={{ color: "#FF6B9D", textShadow: "0 0 10px rgba(255,107,157,0.7)" }}
+                    >
+                      ♡
+                    </span>
                   </motion.div>
                 ) : showImage ? (
                   <motion.img
@@ -269,8 +278,8 @@ export function SupplyDetailModal({
                     <a href="/design-lab">
                       <Button
                         className={cn(
-                          "w-full uppercase text-[10px] tracking-widest text-white shadow-md hover:shadow-lg hover:scale-[1.02] active:scale-[0.98] transition-all",
-                          "bg-gradient-to-r from-[#FF6B9D] via-[#9B5DE5] to-[#00D9FF]"
+                          "w-full uppercase text-[10px] tracking-widest text-white shadow-md hover:shadow-lg hover:scale-[1.04] active:scale-[0.96] transition-all",
+                          "bg-gradient-to-r from-[#FF6B9D] via-[#9B5DE5] to-[#00D9FF] animate-cta-bounce hover-sparkle"
                         )}
                       >
                         <Sparkles className="h-4 w-4 mr-2" />

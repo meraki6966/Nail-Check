@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { motion, AnimatePresence, PanInfo } from "framer-motion";
 import { X, Share2, Sparkles, Check, ChevronLeft, ChevronRight, Download } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -158,20 +158,37 @@ export function GalleryDetailModal({
 
           <div className="grid md:grid-cols-2">
             {/* Image — animated zoom-in */}
-            <div className="relative aspect-square bg-gray-100 overflow-hidden">
+            <div className="relative aspect-square bg-gradient-to-br from-[#FFF5F8] via-[#F8F0FF] to-[#E0F7FF] overflow-hidden">
               <motion.img
                 key={item.image}
                 src={item.image}
                 alt={item.name}
-                className="w-full h-full object-cover"
+                onError={(e) => {
+                  const t = e.currentTarget;
+                  if (t.dataset.fallback) return;
+                  t.dataset.fallback = "1";
+                  const safeName = item.name.replace(/[<>&]/g, "");
+                  t.src = "data:image/svg+xml;utf8," + encodeURIComponent(
+                    `<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 400'><defs><linearGradient id='g' x1='0' y1='0' x2='1' y2='1'><stop offset='0' stop-color='#FF6B9D'/><stop offset='1' stop-color='#9B5DE5'/></linearGradient></defs><rect width='400' height='400' fill='url(#g)'/><text x='200' y='210' text-anchor='middle' font-family='serif' font-size='28' fill='white' opacity='0.95'>${safeName}</text></svg>`
+                  );
+                }}
+                className="w-full h-full object-cover anime-image-pop"
                 initial={{ scale: 1.25, opacity: 0 }}
                 animate={{ scale: 1, opacity: 1 }}
                 exit={{ scale: 1.1, opacity: 0 }}
                 transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
               />
-              <div className="absolute top-3 left-3 px-3 py-1 rounded-full bg-white/90 backdrop-blur-sm shadow text-[9px] uppercase tracking-widest font-bold text-[#FF6B9D]">
+
+              {/* Floating particles overlay */}
+              <FloatingParticles seed={item.id} />
+
+              <div className="absolute top-3 left-3 px-3 py-1 rounded-full bg-white/90 backdrop-blur-sm shadow text-[9px] uppercase tracking-widest font-bold text-[#FF6B9D] animate-wiggle-hover">
                 {item.category}
               </div>
+
+              {/* Sparkle accents */}
+              <Sparkles className="absolute top-4 right-12 h-5 w-5 text-white drop-shadow-lg animate-sparkle pointer-events-none" />
+              <Sparkles className="absolute bottom-6 left-6 h-4 w-4 text-[#FFD700] drop-shadow-lg animate-sparkle-slow pointer-events-none" />
 
               {/* Mobile chevrons */}
               <button
@@ -208,7 +225,7 @@ export function GalleryDetailModal({
 
               <div className="space-y-2 pt-2">
                 <a href="/design-lab">
-                  <Button className="w-full uppercase text-[10px] tracking-widest text-white bg-gradient-to-r from-[#FF6B9D] via-[#9B5DE5] to-[#00D9FF] shadow-md hover:shadow-lg hover:scale-[1.02] active:scale-[0.98] transition-all">
+                  <Button className="w-full uppercase text-[10px] tracking-widest text-white bg-gradient-to-r from-[#FF6B9D] via-[#9B5DE5] to-[#00D9FF] shadow-md hover:shadow-lg hover:scale-[1.04] active:scale-[0.96] transition-all animate-cta-bounce hover-sparkle">
                     <Sparkles className="h-4 w-4 mr-2" />
                     Try this style
                   </Button>
@@ -276,5 +293,51 @@ export function GalleryDetailModal({
         </motion.div>
       </motion.div>
     </AnimatePresence>
+  );
+}
+
+/* ── Floating particles overlay ─────────────────────────── */
+const PARTICLE_GLYPHS = ["✦", "✧", "★", "♡", "✨", "❀"];
+const PARTICLE_COLORS = ["#FF6B9D", "#9B5DE5", "#00D9FF", "#FFD700", "#FF8A5B", "#FFFFFF"];
+
+function FloatingParticles({ seed }: { seed: number }) {
+  const particles = useMemo(() => {
+    const rng = (n: number) => {
+      const x = Math.sin(seed * 9301 + n * 49297) * 233280;
+      return x - Math.floor(x);
+    };
+    return Array.from({ length: 14 }).map((_, i) => ({
+      glyph: PARTICLE_GLYPHS[Math.floor(rng(i) * PARTICLE_GLYPHS.length)],
+      color: PARTICLE_COLORS[Math.floor(rng(i + 100) * PARTICLE_COLORS.length)],
+      left: `${Math.floor(rng(i + 200) * 90) + 5}%`,
+      top: `${Math.floor(rng(i + 300) * 90) + 5}%`,
+      size: 10 + Math.floor(rng(i + 400) * 16),
+      delay: rng(i + 500) * 2.5,
+      duration: 2 + rng(i + 600) * 2,
+      pxOffset: (rng(i + 700) - 0.5) * 30,
+    }));
+  }, [seed]);
+
+  return (
+    <div className="absolute inset-0 pointer-events-none overflow-hidden">
+      {particles.map((p, i) => (
+        <span
+          key={i}
+          className="anime-particle absolute"
+          style={{
+            left: p.left,
+            top: p.top,
+            color: p.color,
+            fontSize: `${p.size}px`,
+            textShadow: `0 0 10px ${p.color}cc, 0 0 4px white`,
+            animationDelay: `${p.delay}s`,
+            animationDuration: `${p.duration}s`,
+            ["--px" as any]: `${p.pxOffset}px`,
+          }}
+        >
+          {p.glyph}
+        </span>
+      ))}
+    </div>
   );
 }

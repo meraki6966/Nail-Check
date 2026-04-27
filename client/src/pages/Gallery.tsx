@@ -47,7 +47,6 @@ const GALLERY_ITEMS = [
   { id: 22, image: "http://nail-check.com/wp-content/uploads/2026/04/IMG_1962.jpg", name: "Springtime", category: "Effects" },
   { id: 23, image: "http://nail-check.com/wp-content/uploads/2026/04/IMG_1961.jpg", name: "Pierced Architecture", category: "Design Styles" },
   { id: 24, image: "http://nail-check.com/wp-content/uploads/2026/04/IMG_1960.jpg", name: "Butterfly and Flowers", category: "Design Styles" },
-  { id: 25, image: "https://images.unsplash.com/photo-1632344004625-df03b9bc1c2e?w=800&q=80&auto=format&fit=crop", name: "Cartoon Anime", category: "Design Styles" },
 ];
 
 const CATEGORIES = ["All", "Nail Shapes", "Effects", "Design Styles", "Themes"];
@@ -165,7 +164,7 @@ export default function Gallery() {
                 key={item.id}
                 style={{ animationDelay: `${idx * 50}ms` }}
                 onClick={() => setSelectedItem(item)}
-                className="group relative aspect-square rounded-2xl overflow-hidden bg-white shadow-sm hover-pop hover-glow-pink animate-pop-in transition-all duration-500 cursor-pointer"
+                className="group relative aspect-square rounded-2xl overflow-hidden bg-white shadow-sm hover-pop hover-glow-pink hover-sparkle hover-tilt animate-pop-in transition-all duration-500 cursor-pointer"
               >
                 <img
                   src={item.image}

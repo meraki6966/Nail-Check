@@ -75,7 +75,6 @@ const STYLE_CATEGORIES = {
       { id: "classy", label: "Classy / Minimal", image: "http://nail-check.com/wp-content/uploads/2026/02/Classy.png", description: "Understated elegance. Clean lines, neutral tones, and subtle accents for timeless sophistication." },
       { id: "junk", label: "Junk Nails", image: "http://nail-check.com/wp-content/uploads/2026/02/Junk.png", description: "Maximalist chaos. Loaded with charms, rhinestones, and 3D elements. More is more!" },
       { id: "3d", label: "3D / Character", image: "http://nail-check.com/wp-content/uploads/2026/02/3D-Character.png", description: "Sculptural nail art featuring raised designs, characters, or intricate 3D elements." },
-      { id: "cartoonAnime", label: "Cartoon Anime", image: "https://images.unsplash.com/photo-1632344004625-df03b9bc1c2e?w=800&q=80&auto=format&fit=crop", description: "Hand-painted anime and cartoon characters with bold outlines, vivid color blocks, and kawaii detail." },
       { id: "editorial", label: "Editorial", image: "http://nail-check.com/wp-content/uploads/2026/02/Editorial.png", description: "Avant-garde and artistic. Designed for photoshoots, runway, and making bold statements." },
     ]
   },

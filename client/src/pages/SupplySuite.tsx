@@ -309,7 +309,7 @@ function ProductCard({
       animate={{ opacity: 1, y: 0 }}
       whileHover={{ y: -4 }}
       transition={{ type: "spring", stiffness: 280, damping: 22 }}
-      className="group relative bg-white border border-gray-200 rounded-xl overflow-hidden cursor-pointer hover-glow-purple transition-all"
+      className="group relative bg-white border border-gray-200 rounded-xl overflow-hidden cursor-pointer hover-glow-purple hover-sparkle transition-all"
       onClick={onClick}
     >
       {/* Top color bar — category coding */}
