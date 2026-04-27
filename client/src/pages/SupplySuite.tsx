@@ -300,6 +300,8 @@ function ProductCard({
 }) {
   const isLocked = product.memberOnly && !isAuthenticated;
   const c = categoryColor(product.category);
+  const [imgFailed, setImgFailed] = useState(false);
+  const hasImage = !!product.imageUrl && !imgFailed;
 
   return (
     <motion.div
@@ -318,18 +320,22 @@ function ProductCard({
 
       {/* Image */}
       <div className="aspect-square bg-gray-100 relative overflow-hidden">
-        {product.imageUrl ? (
+        {hasImage ? (
           <img
             src={product.imageUrl}
             alt={product.name}
+            onError={() => setImgFailed(true)}
             className={cn(
               "w-full h-full object-cover transition-transform duration-500 group-hover:scale-110",
               isLocked && "blur-sm opacity-50"
             )}
           />
         ) : (
-          <div className="w-full h-full flex items-center justify-center">
-            <Package className="h-16 w-16 text-gray-300" />
+          <div
+            className="w-full h-full flex items-center justify-center"
+            style={{ background: `linear-gradient(135deg, ${c.from}22, ${c.to}33)` }}
+          >
+            <Package className="h-16 w-16" style={{ color: c.from, opacity: 0.5 }} />
           </div>
         )}
 

@@ -75,6 +75,7 @@ const STYLE_CATEGORIES = {
       { id: "classy", label: "Classy / Minimal", image: "http://nail-check.com/wp-content/uploads/2026/02/Classy.png", description: "Understated elegance. Clean lines, neutral tones, and subtle accents for timeless sophistication." },
       { id: "junk", label: "Junk Nails", image: "http://nail-check.com/wp-content/uploads/2026/02/Junk.png", description: "Maximalist chaos. Loaded with charms, rhinestones, and 3D elements. More is more!" },
       { id: "3d", label: "3D / Character", image: "http://nail-check.com/wp-content/uploads/2026/02/3D-Character.png", description: "Sculptural nail art featuring raised designs, characters, or intricate 3D elements." },
+      { id: "cartoonAnime", label: "Cartoon Anime", image: "https://images.unsplash.com/photo-1632344004625-df03b9bc1c2e?w=800&q=80&auto=format&fit=crop", description: "Hand-painted anime and cartoon characters with bold outlines, vivid color blocks, and kawaii detail." },
       { id: "editorial", label: "Editorial", image: "http://nail-check.com/wp-content/uploads/2026/02/Editorial.png", description: "Avant-garde and artistic. Designed for photoshoots, runway, and making bold statements." },
     ]
   },
@@ -664,7 +665,20 @@ export default function Home() {
                               )}
                             >
                               <div className="aspect-square relative">
-                                <img src={option.image} alt={option.label} className="w-full h-full object-cover" />
+                                <img
+                                  src={option.image}
+                                  alt={option.label}
+                                  onError={(e) => {
+                                    const t = e.currentTarget;
+                                    if (t.dataset.fallback) return;
+                                    t.dataset.fallback = "1";
+                                    const label = option.label.replace(/[<>&]/g, "");
+                                    t.src = "data:image/svg+xml;utf8," + encodeURIComponent(
+                                      `<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 400'><defs><linearGradient id='g' x1='0' y1='0' x2='1' y2='1'><stop offset='0' stop-color='#FF6B9D'/><stop offset='1' stop-color='#9B5DE5'/></linearGradient></defs><rect width='400' height='400' fill='url(#g)'/><text x='200' y='210' text-anchor='middle' font-family='serif' font-size='24' fill='white' opacity='0.9'>${label}</text></svg>`
+                                    );
+                                  }}
+                                  className="w-full h-full object-cover"
+                                />
                                 <div className={cn("absolute inset-0 transition-all duration-300", isSelected ? `bg-gradient-to-t ${category.color} opacity-40` : "bg-black/0 group-hover:bg-black/20")} />
                                 {isSelected && <div className="absolute top-2 right-2 w-7 h-7 bg-white rounded-full flex items-center justify-center shadow-lg"><span className="text-[#FF6B9D] text-lg font-bold">✓</span></div>}
                               </div>

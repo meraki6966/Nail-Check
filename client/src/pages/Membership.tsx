@@ -93,7 +93,7 @@ export default function Membership() {
                       <span>Upload, paste URL, or select from Fire Vault</span>
                     </li>
                   </ul>
-                  <a href="/critique">
+                  <a href="/design-lab">
                     <Button className={cn("w-full md:w-auto h-12 px-8 rounded-full", PURPLE_GRADIENT, "text-white")}>
                       Try AI Critique →
                     </Button>
@@ -304,7 +304,7 @@ export default function Membership() {
                   Subscribe
                 </Button>
               </a>
-              <a href="/critique">
+              <a href="/design-lab">
                 <Button variant="outline" className="h-16 px-12 text-[11px] uppercase tracking-widest border-white text-white hover:bg-white hover:text-black">
                   Try AI Critique Free
                 </Button>

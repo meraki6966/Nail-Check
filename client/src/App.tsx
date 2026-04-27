@@ -40,7 +40,11 @@ function Router() {
       <Switch>
         {/* Primary Studio Routes */}
         <Route path="/" component={Home} />
-        <Route path="/contact" component={Contact} />        
+        <Route path="/contact" component={Contact} />
+        {/* Design Lab aliases — Home is the Design Lab */}
+        <Route path="/design-lab">{() => <Redirect to="/" />}</Route>
+        <Route path="/ai-generate">{() => <Redirect to="/" />}</Route>
+        <Route path="/critique">{() => <Redirect to="/" />}</Route>
         {/* AI & Content Lab */}
         <Route path="/ai-critique">{() => <Redirect to="/" />}</Route>
         <Route path="/content-editing" component={ContentEditing} />

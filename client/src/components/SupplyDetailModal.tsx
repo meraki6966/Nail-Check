@@ -46,13 +46,16 @@ export function SupplyDetailModal({
 }) {
   const [shadeIdx, setShadeIdx] = useState(0);
   const [shared, setShared] = useState(false);
+  const [imgFailed, setImgFailed] = useState(false);
 
   const palette = useMemo(() => (product ? paletteFor(product.category) : []), [product]);
   const isColor = product?.category === "Color";
+  const showImage = !!product?.imageUrl && !imgFailed && !isColor;
 
   useEffect(() => {
     setShadeIdx(0);
     setShared(false);
+    setImgFailed(false);
   }, [product?.id]);
 
   useEffect(() => {
@@ -162,17 +165,31 @@ export function SupplyDetailModal({
                       style={{ filter: `drop-shadow(0 0 10px ${palette[shadeIdx]})` }}
                     />
                   </motion.div>
-                ) : product.imageUrl ? (
+                ) : showImage ? (
                   <motion.img
                     src={product.imageUrl}
                     alt={product.name}
+                    onError={() => setImgFailed(true)}
                     className="w-full h-full object-cover"
                     initial={{ scale: 1.15 }}
                     animate={{ scale: 1 }}
                     transition={{ duration: 0.6, ease: "easeOut" }}
                   />
                 ) : (
-                  <div className="text-6xl">📦</div>
+                  <div
+                    className="w-full h-full flex flex-col items-center justify-center gap-3"
+                    style={{
+                      background: `linear-gradient(135deg, ${palette[0]}22, ${palette[Math.min(1, palette.length - 1)]}33)`,
+                    }}
+                  >
+                    <div className="text-6xl">📦</div>
+                    <p
+                      className="text-[10px] uppercase tracking-widest font-bold"
+                      style={{ color: palette[0] }}
+                    >
+                      {product.category}
+                    </p>
+                  </div>
                 )}
 
                 {/* Featured badge */}
@@ -249,7 +266,7 @@ export function SupplyDetailModal({
 
                 <div className="pt-4 border-t border-gray-100 space-y-2">
                   {isColor && (
-                    <a href="/critique">
+                    <a href="/design-lab">
                       <Button
                         className={cn(
                           "w-full uppercase text-[10px] tracking-widest text-white shadow-md hover:shadow-lg hover:scale-[1.02] active:scale-[0.98] transition-all",

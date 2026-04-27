@@ -47,6 +47,7 @@ const GALLERY_ITEMS = [
   { id: 22, image: "http://nail-check.com/wp-content/uploads/2026/04/IMG_1962.jpg", name: "Springtime", category: "Effects" },
   { id: 23, image: "http://nail-check.com/wp-content/uploads/2026/04/IMG_1961.jpg", name: "Pierced Architecture", category: "Design Styles" },
   { id: 24, image: "http://nail-check.com/wp-content/uploads/2026/04/IMG_1960.jpg", name: "Butterfly and Flowers", category: "Design Styles" },
+  { id: 25, image: "https://images.unsplash.com/photo-1632344004625-df03b9bc1c2e?w=800&q=80&auto=format&fit=crop", name: "Cartoon Anime", category: "Design Styles" },
 ];
 
 const CATEGORIES = ["All", "Nail Shapes", "Effects", "Design Styles", "Themes"];
@@ -169,6 +170,15 @@ export default function Gallery() {
                 <img
                   src={item.image}
                   alt={item.name}
+                  onError={(e) => {
+                    const t = e.currentTarget;
+                    if (t.dataset.fallback) return;
+                    t.dataset.fallback = "1";
+                    const safeName = item.name.replace(/[<>&]/g, "");
+                    t.src = "data:image/svg+xml;utf8," + encodeURIComponent(
+                      `<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 400'><defs><linearGradient id='g' x1='0' y1='0' x2='1' y2='1'><stop offset='0' stop-color='#FF6B9D'/><stop offset='1' stop-color='#9B5DE5'/></linearGradient></defs><rect width='400' height='400' fill='url(#g)'/><text x='200' y='210' text-anchor='middle' font-family='serif' font-size='28' fill='white' opacity='0.9'>${safeName}</text></svg>`
+                    );
+                  }}
                   className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
                 />
 

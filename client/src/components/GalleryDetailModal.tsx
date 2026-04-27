@@ -207,7 +207,7 @@ export function GalleryDetailModal({
               </motion.div>
 
               <div className="space-y-2 pt-2">
-                <a href="/critique">
+                <a href="/design-lab">
                   <Button className="w-full uppercase text-[10px] tracking-widest text-white bg-gradient-to-r from-[#FF6B9D] via-[#9B5DE5] to-[#00D9FF] shadow-md hover:shadow-lg hover:scale-[1.02] active:scale-[0.98] transition-all">
                     <Sparkles className="h-4 w-4 mr-2" />
                     Try this style
