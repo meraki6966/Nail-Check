@@ -44,8 +44,12 @@ export function getSession() {
     tableName: "sessions",
   });
   
+  if (!process.env.SESSION_SECRET) {
+    throw new Error("SESSION_SECRET must be set in the environment");
+  }
+
   return session({
-    secret: process.env.SESSION_SECRET || "nail-check-secret-key-change-me",
+    secret: process.env.SESSION_SECRET,
     store: sessionStore,
     resave: false,
     saveUninitialized: false,

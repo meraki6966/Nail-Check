@@ -25,12 +25,12 @@ export interface IStorage extends IAuthStorage {
   getTutorial(id: number): Promise<Tutorial | undefined>;
   createTutorial(tutorial: InsertTutorial): Promise<Tutorial>;
   
-  // Fire Vault methods
-  getSavedDesigns(userId?: string): Promise<SavedDesign[]>;
-  getSavedDesign(id: number): Promise<SavedDesign | undefined>;
+  // Fire Vault methods (all scoped by userId)
+  getSavedDesigns(userId: string): Promise<SavedDesign[]>;
+  getSavedDesign(id: number, userId: string): Promise<SavedDesign | undefined>;
   saveDesign(design: InsertSavedDesign): Promise<SavedDesign>;
-  deleteDesign(id: number): Promise<void>;
-  toggleFavorite(id: number): Promise<SavedDesign>;
+  deleteDesign(id: number, userId: string): Promise<boolean>;
+  toggleFavorite(id: number, userId: string): Promise<SavedDesign | undefined>;
   
   // Seasonal Vault methods
   getSeasonalDesigns(season?: string): Promise<SeasonalDesign[]>;
@@ -105,20 +105,20 @@ export class DatabaseStorage implements IStorage {
     return newTutorial;
   }
 
-  // FIRE VAULT METHODS
-  async getSavedDesigns(userId?: string): Promise<SavedDesign[]> {
-    let query = db.select().from(savedDesigns).orderBy(desc(savedDesigns.createdAt));
-    
-    if (userId) {
-      // @ts-ignore
-      query = query.where(eq(savedDesigns.userId, userId));
-    }
-    
-    return await query;
+  // FIRE VAULT METHODS (all queries scoped by userId)
+  async getSavedDesigns(userId: string): Promise<SavedDesign[]> {
+    return await db
+      .select()
+      .from(savedDesigns)
+      .where(eq(savedDesigns.userId, userId))
+      .orderBy(desc(savedDesigns.createdAt));
   }
 
-  async getSavedDesign(id: number): Promise<SavedDesign | undefined> {
-    const [design] = await db.select().from(savedDesigns).where(eq(savedDesigns.id, id));
+  async getSavedDesign(id: number, userId: string): Promise<SavedDesign | undefined> {
+    const [design] = await db
+      .select()
+      .from(savedDesigns)
+      .where(and(eq(savedDesigns.id, id), eq(savedDesigns.userId, userId)));
     return design;
   }
 
@@ -127,22 +127,29 @@ export class DatabaseStorage implements IStorage {
     return newDesign;
   }
 
-  async deleteDesign(id: number): Promise<void> {
-    await db.delete(savedDesigns).where(eq(savedDesigns.id, id));
+  async deleteDesign(id: number, userId: string): Promise<boolean> {
+    const result = await db
+      .delete(savedDesigns)
+      .where(and(eq(savedDesigns.id, id), eq(savedDesigns.userId, userId)))
+      .returning({ id: savedDesigns.id });
+    return result.length > 0;
   }
 
-  async toggleFavorite(id: number): Promise<SavedDesign> {
-    const [design] = await db.select().from(savedDesigns).where(eq(savedDesigns.id, id));
+  async toggleFavorite(id: number, userId: string): Promise<SavedDesign | undefined> {
+    const [design] = await db
+      .select()
+      .from(savedDesigns)
+      .where(and(eq(savedDesigns.id, id), eq(savedDesigns.userId, userId)));
     if (!design) {
-      throw new Error("Design not found");
+      return undefined;
     }
-    
+
     const [updated] = await db
       .update(savedDesigns)
       .set({ isFavorite: !design.isFavorite })
-      .where(eq(savedDesigns.id, id))
+      .where(and(eq(savedDesigns.id, id), eq(savedDesigns.userId, userId)))
       .returning();
-    
+
     return updated;
   }
 

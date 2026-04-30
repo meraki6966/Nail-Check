@@ -3,8 +3,10 @@ import express, { type Request, Response, NextFunction } from "express";
 import { registerRoutes } from "./routes";
 import { serveStatic } from "./static";
 import { createServer } from "http";
+import { assertSessionSecret } from "./middleware/auth";
 
-const GOOGLE_API_KEY = "AIzaSyC7gL4Q3YAcXmvE63F2Xq_ELd-O--kFB5o";
+assertSessionSecret();
+
 const app = express();
 const httpServer = createServer(app);
 

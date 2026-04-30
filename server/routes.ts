@@ -10,7 +10,8 @@ import { storage } from "./storage";
 import { db } from "./db";
 import { api } from "@shared/routes";
 import { z } from "zod";
-import { setupAuth, registerAuthRoutes, isAuthenticated } from "./replit_integrations/auth";
+import { setupAuth, registerAuthRoutes } from "./replit_integrations/auth";
+import { isAuthenticated, isAdmin, getSessionUserId } from "./middleware/auth";
 import { registerImageRoutes } from "./replit_integrations/image";
 
 // WordPress API Configuration
@@ -254,38 +255,33 @@ const aiResponse = await fetch(`https://generativelanguage.googleapis.com/v1beta
   });
 
   // Track critique usage (uses same credit system)
-  app.post("/api/ai/critique/use-credit", async (req, res) => {
+  app.post("/api/ai/critique/use-credit", isAuthenticated, async (req, res) => {
     try {
-      const { userId } = req.body;
-      
-      if (!userId || userId === "guest") {
-        // Guest gets 1 free critique
-        return res.json({ success: true, remainingCredits: 0, isFirstCritique: true });
-      }
-      
+      const userId = getSessionUserId(req)!;
+
       const user = await storage.getUser(userId);
       if (!user) {
         return res.status(404).json({ message: "User not found" });
       }
-      
+
       // Use same credit pool as generation
       if (!user.isPaidMember && user.generationsUsed >= user.credits) {
-        return res.status(403).json({ 
+        return res.status(403).json({
           message: "No credits remaining",
-          showPaywall: true 
+          showPaywall: true,
         });
       }
-      
+
       await storage.incrementGenerationsUsed(userId);
-      
-      const remainingCredits = user.isPaidMember 
+
+      const remainingCredits = user.isPaidMember
         ? 999
         : user.credits - (user.generationsUsed + 1);
-      
-      res.json({ 
-        success: true, 
+
+      res.json({
+        success: true,
         remainingCredits,
-        showPaywall: remainingCredits <= 0 && !user.isPaidMember
+        showPaywall: remainingCredits <= 0 && !user.isPaidMember,
       });
     } catch (err) {
       console.error("Error using critique credit:", err);
@@ -329,10 +325,10 @@ const aiResponse = await fetch(`https://generativelanguage.googleapis.com/v1beta
     }
   });
 
-  // FIRE VAULT API ROUTES
-  app.get("/api/designs", async (req, res) => {
+  // FIRE VAULT API ROUTES — all scoped to the authenticated session user.
+  app.get("/api/designs", isAuthenticated, async (req, res) => {
     try {
-      const userId = req.query.userId as string | undefined;
+      const userId = getSessionUserId(req)!;
       const designs = await storage.getSavedDesigns(userId);
       res.json(designs);
     } catch (err) {
@@ -341,10 +337,14 @@ const aiResponse = await fetch(`https://generativelanguage.googleapis.com/v1beta
     }
   });
 
-  app.get("/api/designs/:id", async (req, res) => {
+  app.get("/api/designs/:id", isAuthenticated, async (req, res) => {
     try {
+      const userId = getSessionUserId(req)!;
       const id = Number(req.params.id);
-      const design = await storage.getSavedDesign(id);
+      if (!Number.isFinite(id)) {
+        return res.status(400).json({ message: "Invalid id" });
+      }
+      const design = await storage.getSavedDesign(id, userId);
       if (!design) {
         return res.status(404).json({ message: "Design not found" });
       }
@@ -355,22 +355,23 @@ const aiResponse = await fetch(`https://generativelanguage.googleapis.com/v1beta
     }
   });
 
-  app.post("/api/designs", async (req, res) => {
+  app.post("/api/designs", isAuthenticated, async (req, res) => {
     try {
-      const { imageUrl, prompt, canvasImageUrl, tags, userId } = req.body;
-      
+      const userId = getSessionUserId(req)!;
+      const { imageUrl, prompt, canvasImageUrl, tags } = req.body;
+
       if (!imageUrl || !prompt) {
         return res.status(400).json({ message: "imageUrl and prompt are required" });
       }
 
       const design = await storage.saveDesign({
-        userId,
+        userId, // forced from session — body-supplied userId is ignored
         imageUrl,
         prompt,
         canvasImageUrl,
         tags,
       });
-      
+
       res.status(201).json(design);
     } catch (err) {
       console.error("Error saving design:", err);
@@ -378,10 +379,17 @@ const aiResponse = await fetch(`https://generativelanguage.googleapis.com/v1beta
     }
   });
 
-  app.delete("/api/designs/:id", async (req, res) => {
+  app.delete("/api/designs/:id", isAuthenticated, async (req, res) => {
     try {
+      const userId = getSessionUserId(req)!;
       const id = Number(req.params.id);
-      await storage.deleteDesign(id);
+      if (!Number.isFinite(id)) {
+        return res.status(400).json({ message: "Invalid id" });
+      }
+      const deleted = await storage.deleteDesign(id, userId);
+      if (!deleted) {
+        return res.status(404).json({ message: "Design not found" });
+      }
       res.status(204).send();
     } catch (err) {
       console.error("Error deleting design:", err);
@@ -389,10 +397,17 @@ const aiResponse = await fetch(`https://generativelanguage.googleapis.com/v1beta
     }
   });
 
-  app.patch("/api/designs/:id/favorite", async (req, res) => {
+  app.patch("/api/designs/:id/favorite", isAuthenticated, async (req, res) => {
     try {
+      const userId = getSessionUserId(req)!;
       const id = Number(req.params.id);
-      const design = await storage.toggleFavorite(id);
+      if (!Number.isFinite(id)) {
+        return res.status(400).json({ message: "Invalid id" });
+      }
+      const design = await storage.toggleFavorite(id, userId);
+      if (!design) {
+        return res.status(404).json({ message: "Design not found" });
+      }
       res.json(design);
     } catch (err) {
       console.error("Error toggling favorite:", err);
@@ -571,15 +586,16 @@ const aiResponse = await fetch(`https://generativelanguage.googleapis.com/v1beta
   });
 
   // POST register new nail tech (UPDATED WITH CREATOR FIELDS)
-  app.post("/api/techs/register", async (req, res) => {
+  app.post("/api/techs/register", isAuthenticated, async (req, res) => {
     try {
-      const { 
-        name, email, phone, businessName, city, state, zipCode, bio, 
+      const ownerUserId = getSessionUserId(req)!;
+      const {
+        name, email, phone, businessName, city, state, zipCode, bio,
         profileImage, bookingUrl, instagram, website, skillLevel, specialties,
         // NEW CREATOR FIELDS:
-        username, linktree, affiliateLink, showInDirectory 
+        username, linktree, affiliateLink, showInDirectory
       } = req.body;
-      
+
       if (!name || !email || !city || !state || !zipCode || !bio) {
         return res.status(400).json({ message: "name, email, city, state, zipCode, and bio are required" });
       }
@@ -588,6 +604,7 @@ const aiResponse = await fetch(`https://generativelanguage.googleapis.com/v1beta
       const techUsername = username || name.toLowerCase().replace(/\s+/g, '_');
 
       const tech = await storage.createNailTech({
+        ownerUserId, // bind to authenticated user — body cannot override
         name,
         email,
         phone,
@@ -608,7 +625,7 @@ const aiResponse = await fetch(`https://generativelanguage.googleapis.com/v1beta
         affiliateLink,
         showInDirectory: showInDirectory !== undefined ? showInDirectory : true // Default opt-in
       });
-      
+
       res.status(201).json(tech);
     } catch (err) {
       console.error("Error registering nail tech:", err);
@@ -617,9 +634,12 @@ const aiResponse = await fetch(`https://generativelanguage.googleapis.com/v1beta
   });
 
   // PUT approve nail tech (admin)
-  app.put("/api/techs/:id/approve", async (req, res) => {
+  app.put("/api/techs/:id/approve", isAuthenticated, isAdmin, async (req, res) => {
     try {
       const id = Number(req.params.id);
+      if (!Number.isFinite(id)) {
+        return res.status(400).json({ message: "Invalid id" });
+      }
       const tech = await storage.approveNailTech(id);
       res.json(tech);
     } catch (err) {
@@ -628,10 +648,13 @@ const aiResponse = await fetch(`https://generativelanguage.googleapis.com/v1beta
     }
   });
 
-  // DELETE nail tech
-  app.delete("/api/techs/:id", async (req, res) => {
+  // DELETE nail tech (admin)
+  app.delete("/api/techs/:id", isAuthenticated, isAdmin, async (req, res) => {
     try {
       const id = Number(req.params.id);
+      if (!Number.isFinite(id)) {
+        return res.status(400).json({ message: "Invalid id" });
+      }
       await storage.deleteNailTech(id);
       res.status(204).send();
     } catch (err) {
@@ -641,31 +664,22 @@ const aiResponse = await fetch(`https://generativelanguage.googleapis.com/v1beta
   });
 
   // CREDIT SYSTEM API
-  app.get("/api/user/credits", async (req, res) => {
+  app.get("/api/user/credits", isAuthenticated, async (req, res) => {
     try {
-      const userId = req.query.userId as string || "guest";
-      
-      if (userId === "guest") {
-        return res.json({ 
-          credits: 1, 
-          generationsUsed: 0,
-          isPaidMember: false,
-          canGenerate: true 
-        });
-      }
-      
+      const userId = getSessionUserId(req)!;
+
       const user = await storage.getUser(userId);
       if (!user) {
         return res.status(404).json({ message: "User not found" });
       }
-      
+
       const canGenerate = user.isPaidMember || (user.credits > user.generationsUsed);
-      
+
       res.json({
         credits: user.credits,
         generationsUsed: user.generationsUsed,
         isPaidMember: user.isPaidMember,
-        canGenerate
+        canGenerate,
       });
     } catch (err) {
       console.error("Error fetching credits:", err);
@@ -673,36 +687,32 @@ const aiResponse = await fetch(`https://generativelanguage.googleapis.com/v1beta
     }
   });
 
-  app.post("/api/user/use-credit", async (req, res) => {
+  app.post("/api/user/use-credit", isAuthenticated, async (req, res) => {
     try {
-      const { userId } = req.body;
-      
-      if (!userId || userId === "guest") {
-        return res.json({ success: true, remainingCredits: 0 });
-      }
-      
+      const userId = getSessionUserId(req)!;
+
       const user = await storage.getUser(userId);
       if (!user) {
         return res.status(404).json({ message: "User not found" });
       }
-      
+
       if (!user.isPaidMember && user.generationsUsed >= user.credits) {
-        return res.status(403).json({ 
+        return res.status(403).json({
           message: "No credits remaining",
-          showPaywall: true 
+          showPaywall: true,
         });
       }
-      
+
       await storage.incrementGenerationsUsed(userId);
-      
-      const remainingCredits = user.isPaidMember 
+
+      const remainingCredits = user.isPaidMember
         ? 999
         : user.credits - (user.generationsUsed + 1);
-      
-      res.json({ 
-        success: true, 
+
+      res.json({
+        success: true,
         remainingCredits,
-        showPaywall: remainingCredits <= 0 && !user.isPaidMember
+        showPaywall: remainingCredits <= 0 && !user.isPaidMember,
       });
     } catch (err) {
       console.error("Error using credit:", err);
@@ -770,7 +780,7 @@ const aiResponse = await fetch(`https://generativelanguage.googleapis.com/v1beta
   });
 
   // ADMIN - Get pending nail techs (not approved)
-  app.get("/api/admin/techs/pending", async (req, res) => {
+  app.get("/api/admin/techs/pending", isAuthenticated, isAdmin, async (req, res) => {
     try {
       const pendingTechs = await db
         .select()
@@ -785,10 +795,11 @@ const aiResponse = await fetch(`https://generativelanguage.googleapis.com/v1beta
   });
 
   // ADMIN - Add gallery image
-  app.post("/api/admin/gallery", async (req, res) => {
+  app.post("/api/admin/gallery", isAuthenticated, isAdmin, async (req, res) => {
     try {
+      const adminUserId = getSessionUserId(req)!;
       const { title, imageUrl, category, tags, description } = req.body;
-      
+
       if (!title || !imageUrl || !category) {
         return res.status(400).json({ message: "title, imageUrl, and category are required" });
       }
@@ -797,10 +808,10 @@ const aiResponse = await fetch(`https://generativelanguage.googleapis.com/v1beta
         imageUrl,
         prompt: title,
         tags: tags || [],
-        userId: "admin",
+        userId: adminUserId,
         canvasImageUrl: null,
       });
-      
+
       res.status(201).json(design);
     } catch (error) {
       console.error("Error adding gallery image:", error);

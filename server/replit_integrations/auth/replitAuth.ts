@@ -141,35 +141,14 @@ export async function setupAuth(app: Express) {
   });
 }
 
-export const isAuthenticated: RequestHandler = async (req, res, next) => {
-  if (!isReplit) {
-    return next(); 
-  }
-  
-  const user = req.user as any;
-
-  if (!req.isAuthenticated() || !user?.expires_at) {
-    return res.status(401).json({ message: "Unauthorized" });
-  }
-
-  const now = Math.floor(Date.now() / 1000);
-  if (now <= user.expires_at) {
-    return next();
-  }
-
-  const refreshToken = user.refresh_token;
-  if (!refreshToken) {
-    res.status(401).json({ message: "Unauthorized" });
-    return;
-  }
-
-  try {
-    const config = await getOidcConfig();
-    const tokenResponse = await client.refreshTokenGrant(config, refreshToken);
-    updateUserSession(user, tokenResponse);
-    return next();
-  } catch (error) {
-    res.status(401).json({ message: "Unauthorized" });
-    return;
-  }
+// DEPRECATED: Do NOT import isAuthenticated from this module.
+// This middleware previously called next() unconditionally on non-Replit
+// environments, which silently bypassed authentication. The canonical
+// middleware lives in `server/middleware/auth.ts` and `./railwayauth.ts`.
+// Importing this export will throw at request time so misuse is loud.
+export const isAuthenticated: RequestHandler = (_req, _res, _next) => {
+  throw new Error(
+    "replitAuth.isAuthenticated is deprecated and unsafe. " +
+    "Import { isAuthenticated } from 'server/middleware/auth' instead.",
+  );
 };

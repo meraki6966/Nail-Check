@@ -1,6 +1,6 @@
 import type { Express } from "express";
 import { authStorage } from "./storage";
-import { isAuthenticated } from "./replitAuth";
+import { isAuthenticated } from "../../middleware/auth";
 
 /**
  * Register auth-specific routes for Railway/Passport compatibility.

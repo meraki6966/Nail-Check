@@ -92,6 +92,9 @@ export type InsertSavedDesign = z.infer<typeof insertSavedDesignSchema>;
 // ============================================
 export const nailTechs = pgTable("nail_techs", {
   id: serial("id").primaryKey(),
+  // Account that registered this tech profile. Used to verify ownership
+  // when the tech edits or deletes their own row in the future.
+  ownerUserId: text("owner_user_id"),
   name: text("name").notNull(),
   email: text("email").notNull().unique(),
   phone: text("phone"),

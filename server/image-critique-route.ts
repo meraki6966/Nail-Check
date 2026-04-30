@@ -1,6 +1,7 @@
 import type { Express } from "express";
 import { GoogleGenerativeAI } from "@google/generative-ai";
 import { checkAIGenerationLimit, incrementAIGeneration } from "./subscriptions";
+import { isAuthenticated, getSessionUserId } from "./middleware/auth";
 
 const genAI = new GoogleGenerativeAI(
   process.env.AI_INTEGRATIONS_GEMINI_API_KEY ||
@@ -10,27 +11,22 @@ const genAI = new GoogleGenerativeAI(
 );
 
 export function registerImageCritiqueRoute(app: Express) {
-  app.post("/api/image/critique", async (req, res) => {
+  app.post("/api/image/critique", isAuthenticated, async (req, res) => {
     try {
+      const userId = getSessionUserId(req)!;
       const { image } = req.body;
 
       if (!image) {
         return res.status(400).json({ error: "Image required" });
       }
 
-      // ── Subscription limit check ───────────────────────────────
-      const userId = (req.session as any)?.user?.id
-        ? String((req.session as any).user.id)
-        : null;
-
-      if (userId) {
-        const allowed = await checkAIGenerationLimit(userId);
-        if (!allowed) {
-          return res.status(403).json({
-            error: "limit_reached",
-            message: "AI generation limit reached. Upgrade to Premium for unlimited generations.",
-          });
-        }
+      // ── Subscription limit check (always enforced) ─────────────
+      const allowed = await checkAIGenerationLimit(userId);
+      if (!allowed) {
+        return res.status(403).json({
+          error: "limit_reached",
+          message: "AI generation limit reached. Upgrade to Premium for unlimited generations.",
+        });
       }
       // ──────────────────────────────────────────────────────────
 
@@ -92,11 +88,9 @@ Be constructive, specific, and encouraging. Focus on actionable improvements.`;
       const critiqueData = jsonMatch ? JSON.parse(jsonMatch[1] || jsonMatch[0]) : JSON.parse(text);
 
       // Increment AFTER successful critique
-      if (userId) {
-        incrementAIGeneration(userId).catch((err) =>
-          console.error("[subscriptions] increment failed:", err)
-        );
-      }
+      incrementAIGeneration(userId).catch((err) =>
+        console.error("[subscriptions] increment failed:", err)
+      );
 
       res.json({ critique: critiqueData });
 

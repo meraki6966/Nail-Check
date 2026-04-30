@@ -1,31 +1,27 @@
 import type { Express } from "express";
 import { GoogleGenerativeAI } from "@google/generative-ai";
 import { checkAIGenerationLimit, incrementAIGeneration } from "./subscriptions";
+import { isAuthenticated, getSessionUserId } from "./middleware/auth";
 
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY || "");
 
 export function registerImageEditRoute(app: Express) {
-  app.post("/api/image/edit", async (req, res) => {
+  app.post("/api/image/edit", isAuthenticated, async (req, res) => {
     try {
+      const userId = getSessionUserId(req)!;
       const { image, prompt } = req.body;
 
       if (!image || !prompt) {
         return res.status(400).json({ error: "Image and prompt required" });
       }
 
-      // ── Subscription limit check ───────────────────────────────
-      const userId = (req.session as any)?.user?.id
-        ? String((req.session as any).user.id)
-        : null;
-
-      if (userId) {
-        const allowed = await checkAIGenerationLimit(userId);
-        if (!allowed) {
-          return res.status(403).json({
-            error: "limit_reached",
-            message: "AI generation limit reached. Upgrade to Premium for unlimited generations.",
-          });
-        }
+      // ── Subscription limit check (always enforced) ─────────────
+      const allowed = await checkAIGenerationLimit(userId);
+      if (!allowed) {
+        return res.status(403).json({
+          error: "limit_reached",
+          message: "AI generation limit reached. Upgrade to Premium for unlimited generations.",
+        });
       }
       // ──────────────────────────────────────────────────────────
 
@@ -63,11 +59,9 @@ export function registerImageEditRoute(app: Express) {
       }
 
       // Increment AFTER successful generation
-      if (userId) {
-        incrementAIGeneration(userId).catch((err) =>
-          console.error("[subscriptions] increment failed:", err)
-        );
-      }
+      incrementAIGeneration(userId).catch((err) =>
+        console.error("[subscriptions] increment failed:", err)
+      );
 
       res.json({
         b64_json: imageData.inlineData.data,

@@ -46,9 +46,14 @@ export async function initializeDatabase() {
       -- Create conversations table
       CREATE TABLE IF NOT EXISTS conversations (
         id SERIAL PRIMARY KEY,
+        user_id TEXT NOT NULL,
         title TEXT NOT NULL,
         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL
       );
+
+      -- Backfill column for existing deployments
+      ALTER TABLE conversations ADD COLUMN IF NOT EXISTS user_id TEXT;
+      CREATE INDEX IF NOT EXISTS idx_conversations_user_id ON conversations(user_id);
 
       -- Create messages table
       CREATE TABLE IF NOT EXISTS messages (
@@ -148,6 +153,10 @@ export async function initializeDatabase() {
         CREATE TYPE subscription_change_status AS ENUM ('started', 'upgraded', 'downgraded', 'cancelled', 'expired');
       EXCEPTION WHEN duplicate_object THEN NULL;
       END $$;
+
+      -- ── nail_techs ownership column ───────────────────────────────────────
+      ALTER TABLE nail_techs ADD COLUMN IF NOT EXISTS owner_user_id TEXT;
+      CREATE INDEX IF NOT EXISTS idx_nail_techs_owner_user_id ON nail_techs(owner_user_id);
 
       -- ── New columns on users ─────────────────────────────────────────────────
       ALTER TABLE users
