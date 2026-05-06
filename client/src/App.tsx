@@ -7,6 +7,7 @@ import { Layout } from "@/components/Layout";
 
 // Page Imports
 import Home from "@/pages/Home";
+import Styles from "@/pages/Styles";
 import Contact from "@/pages/Contact";
 import ContentEditing from "@/pages/ContentEditing";
 import Creators from "@/pages/Creators";
@@ -40,13 +41,14 @@ function Router() {
       <Switch>
         {/* Primary Studio Routes */}
         <Route path="/" component={Home} />
+        <Route path="/styles" component={Styles} />
         <Route path="/contact" component={Contact} />
-        {/* Design Lab aliases — Home is the Design Lab */}
-        <Route path="/design-lab">{() => <Redirect to="/" />}</Route>
-        <Route path="/ai-generate">{() => <Redirect to="/" />}</Route>
-        <Route path="/critique">{() => <Redirect to="/" />}</Route>
+        {/* Design Lab aliases — /styles is the Design Lab */}
+        <Route path="/design-lab">{() => <Redirect to="/styles" />}</Route>
+        <Route path="/ai-generate">{() => <Redirect to="/styles" />}</Route>
+        <Route path="/critique">{() => <Redirect to="/styles" />}</Route>
         {/* AI & Content Lab */}
-        <Route path="/ai-critique">{() => <Redirect to="/" />}</Route>
+        <Route path="/ai-critique">{() => <Redirect to="/styles" />}</Route>
         <Route path="/content-editing" component={ContentEditing} />
         
         {/* Community & Creators */}
